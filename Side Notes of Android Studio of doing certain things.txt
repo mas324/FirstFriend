@@ -1,0 +1,16 @@
+Some Android Studio Side Notes
+// Android Development(Kotlin) Full Course For Beginners 2023 | 12 Hour Comprehensive Tutorial For Free
+// https://www.youtube.com/watch?v=BCSlZIUj18Y Author: Anushka Madusanka
+    <!-- comment -->
+    <!-- more detailed information -->
+    <!-- highlight code snippet you want -> right click on highlight ->  -->
+    <!-- show context actions -> extract string resources -->
+    <!-- adding @string to text will put <string name="ayooo">AYOOO!</string> -->
+    <!-- in the values folder strings.xml file-->
+
+	<!-- comment -->
+    <!-- more detailed information -->
+    <!-- highlight code snippet you want -> right click on highlight ->  -->
+    <!-- show context actions -> extract string resources -->
+    <!-- adding @string to text will put <string name="ayooo">AYOOO!</string> -->
+    <!-- in the values folder strings.xml file-->
