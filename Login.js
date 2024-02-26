@@ -33,7 +33,7 @@ export function LoginPage({ navigation }) {
             />
             <Button
                 onPress={() => {
-                    //TODO: Add validation with a database for user logins
+                    // TODO: Add validation with a database for user logins
                     // Use validate as return variable
                     
                     //validate = database.password() == password
@@ -43,9 +43,9 @@ export function LoginPage({ navigation }) {
                     } else {
                         // Notify the user of a failed login
                         setRejection('Login information is incorrect  ');
-                    }                    
+                    }
                 }}
-                title='Submit'
+                title='Login'
             />
             <View
                 style={{
@@ -65,7 +65,7 @@ export function LoginPage({ navigation }) {
     );
 };
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     input: {
         height: 40,
         margin: 10,
