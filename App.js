@@ -1,10 +1,21 @@
 import * as React from 'react';
+<<<<<<< HEAD
 import { Button, View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+=======
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { LoginPage } from './Login';
+import { PasswordReset } from './PassRes';
+import { Test } from './Test';
+
+const Stack = createNativeStackNavigator();
+>>>>>>> fbb15ad9205e37f72022a9f2271c722d854e7a19
 
 function HomeScreen({ navigation }) {
   return (
+<<<<<<< HEAD
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Text>Home Screen</Text>
       <Button
@@ -52,3 +63,14 @@ function App() {
 }
 
 export default App;
+=======
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name='Test' component={Test} options={{title: 'Dev Test page'}} />
+        <Stack.Screen name='Login' component={LoginPage} options={{title: 'Login'}} />
+        <Stack.Screen name='PassRes' component={PasswordReset} options={{title: 'Forgot Password'}} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+}
+>>>>>>> fbb15ad9205e37f72022a9f2271c722d854e7a19
