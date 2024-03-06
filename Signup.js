@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 
 const SignUpPage = () => {
-    // maybe first name, last name, etc...
-    // const [firstname, setUserfirstname] = useState('');
-    // const [lastname, setUserlastname] = useState('');
-    // const [Country of origin, ] = useState('');
+    // const [firstName, setUserFirstName] = useState('');
+    // const [lastName, setUserLastName] = useState('');
     const [username, setUsername] = useState('');
-    const [email, setEmail] = useState('');
+    const [Country_of_Origin, setUserCoO] = useState('');
+    const [SID, setSID] = useState('');
+    const [Major, setUserMajor] = useState('');
+
     const [password, setPassword] = useState('');
 
     const handleSignUp = () => {
@@ -15,10 +16,12 @@ const SignUpPage = () => {
         // isEmpty(), comparator, if-else, etc... maybe
 
         // Display the entered data (can modify this part based on requirements)
-        // console.log('Userfirstname: ', userfirstname);
-        // console.log('Userlastname: ', userlastname);
+        // console.log('UserFirstName: ' + 'UserLastName: ', firstName, lastName);
         console.log('Username: ', username);
-        console.log('Email: ' + email);
+        console.log('Country of Origin: ', Country_of_Origin);
+        console.log('Student ID: ' + SID);
+        console.log('Major: ', Major);
+
         console.log('Password: ' + password);
     }; 
 
@@ -30,10 +33,21 @@ const SignUpPage = () => {
                 value={username}
                 onChangeText={text => setUsername(text)}
             />
+                <TextInput
+                placeholder="Country of Origin"
+                value={Country_of_Origin}
+                onChangeText={text => setUserCoO(text)}
+            />
             <TextInput
-                placeholder="Email"
-                value={email} 
-                onChangeText={text => setEmail(text)}
+                placeholder="Student ID"
+                secureTextEntry={true}
+                value={SID} 
+                onChangeText={text => setSID(text)}
+            />
+            <TextInput
+                placeholder="Major"
+                value={Major}
+                onChangeText={text => setUserMajor(text)}
             />
             <TextInput
                 placeholder="Password"
