@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 
-const SignUpPage = () => {
+export function SignUpPage({navigation}) {
     // const [firstName, setUserFirstName] = useState('');
     // const [lastName, setUserLastName] = useState('');
     const [username, setUsername] = useState('');
@@ -23,7 +23,7 @@ const SignUpPage = () => {
         console.log('Major: ', Major);
 
         console.log('Password: ' + password);
-    }; 
+    };
 
     return (
         <View>
@@ -40,7 +40,6 @@ const SignUpPage = () => {
             />
             <TextInput
                 placeholder="Student ID"
-                secureTextEntry={true}
                 value={SID} 
                 onChangeText={text => setSID(text)}
             />
@@ -57,7 +56,5 @@ const SignUpPage = () => {
             />
             <Button title="Sign Up" onPress={handleSignUp} />
         </View>
-    );
-};
-
-export default SignUpPage;
+    )
+}
