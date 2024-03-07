@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Text, View, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HelloPage } from './Job.js';
+import { Jobs } from './Job.js';
 
 const Stack = createNativeStackNavigator();
 
@@ -12,24 +12,12 @@ function Home({ navigation }) {
       <Text>Home Screen</Text>
       <Button
         title='Go to Profile'
-        onPress={() => navigation.navigate('Profile')}
+        onPress={() => navigation.navigate('Jobs')}
       />
     </View>
   )
 }
 
-function ProfileScreen({navigation}) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Profile Screen</Text>lear
-      
-      <Button
-        title='Goto Hello'
-        onPress={() => navigation.navigate('Hello')}
-      />
-    </View>
-  )
-}
 
 export default function App() {
   return (
@@ -40,8 +28,7 @@ export default function App() {
           component={Home}
           options={{title: 'Welcome'}}
         />
-        <Stack.Screen name='Profile' component={ProfileScreen} />
-        <Stack.Screen name='Hello' component={HelloPage} />
+        <Stack.Screen name='Jobs' component={Jobs} />
       </Stack.Navigator>
     </NavigationContainer>
   );
