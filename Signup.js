@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
 
 export function SignUpPage({navigation}) {
-    // const [firstName, setUserFirstName] = useState('');
-    // const [lastName, setUserLastName] = useState('');
+    const [firstname, setUserFirstName] = useState('');
+    const [lastname, setUserLastName] = useState('');
     const [username, setUsername] = useState('');
     const [Country_of_Origin, setUserCoO] = useState('');
     const [SID, setSID] = useState('');
@@ -16,7 +16,8 @@ export function SignUpPage({navigation}) {
         // isEmpty(), comparator, if-else, etc... maybe
 
         // Display the entered data (can modify this part based on requirements)
-        // console.log('UserFirstName: ' + 'UserLastName: ', firstName, lastName);
+        console.log('UserFirstName: ' , firstname);
+        console.log('UserLastName: ' , lastname);
         console.log('Username: ', username);
         console.log('Country of Origin: ', Country_of_Origin);
         console.log('Student ID: ' + SID);
@@ -28,6 +29,16 @@ export function SignUpPage({navigation}) {
     return (
         <View>
             <Text>Sign Up</Text>
+            <TextInput
+                placeholder="UserFirstName"
+                value={firstname}
+                onChangeText={text => setUserFirstName(text)}
+            />
+             <TextInput
+                placeholder="UserLastName"
+                value={lastname}
+                onChangeText={text => setUserLastName(text)}
+            />
             <TextInput
                 placeholder="Username"
                 value={username}
