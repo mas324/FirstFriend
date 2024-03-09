@@ -1,103 +1,92 @@
-import React, { useState } from "react";
-import styled, { createGlobalStyle} from "styled-components";
+import React, { useState } from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-const GlobalStyle = createGlobalStyle`
-   body {
-    background-color: #800020; 
-   }
-`;
-const theme = {
-    white: { 
-        default: "#fffaf0",
-        hover: "#f8f8ff",
-        
-    },
-    gold: {
-        default: "#daa520",
-        hover:"#b8860b",
+const FlexDirectionBasics = () => {
+  const [flexDirection, setflexDirection] = useState('column');
 
-    },
+  return (
+    <PreviewLayout
+      label="First Friend"
+      values={['Search', '+']}
+      selectedValue={flexDirection}
+      setSelectedValue={setflexDirection}
+    >
+      <View style={[styles.box, { backgroundColor: 'bisque' }, 'First Friend']} />
+      <View style={[styles.box, { backgroundColor: 'burlywood' }]} />
+      <View style={[styles.box, { backgroundColor: 'bisque' }]} />
+      <View style={[styles.box, { backgroundColor: 'burlywood' }]} />
+      <View style={[styles.box, { backgroundColor: 'bisque' }]} />
+      <View style={[styles.box, { backgroundColor: 'burlywood' }]} />
+      <View style={[styles.box, { backgroundColor: 'bisque' }]} />
+      <View style={[styles.box, { backgroundColor: 'burlywood' }]} />
+      <View style={[styles.box, { backgroundColor: 'bisque' }]} />
+    </PreviewLayout>
+  );
 };
 
-const Button = styled.button`
-  background-color: gold;
-  color: white;
-  padding: 10px 12px;
-  border-radius: 4px;
-  outline: 0;
-  border: 0; 
-  text-transform: uppercase;
-  margin: 2px 2px;
-  cursor: pointer;
-  box-shadow: 0px 2px 2px lightgray;
-  transition: ease background-color 250ms;
-  &:hover {
-    background-color: #b8860b ;
-  }
-  &:disabled {
-    cursor: default;
-    opacity: 0.7;
-  }
-`;
-const Disabled = styled.button`
-  background-color: gold;
-  color: white;
-  padding: 10px 12px;
-  border-radius: 4px;
-  outline: 0;
-  border: 0; 
-  text-transform: uppercase;
-  margin: 2px 2px;
-  cursor: arrow;
-  box-shadow: 0px 2px 2px lightgray;
-  transition: ease background-color 250ms;
-  &:hover {
-    background-color: none;
-  }
-  &:disabled {
-    cursor: default;
-    opacity: 0.7;
-  }
-`;
+const PreviewLayout = ({
+  label,
+  children,
+  values,
+  selectedValue,
+  setSelectedValue,
+}) => (
+  <View style={{ padding: 10, flex: 1 }}>
+    <Text style={styles.label}>{label}</Text>
+    <View style={styles.row}>
+      {values.map((value) => (
+        <TouchableOpacity
+          key={value}
+          onPress={() => setSelectedValue(value)}
+          style={[styles.button]}
+        >
+          <Text style={[styles.buttonLabel]}>{value}</Text>
+        </TouchableOpacity>
+      ))}
+    </View>
+    <View style={[styles.container, { [label]: selectedValue }]}>{children}</View>
+  </View>
+);
 
-Button.defaultProps = {
-    theme: "gold",
-};
-  
-  function clickMe() {
-    alert("You've made a new friend!");
-}
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    marginTop: 8,
+    backgroundColor: 'white',
+  },
+  box: {
+    width: 372,
+    height: 75,
+    borderRadius: 7,
+    marginBottom: 6,
+  },
+  row: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+  button: {
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 8,
+    backgroundColor: 'maroon',
+    alignSelf: 'center',
+    marginHorizontal: '1%',
+    marginBottom: 6,
+    minWidth: '48%',
+    textAlign: 'center',
+  },
+  buttonLabel: {
+    fontSize: 20,
+    fontWeight: '500',
+    color: 'goldenrod',
+    textAlign: 'center',
+  },
+  label: {
+    textAlign: 'center',
+    marginBottom: 10,
+    fontSize: 20,
+    fontFamily: 'Cochin',
+  },
+});
 
-const ButtonToggle = styled(Button)`
-  opacity: 0.7;
-  ${({ active }) =>
-    active &&
-    `
-    opacity: 1; 
-  `}
-`;
-
-export default function App() {
-    return (
-      <>
-      <GlobalStyle/>
-        <div>
-          <Disabled onClick={clickMe}>Messages</Disabled><Button onClick={clickMe}>
-            +
-          </Button>
-        </div>
-        <div>
-        <Button>First Friend #1</Button>
-        </div>
-        <div>
-        <Button>First Friend #2</Button>
-        </div>
-        <div>
-        <Button>First Friend #3</Button>
-        </div>
-        <div>
-        <Button>First Friend #4</Button>
-        </div>
-      </>
-    );
-}
+export default FlexDirectionBasics;
