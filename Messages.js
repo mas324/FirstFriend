@@ -11,15 +11,15 @@ const FlexDirectionBasics = () => {
       selectedValue={flexDirection}
       setSelectedValue={setflexDirection}
     >
-      <View style={[styles.box, { backgroundColor: 'bisque' }]} />
-      <View style={[styles.box, { backgroundColor: 'burlywood' }]} />
-      <View style={[styles.box, { backgroundColor: 'bisque' }]} />
-      <View style={[styles.box, { backgroundColor: 'burlywood' }]} />
-      <View style={[styles.box, { backgroundColor: 'bisque' }]} />
-      <View style={[styles.box, { backgroundColor: 'burlywood' }]} />
-      <View style={[styles.box, { backgroundColor: 'bisque' }]} />
-      <View style={[styles.box, { backgroundColor: 'burlywood' }]} />
-      <View style={[styles.box, { backgroundColor: 'bisque' }]} />
+      <View style={[styles.box, { backgroundColor: '#f0dc82' }]} />
+      <View style={[styles.box, { backgroundColor: '#f3e5ab' }]} />
+      <View style={[styles.box, { backgroundColor: '#f0dc82' }]} />
+      <View style={[styles.box, { backgroundColor: '#f3e5ab' }]} />
+      <View style={[styles.box, { backgroundColor: '#f0dc82' }]} />
+      <View style={[styles.box, { backgroundColor: '#f3e5ab' }]} />
+      <View style={[styles.box, { backgroundColor: '#f0dc82' }]} />
+      <View style={[styles.box, { backgroundColor: '#f3e5ab' }]} />
+      <View style={[styles.box, { backgroundColor: '#f0dc82' }]} />
     </PreviewLayout>
   );
 };
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   buttonLabel: {
     fontSize: 20,
     fontWeight: '500',
-    color: 'goldenrod',
+    color: '#fcc200',
     textAlign: 'center',
   },
   label: {
