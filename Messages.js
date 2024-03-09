@@ -11,7 +11,7 @@ const FlexDirectionBasics = () => {
       selectedValue={flexDirection}
       setSelectedValue={setflexDirection}
     >
-      <View style={[styles.box, { backgroundColor: 'bisque' }, 'First Friend']} />
+      <View style={[styles.box, { backgroundColor: 'bisque' }]} />
       <View style={[styles.box, { backgroundColor: 'burlywood' }]} />
       <View style={[styles.box, { backgroundColor: 'bisque' }]} />
       <View style={[styles.box, { backgroundColor: 'burlywood' }]} />
@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
     fontSize: 20,
-    fontFamily: 'Cochin',
   },
 });
 
