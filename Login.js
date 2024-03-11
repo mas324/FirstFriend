@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { Text, TextInput, SafeAreaView, StyleSheet, Button, Pressable, View } from 'react-native';
-import { AuthContext } from './App';
+import { AuthContext, hasher } from './components/Auth';
+import { Buffer } from 'buffer';
+import { TextEncoder } from 'util';
 
 export function LoginPage({ navigation }) {
 
@@ -34,7 +36,10 @@ export function LoginPage({ navigation }) {
             />
             <Button
                 onPress={() => {
-                    signIn({ username, password})
+                    hasher(password).then(data => {
+                        console.log('Returned data: ', data);
+                        signIn({ username, data});
+                    });
                 }}
                 title='Login'
             />
