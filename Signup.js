@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button } from 'react-native';
+import { AuthContext, hasher } from './components/Auth';
 
 export function SignUpPage({navigation}) {
     const [firstname, setUserFirstName] = useState('');
@@ -10,20 +11,19 @@ export function SignUpPage({navigation}) {
     const [Major, setUserMajor] = useState('');
 
     const [password, setPassword] = useState('');
+    const { signUp } = React.useContext(AuthContext);
 
     const handleSignUp = () => {
         // Perform validation here (e.g., check if fields are not empty)
         // isEmpty(), comparator, if-else, etc... maybe
 
         // Display the entered data (can modify this part based on requirements)
-        console.log('UserFirstName: ' , firstname);
-        console.log('UserLastName: ' , lastname);
-        console.log('Username: ', username);
-        console.log('Country of Origin: ', Country_of_Origin);
-        console.log('Student ID: ' + SID);
-        console.log('Major: ', Major);
 
-        console.log('Password: ' + password);
+        hasher(password).then(hashPass => {
+            signUp({firstname, lastname, username,
+                Country_of_Origin, SID, Major, hashPass});
+        })
+        
     };
 
     return (
