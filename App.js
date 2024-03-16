@@ -7,13 +7,14 @@ import { Test } from './screens/Test';
 
 const Stack = createNativeStackNavigator();
 
-export default function App() {
+export default function App({ navigation }) {
   return (
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen name='Test' component={Test} options={{title: 'Dev Test page'}} />
         <Stack.Screen name='Login' component={LoginPage} options={{title: 'Login'}} />
         <Stack.Screen name='PassRes' component={PasswordReset} options={{title: 'Forgot Password'}} />
+        <Stack.Screen name='Signup' component={SignUpPage} options={{title: 'Signup'}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

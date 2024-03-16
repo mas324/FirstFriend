@@ -6,7 +6,7 @@ export function Test({ navigation }) {
         <SafeAreaView
             style={{padding: 20, flex: 1}}
         >
-            <Text>Hello there  </Text>
+            <Text>DEVELOPER PAGE  </Text>
             <Button 
                 title='Button to login'
                 onPress={() => navigation.navigate('Login')}
@@ -14,6 +14,10 @@ export function Test({ navigation }) {
             <Button
                 title='Button to forgot password'
                 onPress={() => navigation.navigate('PassRes')}
+            />
+            <Button
+                title='To signup'
+                onPress={() => navigation.navigate('Signup')}
             />
         </SafeAreaView>
     )
