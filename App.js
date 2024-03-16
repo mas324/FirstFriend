@@ -1,34 +1,20 @@
 import * as React from 'react';
-import { Text, View, Button } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Jobs } from './Job.js';
+import { LoginPage } from './screens/Login';
+import { PasswordReset } from './screens/PassRes';
+import { Test } from './screens/Test';
 
 const Stack = createNativeStackNavigator();
 
-function Home({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-      <Text>Home Screen</Text>
-      <Button
-        title='Go to Profile'
-        onPress={() => navigation.navigate('Jobs')}
-      />
-    </View>
-  )
-}
-
-
-export default function App() {
+export default function App({ navigation }) {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{title: 'Welcome'}}
-        />
-        <Stack.Screen name='Jobs' component={Jobs} />
+        <Stack.Screen name='Test' component={Test} options={{title: 'Dev Test page'}} />
+        <Stack.Screen name='Login' component={LoginPage} options={{title: 'Login'}} />
+        <Stack.Screen name='PassRes' component={PasswordReset} options={{title: 'Forgot Password'}} />
+        <Stack.Screen name='Signup' component={SignUpPage} options={{title: 'Signup'}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

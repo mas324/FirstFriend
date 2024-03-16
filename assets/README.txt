@@ -1,0 +1,1 @@
+Items like images, icons, or GIFs are to be included and referenced from here.
