@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text, StyleSheet} from 'react-native';
+import { View, Text, StyleSheet, VirtualizedList} from 'react-native';
 
 const Page = StyleSheet.create({
     pageBG: {
@@ -23,9 +23,34 @@ const Page = StyleSheet.create({
         paddingTop: 10,
         fontSize: 15,
         fontWeight: 'bold',
+    },
+
+    item: {
+        backgroundColor: '#E6EBEB',
+        height: 150,
+        justifyContent: 'center',
+        marginVertical: 8,
+        marginHorizontal: 16,
+        padding: 20
     }
 });
 
+const styles = StyleSheet.create({
+    container: {
+        flex:1,
+    },
+    item: {
+        backgroundColor: '#f9c2ff',
+        height: 150,
+        justifyContent: 'center',
+        marginVertical: 8,
+        marginHorizontal: 16,
+        padding: 20,
+    },
+    title: {
+        fontSize: 32
+    },
+})
 /* 
     GetJob will have an API parameter to get said job information.
     Then call API methods to retrieve data
@@ -47,6 +72,8 @@ const getCard = (title, description, qualifications, salary) => {
     );
 }
 
+
+
 // DEMO ONLY
 const DemoCard= () => {
     return(
@@ -65,8 +92,33 @@ const DemoCard= () => {
     );
 }
 
+const DATA = []
+
+const Item = ({title}) => (
+    <View style={styles.item}>
+        <Text style={styles.title}>{title}</Text>
+    </View>
+)
+
 export function Jobs({navigator}) {
+
+    // const renderItem = ({item, index}) => {
+    //     return (
+    //         <View key={index} style={styles.item}>
+    //             <Text style={styles.title}>{item.title}</Text>
+    //         </View>
+    //     )
+    // }
     return (
+        // <SafeAreaView style={styles.container}>
+        //     <VirtualizedList
+        //     data={DATA}
+        //     initialNumRender={1}
+        //     renderItem={renderItem}
+        //     />
+        // </SafeAreaView>
+        
+
         DemoCard()
     )
 }
