@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button } from 'react-native';
+import { View, TextInput, Button } from 'react-native';
+import { Text } from '../components/TextFix';
 
 export function SignUpPage({navigation}) {
     const [firstname, setUserFirstName] = useState('');

@@ -1,23 +1,37 @@
 import * as React from 'react';
-import { Button, SafeAreaView, Text } from 'react-native';
+import { Button, SafeAreaView } from 'react-native';
+//import { Text } from 'react-native';
+import { Text } from '../components/TextFix';
 
 export function Test({ navigation }) {
     return (
         <SafeAreaView
             style={{padding: 20, flex: 1}}
         >
-            <Text>DEVELOPER PAGE  </Text>
+            <Text>DEVELOPER PAGE</Text>
             <Button 
-                title='Button to login'
+                title='Login'
                 onPress={() => navigation.navigate('Login')}
             />
             <Button
-                title='Button to forgot password'
+                title='Password Reset'
                 onPress={() => navigation.navigate('PassRes')}
             />
             <Button
-                title='To signup'
+                title='Signup'
                 onPress={() => navigation.navigate('Signup')}
+            />
+            <Button
+                title='Home'
+                onPress={() => navigation.navigate('Home')}
+            />
+            <Button
+                title='Jobs'
+                onPress={() => navigation.navigate('Jobs')}
+            />
+            <Button
+                title='Messages'
+                onPress={() => navigation.navigate('Messages')}
             />
         </SafeAreaView>
     )

@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { View, Text, StyleSheet, VirtualizedList} from 'react-native';
+import { View, StyleSheet, VirtualizedList} from 'react-native';
+import { Text } from '../components/TextFix';
 
 const Page = StyleSheet.create({
     pageBG: {

@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, Button, Text, StyleSheet, Dimensions } from 'react-native';
+import { View, Button, StyleSheet, Dimensions } from 'react-native';
+import { Text } from '../components/TextFix';
 
-const MyScreenWithButtons = () => {
+const Home = () => {
   const handleButtonPress = (buttonNumber) => {
     // define actions for each button press here
     console.log('Button', buttonNumber, 'pressed');
@@ -58,4 +59,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MyScreenWithButtons;
+export default Home;

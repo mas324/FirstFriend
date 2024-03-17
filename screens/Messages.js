@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Text } from '../components/TextFix';
 
-const FlexDirectionBasics = () => {
+const Messages = () => {
   const [flexDirection, setflexDirection] = useState('column');
 
   return (
@@ -88,4 +89,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default FlexDirectionBasics;
+export default Messages;

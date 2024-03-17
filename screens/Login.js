@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Text, TextInput, SafeAreaView, StyleSheet, Button, Pressable, View } from 'react-native';
+import { TextInput, SafeAreaView, StyleSheet, Button, Pressable, View } from 'react-native';
+import { Text } from '../components/TextFix';
 
 export function LoginPage({ navigation }) {
 
@@ -7,11 +8,11 @@ export function LoginPage({ navigation }) {
     const [password, setPass] = useState('');
     const [rejectNotif, setRejection] = useState('');
     let validate = true;
-    
+
     return (
-        <SafeAreaView style={{padding: 10, flex: 1, alignContent: 'center'}}>
-            <Text 
-                style={{color: 'red', alignSelf: 'center', }}
+        <SafeAreaView style={{ padding: 10, flex: 1, alignContent: 'center' }}>
+            <Text
+                style={{ color: 'red', alignSelf: 'center', }}
                 textBreakStrategy='simple'
             >
                 {rejectNotif}
@@ -35,14 +36,14 @@ export function LoginPage({ navigation }) {
                 onPress={() => {
                     // TODO: Add validation with a database for user logins
                     // Use validate as return variable
-                    
+
                     //validate = database.password() == password
 
                     if (validate) {
                         navigator.navigate('Home');
                     } else {
                         // Notify the user of a failed login
-                        setRejection('Login information is incorrect  ');
+                        setRejection('Login information is incorrect');
                     }
                 }}
                 title='Login'
@@ -54,11 +55,11 @@ export function LoginPage({ navigation }) {
                     justifyContent: 'space-evenly'
                 }}
             >
-                <Pressable onPress={() => {navigation.navigate('Signup')}}>
-                    <Text>Signup  </Text>
+                <Pressable onPress={() => { navigation.navigate('Signup') }}>
+                    <Text>Signup</Text>
                 </Pressable>
-                <Pressable onPress={() => {navigation.navigate('PassRes')}}>
-                    <Text>Forgot password  </Text>
+                <Pressable onPress={() => { navigation.navigate('PassRes') }}>
+                    <Text>Forgot password</Text>
                 </Pressable>
             </View>
         </SafeAreaView>
