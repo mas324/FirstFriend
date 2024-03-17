@@ -2,13 +2,21 @@ import React from 'react';
 import { View, Button, StyleSheet, Dimensions } from 'react-native';
 import { Text } from '../components/TextFix';
 
-const Home = () => {
+const Home = ({navigation}) => {
   const handleButtonPress = (buttonNumber) => {
     // define actions for each button press here
-    console.log('Button', buttonNumber, 'pressed');
-  };
 
-  const windowWidth = Dimensions.get('window').width;
+    switch (buttonNumber) {
+      case 2:
+        navigation.navigate('Jobs');
+        break;
+      case 4:
+        navigation.navigate('Messages');
+      default:
+        console.log('Button', buttonNumber, 'pressed');
+        break;
+    }
+  };
 
   return (
     <View style={styles.container}>

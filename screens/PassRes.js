@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { SafeAreaView, TextInput, Button } from 'react-native';
 import { Text } from '../components/TextFix';
-import { styles } from './Login';
+import { appStyles } from '../components/AppStyles';
 
 export function PasswordReset({ navigation }) {
     const [email, setEmail] = useState('');
@@ -14,7 +14,7 @@ export function PasswordReset({ navigation }) {
                 }}
             >Enter email used to signup. It should be your school email, unless you used something else</Text>
             <TextInput
-                style={styles.input}
+                style={appStyles.input}
                 autoComplete='email'
                 placeholder='Email'
                 onChangeText={newmail => setEmail(newmail)}
@@ -51,14 +51,14 @@ function newPassword({ navigation }) {
     <SafeAreaView>
         <Text>Test input for the next step in reset password</Text>
         <TextInput
-            style={styles.input}
+            style={appStyles.input}
             secureTextEntry={true}
             placeholder='New Password'
             onChangeText={newPass => setPass(newPass)}
             defaultValue={password}
         />
         <TextInput
-            style={styles.input}
+            style={appStyles.input}
             secureTextEntry={true}
             placeholder='Reenter password'
             onChangeText={newPass => setConfirm(newPass)}

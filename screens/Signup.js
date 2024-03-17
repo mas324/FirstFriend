@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button } from 'react-native';
-import { Text } from '../components/TextFix';
+import { TextInput, Button, SafeAreaView } from 'react-native';
+import { appStyles } from '../components/AppStyles';
 
 export function SignUpPage({navigation}) {
     const [firstname, setUserFirstName] = useState('');
@@ -9,7 +9,6 @@ export function SignUpPage({navigation}) {
     const [Country_of_Origin, setUserCoO] = useState('');
     const [SID, setSID] = useState('');
     const [Major, setUserMajor] = useState('');
-
     const [password, setPassword] = useState('');
 
     const handleSignUp = () => {
@@ -28,45 +27,51 @@ export function SignUpPage({navigation}) {
     };
 
     return (
-        <View>
-            <Text>Sign Up</Text>
+        <SafeAreaView>
             <TextInput
+                style={[appStyles.input]}
                 placeholder="UserFirstName"
                 value={firstname}
                 onChangeText={text => setUserFirstName(text)}
             />
              <TextInput
+                style={[appStyles.input]}
                 placeholder="UserLastName"
                 value={lastname}
                 onChangeText={text => setUserLastName(text)}
             />
             <TextInput
+                style={[appStyles.input]}
                 placeholder="Username"
                 value={username}
                 onChangeText={text => setUsername(text)}
             />
-                <TextInput
+            <TextInput
+                style={[appStyles.input]}
                 placeholder="Country of Origin"
                 value={Country_of_Origin}
                 onChangeText={text => setUserCoO(text)}
             />
             <TextInput
+                style={[appStyles.input]}
                 placeholder="Student ID"
                 value={SID} 
                 onChangeText={text => setSID(text)}
             />
             <TextInput
+                style={[appStyles.input]}
                 placeholder="Major"
                 value={Major}
                 onChangeText={text => setUserMajor(text)}
             />
             <TextInput
+                style={appStyles.input}
                 placeholder="Password"
                 secureTextEntry={true}
                 value={password}
                 onChangeText={text => setPassword(text)}
             />
             <Button title="Sign Up" onPress={handleSignUp} />
-        </View>
+        </SafeAreaView>
     )
 }

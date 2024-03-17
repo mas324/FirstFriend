@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Dimensions, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { Text } from '../components/TextFix';
 
 const Messages = () => {
   const [flexDirection, setflexDirection] = useState('column');
+  const {winWidth} = useWindowDimensions();
 
   return (
     <PreviewLayout
@@ -56,7 +57,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   box: {
-    width: 372,
     height: 75,
     borderRadius: 7,
     marginBottom: 6,

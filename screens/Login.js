@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { TextInput, SafeAreaView, StyleSheet, Button, Pressable, View } from 'react-native';
 import { Text } from '../components/TextFix';
+import { appStyles } from '../components/AppStyles';
 
 export function LoginPage({ navigation }) {
 
@@ -18,14 +19,14 @@ export function LoginPage({ navigation }) {
                 {rejectNotif}
             </Text>
             <TextInput
-                style={styles.input}
+                style={appStyles.input}
                 autoComplete='username'
                 placeholder='Username'
                 onChangeText={newName => setName(newName)}
                 defaultValue={username}
             />
             <TextInput
-                style={styles.input}
+                style={appStyles.input}
                 autoComplete='current-password'
                 secureTextEntry={true}
                 placeholder='Password'
@@ -40,7 +41,7 @@ export function LoginPage({ navigation }) {
                     //validate = database.password() == password
 
                     if (validate) {
-                        navigator.navigate('Home');
+                        navigation.navigate('Home');
                     } else {
                         // Notify the user of a failed login
                         setRejection('Login information is incorrect');
@@ -65,12 +66,3 @@ export function LoginPage({ navigation }) {
         </SafeAreaView>
     );
 };
-
-export const styles = StyleSheet.create({
-    input: {
-        height: 40,
-        margin: 10,
-        borderWidth: 1,
-        padding: 10,
-    },
-});
