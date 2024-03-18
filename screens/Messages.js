@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
-import { Dimensions, StyleSheet, TouchableOpacity, View, useWindowDimensions } from 'react-native';
+import { TouchableOpacity, View, useWindowDimensions } from 'react-native';
 import { Text } from '../components/TextFix';
+import { appStyles } from '../components/AppStyles';
+
+const styles = appStyles;
 
 const Messages = () => {
   const [flexDirection, setflexDirection] = useState('column');
@@ -49,44 +52,5 @@ const PreviewLayout = ({
     <View style={[styles.container, { [label]: selectedValue }]}>{children}</View>
   </View>
 );
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 8,
-    backgroundColor: 'white',
-  },
-  box: {
-    height: 75,
-    borderRadius: 7,
-    marginBottom: 6,
-  },
-  row: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-  },
-  button: {
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    borderRadius: 8,
-    backgroundColor: 'maroon',
-    alignSelf: 'center',
-    marginHorizontal: '1%',
-    marginBottom: 6,
-    minWidth: '48%',
-    textAlign: 'center',
-  },
-  buttonLabel: {
-    fontSize: 20,
-    fontWeight: '500',
-    color: '#fcc200',
-    textAlign: 'center',
-  },
-  label: {
-    textAlign: 'center',
-    marginBottom: 10,
-    fontSize: 20,
-  },
-});
 
 export default Messages;

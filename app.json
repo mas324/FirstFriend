@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "extra": {
+      "eas": {
+        "projectId": "456fd9b6-4e14-46c8-af72-388827778d3a"
+      }
+    },
+    "android": {
+      "package": "com.g6.FirstFriend",
+      "splash": {
+        "backgroundColor": "#FFFFFF"
+      }
+    }
+  }
+}

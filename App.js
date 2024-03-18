@@ -12,9 +12,10 @@ import { SignUpPage } from './screens/Signup';
 const Stack = createNativeStackNavigator();
 
 export default function App({ navigation }) {
+  // Change route name to Test for development, Login for production
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName='Login'>
         <Stack.Screen name='Test' component={Test} options={{title: 'Dev Test page'}} />
         <Stack.Screen name='Login' component={LoginPage} options={{title: 'Login'}} />
         <Stack.Screen name='PassRes' component={PasswordReset} options={{title: 'Forgot Password'}} />

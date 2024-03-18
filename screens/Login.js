@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextInput, SafeAreaView, StyleSheet, Button, Pressable, View } from 'react-native';
+import { TextInput, SafeAreaView, Pressable, View } from 'react-native';
 import { Text } from '../components/TextFix';
 import { appStyles } from '../components/AppStyles';
 
@@ -33,7 +33,8 @@ export function LoginPage({ navigation }) {
                 onChangeText={newPass => setPass(newPass)}
                 defaultValue={password}
             />
-            <Button
+            <Pressable
+                style={appStyles.button}
                 onPress={() => {
                     // TODO: Add validation with a database for user logins
                     // Use validate as return variable
@@ -47,8 +48,9 @@ export function LoginPage({ navigation }) {
                         setRejection('Login information is incorrect');
                     }
                 }}
-                title='Login'
-            />
+            >
+                <Text style={appStyles.buttonLabel}>Login</Text>
+            </Pressable>
             <View
                 style={{
                     flexDirection: 'row',
@@ -57,10 +59,10 @@ export function LoginPage({ navigation }) {
                 }}
             >
                 <Pressable onPress={() => { navigation.navigate('Signup') }}>
-                    <Text>Signup</Text>
+                    <Text style={{color: 'blue'}}>Signup</Text>
                 </Pressable>
                 <Pressable onPress={() => { navigation.navigate('PassRes') }}>
-                    <Text>Forgot password</Text>
+                    <Text style={{color: 'blue'}}>Forgot password</Text>
                 </Pressable>
             </View>
         </SafeAreaView>
