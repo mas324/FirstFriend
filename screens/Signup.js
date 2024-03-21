@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { TextInput, Button, SafeAreaView } from 'react-native';
+import { TextInput, Button, SafeAreaView, Pressable } from 'react-native';
 import { appStyles } from '../components/AppStyles';
+import { Text } from '../components/TextFix';
+import { userCreate } from '../utils/Database';
 
 export function SignUpPage({navigation}) {
     const [firstname, setUserFirstName] = useState('');
@@ -10,20 +12,37 @@ export function SignUpPage({navigation}) {
     const [SID, setSID] = useState('');
     const [Major, setUserMajor] = useState('');
     const [password, setPassword] = useState('');
+    const [confPassword, setConfPassword] = useState('');
 
     const handleSignUp = () => {
-        // Perform validation here (e.g., check if fields are not empty)
-        // isEmpty(), comparator, if-else, etc... maybe
+        let verify = true;
+        if (firstname == '' || lastname == '' || username == '' || SID == '' || password == '' || confPassword == '') {
+            verify = false;
 
-        // Display the entered data (can modify this part based on requirements)
-        console.log('UserFirstName: ' , firstname);
-        console.log('UserLastName: ' , lastname);
-        console.log('Username: ', username);
-        console.log('Country of Origin: ', Country_of_Origin);
-        console.log('Student ID: ' + SID);
-        console.log('Major: ', Major);
+        }
 
-        console.log('Password: ' + password);
+        if (password !== confPassword) {
+            verify = false;
+            // Password not matching
+        }
+
+        if (verify) {
+            let data = {
+                name: {
+                    first: firstname,
+                    last: lastname,
+                    user: username
+                },
+                school: {
+                    sid: SID,
+                    study: Major
+                },
+                country: Country_of_Origin,
+                password: password
+            }
+
+            userCreate(data);
+        }
     };
 
     return (
@@ -71,7 +90,16 @@ export function SignUpPage({navigation}) {
                 value={password}
                 onChangeText={text => setPassword(text)}
             />
-            <Button title="Sign Up" onPress={handleSignUp} />
+            <TextInput
+                style={appStyles.input}
+                placeholder='Confirm Password'
+                secureTextEntry={true}
+                value={confPassword}
+                onChangeText={text => setConfPassword(text)}
+            />
+            <Pressable style={appStyles.button} onPress={handleSignUp}>
+                <Text style={appStyles.buttonLabel}>Sign up</Text>
+            </Pressable>
         </SafeAreaView>
     )
 }

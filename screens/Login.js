@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { TextInput, SafeAreaView, Pressable, View } from 'react-native';
 import { Text } from '../components/TextFix';
 import { appStyles } from '../components/AppStyles';
+import { userAuth } from '../utils/Database';
 
 export function LoginPage({ navigation }) {
 
     const [username, setName] = useState('');
     const [password, setPass] = useState('');
     const [rejectNotif, setRejection] = useState('');
-    let validate = true;
 
     return (
         <SafeAreaView style={{ padding: 10, flex: 1, alignContent: 'center' }}>
@@ -36,17 +36,13 @@ export function LoginPage({ navigation }) {
             <Pressable
                 style={appStyles.button}
                 onPress={() => {
-                    // TODO: Add validation with a database for user logins
-                    // Use validate as return variable
-
-                    //validate = database.password() == password
-
-                    if (validate) {
-                        navigation.navigate('Home');
-                    } else {
-                        // Notify the user of a failed login
-                        setRejection('Login information is incorrect');
+                    if (username !== '' && password !== '') {
+                        userAuth(username, password).then((resp) => {
+                            resp.data ? navigation.navigate('Home') : setRejection('Login information is incorrect');
+                        });
+                        return;
                     }
+                    setRejection('Fill out all forms');
                 }}
             >
                 <Text style={appStyles.buttonLabel}>Login</Text>
