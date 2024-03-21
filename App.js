@@ -71,6 +71,64 @@ export default function App({ navigation }) {
     },
   }), []);
 
+export default function App({ navigation }) {
+  const [state, dispatch] = React.useReducer(
+    (prevState, action) => {
+      switch (action.type) {
+        case 'RESTORE_TOKEN':
+          return {
+            ...prevState,
+            userToken: action.token,
+            isLoading: false,
+          };
+        case 'SIGN_IN':
+          return {
+            ...prevState,
+            isSignout: false,
+            userToken: action.token,
+          };
+        case 'SIGN_OUT':
+          return {
+            ...prevState,
+            isSignout: true,
+            userToken: null
+          };
+      }
+    },
+    {
+      isLoading: true,
+      isSignout: false,
+      userToken: null,
+    }
+  );
+
+  React.useEffect(() => {
+    const bootstrapAsync = async () => {
+      let userToken;
+      try {
+        userToken = await SecureStore.getItemAsync('userToken');
+      } catch (e) {
+        // When failed
+      }
+
+      dispatch({ type: 'RESTORE_TOKEN', token: userToken });
+    };
+
+    bootstrapAsync();
+  }, []);
+
+  const AuthMemo = React.useMemo(() => ({
+    signIn: async (data) => {
+      console.log('Sign in data package: ', data);
+      dispatch({ type: 'SIGN_IN', token: 'token' });
+    },
+    signOut: () => dispatch({ type: 'SIGN_OUT' }),
+    signUp: async (data) => {
+      console.log('Sign up data package: ', data);
+      dispatch({ type: 'SIGN_IN', token: 'token' });
+    },
+  }), []);
+
   return (
     <NavigationContainer>
       <AuthContext.Provider value={AuthMemo}>
