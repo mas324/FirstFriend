@@ -8,10 +8,12 @@ export function SignUpPage({navigation}) {
     const [firstname, setUserFirstName] = useState('');
     const [lastname, setUserLastName] = useState('');
     const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [Country_of_Origin, setUserCoO] = useState('');
     const [SID, setSID] = useState('');
     const [Major, setUserMajor] = useState('');
     const [password, setPassword] = useState('');
+    const [confPassword, setConfPassword] = useState('');
     const [confPassword, setConfPassword] = useState('');
 
     const handleSignUp = () => {
@@ -35,7 +37,8 @@ export function SignUpPage({navigation}) {
                 },
                 school: {
                     sid: SID,
-                    study: Major
+                    study: Major,
+                    email: email
                 },
                 country: Country_of_Origin,
                 password: password
@@ -49,13 +52,13 @@ export function SignUpPage({navigation}) {
         <SafeAreaView>
             <TextInput
                 style={[appStyles.input]}
-                placeholder="UserFirstName"
+                placeholder="First Name"
                 value={firstname}
                 onChangeText={text => setUserFirstName(text)}
             />
              <TextInput
                 style={[appStyles.input]}
-                placeholder="UserLastName"
+                placeholder="Last Name"
                 value={lastname}
                 onChangeText={text => setUserLastName(text)}
             />
@@ -64,6 +67,12 @@ export function SignUpPage({navigation}) {
                 placeholder="Username"
                 value={username}
                 onChangeText={text => setUsername(text)}
+            />
+            <TextInput
+                style={[appStyles.input]}
+                placeholder='Email'
+                value={email}
+                onChangeText={text => setEmail(text)}
             />
             <TextInput
                 style={[appStyles.input]}
