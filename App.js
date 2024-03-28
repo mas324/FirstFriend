@@ -10,8 +10,10 @@ import { Jobs } from './screens/Job';
 import Messages from './screens/Messages';
 import { SignUpPage } from './screens/Signup';
 import { AuthContext } from './utils/Auth';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function App({ navigation }) {
   const [state, dispatch] = React.useReducer(
@@ -71,27 +73,41 @@ export default function App({ navigation }) {
     },
   }), []);
 
-  return (
-    <NavigationContainer>
-      <AuthContext.Provider value={AuthMemo}>
-        <Stack.Navigator initialRouteName='Test'>
-        {state.userToken == null || state.userToken != null ? (
-          <>
-            <Stack.Screen name='Login' component={LoginPage} options={{title: 'Login'}} />
-            <Stack.Screen name='PassRes' component={PasswordReset} options={{title: 'Forgot Password'}} />
-            <Stack.Screen name='Signup' component={SignUpPage} options={{title: 'Signup'}} />
-            <Stack.Screen name='Test' component={Test} options={{title: 'Dev Test page'}} />
-            <Stack.Screen name='Home' component={Home} options={{title: 'Home'}} />
-            <Stack.Screen name='Jobs' component={Jobs} options={{title: 'Jobs'}} />
-            <Stack.Screen name='Messages' component={Messages} options={{title: 'Messages'}} />            
-          </>
-        ) : (
-          <>
+  const dev = false; // For final release remove this and else return
 
-          </>
-        )}
+  if (!dev) {
+    return (
+      <NavigationContainer>
+        <AuthContext.Provider value={AuthMemo}>
+          {state.userToken == null ? (
+            <Stack.Navigator initialRouteName='Login'>
+              <Stack.Screen name='Login' component={LoginPage} options={{ title: 'Login' }} />
+              <Stack.Screen name='PassRes' component={PasswordReset} options={{ title: 'Forgot Password' }} />
+              <Stack.Screen name='Signup' component={SignUpPage} options={{ title: 'Signup' }} />
+            </Stack.Navigator>
+          ) : (
+            <Tab.Navigator initialRouteName='Home'>
+              <Tab.Screen name='Home' component={Home} />
+              <Tab.Screen name='Jobs' component={Jobs} />
+              <Tab.Screen name='Messages' component={Messages} />
+            </Tab.Navigator>
+          )}
+        </AuthContext.Provider>
+      </NavigationContainer>
+    );
+  } else {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='Test'>
+          <Stack.Screen name='Test' component={Test} />
+          <Stack.Screen name='Login' component={LoginPage} />
+          <Stack.Screen name='PassRes' component={PasswordReset} />
+          <Stack.Screen name='Signup' component={SignUpPage} />
+          <Stack.Screen name='Home' component={Home} />
+          <Stack.Screen name='Jobs' component={Jobs} />
+          <Stack.Screen name='Messages' component={Messages} />
         </Stack.Navigator>
-      </AuthContext.Provider>
-    </NavigationContainer>
-  );
+      </NavigationContainer>
+    );
+  }
 }

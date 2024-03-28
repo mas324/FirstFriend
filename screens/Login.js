@@ -36,13 +36,17 @@ export function LoginPage({ navigation }) {
             <Pressable
                 style={appStyles.button}
                 onPress={() => {
-                    if (username !== '' && password !== '') {
-                        userAuth(username, password).then((resp) => {
-                            resp.data ? navigation.navigate('Home') : setRejection('Login information is incorrect');
-                        });
+                    if (username === '' && password === '') {
+                        setRejection('Fill out all forms');                        
                         return;
                     }
-                    setRejection('Fill out all forms');
+
+                    userAuth(username, password).then((resp) => {
+                        resp.data ? navigation.navigate('Home') : setRejection('Login information is incorrect');
+                    }).catch((err) => {
+                        console.error(err);
+                        setRejection('No connection to servers');
+                    });
                 }}
             >
                 <Text style={appStyles.buttonLabel}>Login</Text>

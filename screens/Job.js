@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet, VirtualizedList} from 'react-native';
+import { View, StyleSheet, VirtualizedList } from 'react-native';
 import { Text } from '../components/TextFix';
 
 const Page = StyleSheet.create({
@@ -11,7 +11,7 @@ const Page = StyleSheet.create({
         paddingRight: 30,
         padding: 20,
         justifyContent: 'top',
-        flex:1,
+        flex: 1,
     },
 
     jobTitle: {
@@ -20,7 +20,7 @@ const Page = StyleSheet.create({
         paddingBottom: 10,
     },
 
-    jobSection:{
+    jobSection: {
         paddingTop: 10,
         fontSize: 15,
         fontWeight: 'bold',
@@ -38,7 +38,7 @@ const Page = StyleSheet.create({
 
 const styles = StyleSheet.create({
     container: {
-        flex:1,
+        flex: 1,
     },
     item: {
         backgroundColor: '#f9c2ff',
@@ -57,8 +57,8 @@ const styles = StyleSheet.create({
     Then call API methods to retrieve data
 */
 const getCard = (title, description, qualifications, salary) => {
-    return(
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'top'}}>
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'top' }}>
             <View style={Page.pageBG}>
                 <Text style={Page.jobTitle}>default Title</Text>
                 <Text style={Page.jobSection}>Description</Text>
@@ -76,9 +76,9 @@ const getCard = (title, description, qualifications, salary) => {
 
 
 // DEMO ONLY
-const DemoCard= () => {
-    return(
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'top'}}>
+const DemoCard = () => {
+    return (
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'top' }}>
             <View style={Page.pageBG}>
                 <Text style={Page.jobTitle}>Intern Front End Developer</Text>
                 <Text style={Page.jobSection}>Description</Text>
@@ -95,13 +95,13 @@ const DemoCard= () => {
 
 const DATA = []
 
-const Item = ({title}) => (
+const Item = ({ title }) => (
     <View style={styles.item}>
         <Text style={styles.title}>{title}</Text>
     </View>
 )
 
-export function Jobs({navigator}) {
+export function Jobs({ navigator }) {
 
     // const renderItem = ({item, index}) => {
     //     return (
@@ -118,7 +118,7 @@ export function Jobs({navigator}) {
         //     renderItem={renderItem}
         //     />
         // </SafeAreaView>
-        
+
 
         DemoCard()
     )

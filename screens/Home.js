@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Button, StyleSheet, Dimensions } from 'react-native';
 import { Text } from '../components/TextFix';
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
   const handleButtonPress = (buttonNumber) => {
     // define actions for each button press here
 
@@ -54,16 +54,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headingContainer: {
-    backgroundColor: '#FF9800', 
-    paddingVertical: 10, 
-    paddingHorizontal: 0.05 * Dimensions.get('window').width, 
-    borderRadius: 5, 
-    marginBottom: 20, 
+    backgroundColor: '#FF9800',
+    paddingVertical: 10,
+    paddingHorizontal: 0.05 * Dimensions.get('window').width,
+    borderRadius: 5,
+    marginBottom: 20,
   },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white', 
+    color: 'white',
   },
 });
 

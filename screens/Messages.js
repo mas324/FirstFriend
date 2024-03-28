@@ -7,7 +7,7 @@ const styles = appStyles;
 
 const Messages = () => {
   const [flexDirection, setflexDirection] = useState('column');
-  const {winWidth} = useWindowDimensions();
+  const { winWidth } = useWindowDimensions();
 
   return (
     <PreviewLayout
