@@ -3,12 +3,32 @@ import { TextInput, SafeAreaView, Pressable, View } from 'react-native';
 import { Text } from '../components/TextFix';
 import { appStyles } from '../components/AppStyles';
 import { userAuth } from '../utils/Database';
+import { useAuth } from '../utils/Authentication/Auth';
 
 export function LoginPage({ navigation }) {
 
-    const [username, setName] = useState('');
-    const [password, setPass] = useState('');
+    const [username, setName] = useState('jdoe');
+    const [password, setPass] = useState('password1');
     const [rejectNotif, setRejection] = useState('');
+    const { user, login } = useAuth();
+
+    const handleLogin = () => {
+        if (username === '' || password === '') {
+            setRejection('Fill out all forms');
+            return;
+        }
+
+        userAuth(username, password).then((resp) => {
+            if (resp.data) {
+                login({ username: username, authToken: 'token' });
+                console.log('User is:', user);
+            } else {
+                setRejection('Login information is incorrect');
+            }
+        }).catch(() => {
+            setRejection('No connection to server. Try again later.');
+        });
+    }
 
     return (
         <SafeAreaView style={{ padding: 10, flex: 1, alignContent: 'center' }}>
@@ -35,19 +55,7 @@ export function LoginPage({ navigation }) {
             />
             <Pressable
                 style={appStyles.button}
-                onPress={() => {
-                    if (username === '' && password === '') {
-                        setRejection('Fill out all forms');                        
-                        return;
-                    }
-
-                    userAuth(username, password).then((resp) => {
-                        resp.data ? navigation.navigate('Home') : setRejection('Login information is incorrect');
-                    }).catch((err) => {
-                        console.error(err);
-                        setRejection('No connection to servers');
-                    });
-                }}
+                onPress={handleLogin}
             >
                 <Text style={appStyles.buttonLabel}>Login</Text>
             </Pressable>
@@ -59,10 +67,10 @@ export function LoginPage({ navigation }) {
                 }}
             >
                 <Pressable onPress={() => { navigation.navigate('Signup') }}>
-                    <Text style={{color: 'blue'}}>Signup</Text>
+                    <Text style={{ color: 'blue' }}>Signup</Text>
                 </Pressable>
                 <Pressable onPress={() => { navigation.navigate('PassRes') }}>
-                    <Text style={{color: 'blue'}}>Forgot password</Text>
+                    <Text style={{ color: 'blue' }}>Forgot password</Text>
                 </Pressable>
             </View>
         </SafeAreaView>
