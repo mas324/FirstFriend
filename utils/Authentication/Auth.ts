@@ -1,7 +1,7 @@
-import { useEffect } from "react";
 import * as Crypto from 'expo-crypto';
-import { useLocalStore } from "./useLocalStorage";
-import { User, useUser } from "./useUser";
+import { deleteItem, setItem } from "./LocalStore";
+import { useContext } from 'react';
+import AppContext from './AppContext';
 
 // Function to hash any data that is needed, mainly passwords
 export async function hasher(toHash: string) {
@@ -17,28 +17,13 @@ export async function hasher(toHash: string) {
 }
 
 export const useAuth = () => {
-    const { user, addUser, removeUser, setUser } = useUser();
-    const { retrieveItem } = useLocalStore();
-
-    useEffect(() => {
-        console.log('triggered effect');
-        retrieveItem().then((value) => {
-            console.log('entered promise effect', value);
-            if (value != null) {
-                addUser(JSON.parse(value));
-            }
-        })
-    }, [addUser, retrieveItem]);
-
-    const login = (user: User) => {
-        addUser(user);
-    };
+    const login = (user: string) => {
+        setItem('@user', user)
+    }
 
     const logout = () => {
-        removeUser();
-    };
+        deleteItem('@user');
+    }
 
-    return { user, login, logout, setUser };
+    return { login, logout };
 }
-
-

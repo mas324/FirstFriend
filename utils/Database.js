@@ -1,7 +1,7 @@
 import Axios from 'axios';
 
 const inst = Axios.create({
-    baseURL: 'http://192.168.1.60:3305/api/',
+    baseURL: 'http://ssm.mywire.org:3405/api/',
     timeout: 1000
 });
 

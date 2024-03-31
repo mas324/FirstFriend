@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { TextInput, SafeAreaView, Pressable, View } from 'react-native';
 import { Text } from '../components/TextFix';
 import { appStyles } from '../components/AppStyles';
 import { userAuth } from '../utils/Database';
 import { useAuth } from '../utils/Authentication/Auth';
+import AppContext from '../utils/Authentication/AppContext';
 
 export function LoginPage({ navigation }) {
-
+    const { setState } = useContext(AppContext);
     const [username, setName] = useState('jdoe');
     const [password, setPass] = useState('password1');
     const [rejectNotif, setRejection] = useState('');
-    const { user, login } = useAuth();
+    const { login } = useAuth();
 
     const handleLogin = () => {
         if (username === '' || password === '') {
@@ -19,9 +20,11 @@ export function LoginPage({ navigation }) {
         }
 
         userAuth(username, password).then((resp) => {
+            console.log(resp.data);
             if (resp.data) {
-                login({ username: username, authToken: 'token' });
-                console.log('User is:', user);
+                setRejection('');
+                login(username);
+                setState(username);
             } else {
                 setRejection('Login information is incorrect');
             }
