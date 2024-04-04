@@ -6,7 +6,10 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "lint": "eslint .",
+    "adb:reverse": "adb start-server && adb reverse tcp:8081 tcp:8081",
+    "clean": "react-native-clean-project"
   },
   "dependencies": {
     "@expo/metro-runtime": "~3.1.3",
