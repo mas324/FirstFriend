@@ -1,9 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import Message from './Message';
-import SendMessageScreen from './SendMessageScreen';
 import MessageDetails from './MessageDetails';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import MessageDetails from './MessageDetails';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +17,7 @@ export default function App() {
     </NavigationContainer>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
