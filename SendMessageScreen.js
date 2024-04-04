@@ -8,6 +8,11 @@ const SendMessageScreen = () => {
   const navigation = useNavigation();
   const [userID, setUserID] = useState("");
 
+  const handleSubmit = () => {
+    
+    navigation.navigate('MessageDetails', { userID });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
@@ -24,8 +29,8 @@ const SendMessageScreen = () => {
             title="Submit" 
             color= "#f3e5ab"
             marginTop = "20"
-            onPress={() => navigation.goBack()} />
-
+            onPress={handleSubmit} 
+            />
       </View>
       </View>
   );
