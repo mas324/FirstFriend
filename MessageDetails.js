@@ -1,18 +1,24 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+
 
 const MessageDetails = ({ route }) => {
+  const navigation = useNavigation();
   const [message, setMessage] = useState('');
-  const { userID } = route.params;
+  const { userID, onMessageSent} = route.params;
 
   const handleSend = () => {
-    console.log('Message sent:', message);
-  };
+  console.log('Message sent:', message);
+  onMessageSent(); 
+};
+
+
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Message Details</Text>
-      <Text style={styles.userInfo}>Recipient: {userID}</Text>
+      <Text style={styles.heading}>New Message</Text>
+      <Text style={styles.userInfo}> {userID}</Text>
       <TextInput
         placeholder="Type your message here..."
         placeholderTextColor="#f3e5ab"
@@ -21,7 +27,7 @@ const MessageDetails = ({ route }) => {
         value={message}
         onChangeText={setMessage}
       />
-      <Button title="Send" onPress={handleSend} />
+      <Button title="Send" color= "#f3e5ab" onPress={handleSend} />
     </View>
   );
 };
@@ -44,7 +50,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   input: {
-    height: 150,
+    height: 75,
     borderWidth: 2,
     borderColor: '#f3e5ab',
     borderRadius: 10,

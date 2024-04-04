@@ -16,10 +16,11 @@ const SendMessageScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
-        <Text style={styles.headingText}>New Message</Text>
+        <Text style={styles.headingText}>Add New Friend</Text>
         <TextInput
                 placeholder="Insert userID"
                 placeholderTextColor = "#f3e5ab"
+                fontWeight = "bold"
                 value={userID}
                 onChangeText={(text) => setUserID(text)}
                 keyboardType="user ID"
