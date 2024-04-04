@@ -1,6 +1,10 @@
-import React from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
+import React, {useState} from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, FlatList, Image} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import MessageDetails from './MessageDetails';
+
+
 
 const Item = ({ name, photo, status }) => (
     <View style={styles.item}>
@@ -27,43 +31,22 @@ const FAB = () => {
     </TouchableOpacity>
   );
 };
+};
 
-const Message = () => {
-  
-  const data = [
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-     { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-     { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-     { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-     { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
-  ];
+const Messages = () => {
+  const [messages, setMessages] = useState([]);
+
+  const handleMessageSent = () => {
+    console.log('Message sent!');
+  };
+
+  const handleAddMessage = (message) => {
+    setMessages(prevMessages => [...prevMessages, message]);
+  };
+
+  const handleItemPress = (userID) => {
+    navigation.navigate('MessageDetails', { userID, onMessageSent: handleMessageSent });
+  };
 
   return (
     <View style={styles.container}>
@@ -72,7 +55,7 @@ const Message = () => {
       </View>
 
       <FlatList
-        data={data}
+        data={messages}
         renderItem={({ item }) => <Item name={item.name} photo={item.photo} status={item.status} />}
       />
 
@@ -156,8 +139,8 @@ const styles = StyleSheet.create({
   },
   fabIcon: {
     fontSize: 40,
-    color: 'white',
+    color: '#f3e5ab',
   },
 });
 
-export default Message;
+export default Messages;

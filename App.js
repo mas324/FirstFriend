@@ -64,7 +64,9 @@ const App = () => {
           <Stack.Screen name='Signup' component={SignUpPage} />
           <Stack.Screen name='Home' component={Home} />
           <Stack.Screen name='Jobs' component={Jobs} />
-          <Stack.Screen name='Messages' component={Messages} />
+          <Stack.Screen options={{headerShown: false}} name="Messages" component={Messages} />
+          <Stack.Screen options={{headerShown: false}} name="SendMessageScreen" component={SendMessageScreen} />
+          <Stack.Screen options={{headerShown: false}} name="MessageDetails" component={MessageDetails} />
         </Stack.Navigator>
       </NavigationContainer>
     );
