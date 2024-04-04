@@ -1,8 +1,6 @@
 import React from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 
 const Item = ({ name, photo, status }) => (
     <View style={styles.item}>
