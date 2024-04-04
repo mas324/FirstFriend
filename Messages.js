@@ -4,15 +4,14 @@ import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
-const Item = ({ name, timestamp, photo }) => (
+const Item = ({ name, photo, status }) => (
     <View style={styles.item}>
       <Image source={{ uri: photo }} style={styles.contactPhoto} />
       <View style={styles.messageContent}>
         <Text style={styles.name}>{name}</Text>
         <View style={styles.statusContainer}>
-          <Text style={styles.status}>New Message</Text>
-        </View>
-        <Text style={styles.timestamp}>{timestamp}</Text>
+        <Text style={status === 'New' ? styles.newMessage : styles.readMessage}>{status} Message</Text>
+          </View>
       </View>
     </View>
   );
@@ -34,34 +33,38 @@ const FAB = () => {
 const Message = () => {
   
   const data = [
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-     { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-     { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-   { name: 'John', photo: 'https://http.cat/images/200.jpg'},
-    { name: 'John', photo: 'https://http.cat/images/200.jpg'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+     { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+     { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+     { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+     { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+   { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
+    { name: 'John', photo: 'https://http.cat/images/200.jpg', status: 'New'},
   ];
 
   return (
@@ -72,7 +75,7 @@ const Message = () => {
 
       <FlatList
         data={data}
-        renderItem={({ item }) => <Item name={item.name} photo={item.photo}   />}
+        renderItem={({ item }) => <Item name={item.name} photo={item.photo} status={item.status} />}
       />
 
       <FAB />
@@ -128,16 +131,18 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  timestamp: {
-    fontSize: 10,
-    color: 'gray',
-  },
   statusContainer: {
     marginTop: 10 , 
   },
-  status: {
+  newMessage: {
     fontSize: 14,
-    color: 'green', 
+    color: 'green',
+    fontWeight: 'bold',
+  },
+  readMessage: {
+    fontSize: 14,
+    color: 'black',
+    fontWeight: 'bold',
   },
   fab: {
     position: 'absolute',
