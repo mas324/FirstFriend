@@ -23,7 +23,7 @@ const SendMessageScreen = () => {
                 fontWeight = "bold"
                 value={userID}
                 onChangeText={(text) => setUserID(text)}
-                keyboardType="user ID"
+                keyboardType='number-pad'
                 style={styles.input}
             />
             <Button 
