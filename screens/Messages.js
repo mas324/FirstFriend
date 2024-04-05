@@ -70,6 +70,7 @@ const Messages = () => {
     <Stack.Navigator>
       <Stack.Screen name='MessageMain' component={MessagePage} />
       <Stack.Screen name='SendMessageScreen' component={SendMessageScreen} />
+      <Stack.Screen name='MessageDetails' component={MessageDetails} />
     </Stack.Navigator>
   );
 };
