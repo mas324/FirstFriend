@@ -1,22 +1,23 @@
-import React, {useState} from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, FlatList, Image} from 'react-native';
+import React, { useState } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import MessageDetails from './MessageDetails';
+import MessageDetails from '../MessageDetails';
+import SendMessageScreen from '../SendMessageScreen';
 
+const Stack = createNativeStackNavigator();
 
-
-const Item = ({ name, photo, status }) => (
-    <View style={styles.item}>
-      <Image source={{ uri: photo }} style={styles.contactPhoto} />
-      <View style={styles.messageContent}>
-        <Text style={styles.name}>{name}</Text>
-        <View style={styles.statusContainer}>
+const Item = ({ name, photo, status }) => {
+  <View style={styles.item}>
+    <Image source={{ uri: photo }} style={styles.contactPhoto} />
+    <View style={styles.messageContent}>
+      <Text style={styles.name}>{name}</Text>
+      <View style={styles.statusContainer}>
         <Text style={status === 'New' ? styles.newMessage : styles.readMessage}>{status} Message</Text>
-          </View>
       </View>
     </View>
-  );
+  </View>
+};
 
 const FAB = () => {
   const navigation = useNavigation();
@@ -31,9 +32,9 @@ const FAB = () => {
     </TouchableOpacity>
   );
 };
-};
 
-const Messages = () => {
+const MessagePage = () => {
+
   const [messages, setMessages] = useState([]);
 
   const handleMessageSent = () => {
@@ -48,19 +49,28 @@ const Messages = () => {
     navigation.navigate('MessageDetails', { userID, onMessageSent: handleMessageSent });
   };
 
+
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
         <Text style={styles.headingText}>First Friend</Text>
       </View>
-
       <FlatList
         data={messages}
         renderItem={({ item }) => <Item name={item.name} photo={item.photo} status={item.status} />}
       />
-
       <FAB />
     </View>
+  )
+}
+
+const Messages = () => {
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name='MessageMain' component={MessagePage} />
+      <Stack.Screen name='SendMessageScreen' component={SendMessageScreen} />
+    </Stack.Navigator>
   );
 };
 
@@ -113,7 +123,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   statusContainer: {
-    marginTop: 10 , 
+    marginTop: 10,
   },
   newMessage: {
     fontSize: 14,

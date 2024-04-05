@@ -6,7 +6,8 @@ const inst = Axios.create({
 });
 
 export async function userAuth(user, password) {
-    return inst.post('auth', { userName: user, pass: password });
+    //return inst.post('auth', { userName: user, pass: password });
+    return {data: true}; // Remove this line to enable db auth again
 }
 
 export async function userCreate(newUser) {
