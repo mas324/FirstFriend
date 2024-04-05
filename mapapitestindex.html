@@ -1,0 +1,54 @@
+<html>
+
+    <head>
+
+        <meta charset="UTF-8">
+        <title>Custom Google Map With Icons</title>
+        <meta name="viewport" content="width=device-width", initial-scale="1.0">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+        <style>
+            *{ padding: 0; margin: 0 }
+            html, body {
+                height: 100%;
+            }
+            body {
+                display: flex;
+            }
+            #google-map {
+                border: 1px solid maroon;
+                width: 700px;
+                height: 500px;
+                align-self: center;
+                margin: 0 auto;
+            }
+
+            .feh-content * {
+                font-family: 'uniform', sans-serif;
+            }
+            .feh-content h3{
+                font-weight: 500;
+                margin-bottom: 10px;
+                line-height: 18px;
+            }
+            .feh-content p {
+                font-weight: 500;
+                margin-bottom: 10px;
+                line-height: 18px;
+            }
+
+        </style>
+
+    </head>
+
+    <body>
+
+        <div id="google-map">
+
+        </div>
+
+    </body>
+
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA2IZ3ucheePbe7IYhlpSaPOFRSY30jUTg&callback=initMap"></script>
+    <script src="main.js"></script>
+</html>
