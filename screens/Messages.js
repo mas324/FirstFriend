@@ -38,8 +38,38 @@ const MessagePage = () => {
   const [messages, setMessages] = useState([]);
 
   const handleMessageSent = () => {
-    console.log('Message sent!');
+    const userName = 'John'; // Replace with the actual user name
+    const firstLetter = userName.charAt(0).toUpperCase();
+    const defaultPhoto = `https://ui-avatars.com/api/?name=${firstLetter}&background=random`;
+  
+    const messageData = {
+      name: userName,
+      photo: defaultPhoto,
+      status: 'New'
+    };
+  
+    fetch('http://localhost:3000/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(messageData)
+    })
+    .then(response => {
+      if (response.ok) {
+        console.log('Message sent successfully');
+        // Optionally, update state or perform other actions
+      } else {
+        console.error('Error sending message:', response.statusText);
+        // Handle error
+      }
+    })
+    .catch(error => {
+      console.error('Error sending message:', error);
+      // Handle error
+    });
   };
+  
 
   const handleAddMessage = (message) => {
     setMessages(prevMessages => [...prevMessages, message]);
