@@ -1,125 +1,82 @@
-import * as React from 'react';
-import { View, StyleSheet, VirtualizedList} from 'react-native';
+// import * as React from 'react';
+import React, {useEffect, useState} from 'react';
+import { View, StyleSheet, ActivityIndicator, FlatList, TextInput, SafeAreaView} from 'react-native';
 import { Text } from '../components/TextFix';
-
-const Page = StyleSheet.create({
-    pageBG: {
-        backgroundColor: '#E6EBEB',
-        alignSelf: 'stretch',
-        textAlign: 'left',
-        paddingLeft: 30,
-        paddingRight: 30,
-        padding: 20,
-        justifyContent: 'top',
-        flex:1,
-    },
-
-    jobTitle: {
-        fontWeight: 'bold',
-        fontSize: 30,
-        paddingBottom: 10,
-    },
-
-    jobSection:{
-        paddingTop: 10,
-        fontSize: 15,
-        fontWeight: 'bold',
-    },
-
-    item: {
-        backgroundColor: '#E6EBEB',
-        height: 150,
-        justifyContent: 'center',
-        marginVertical: 8,
-        marginHorizontal: 16,
-        padding: 20
-    }
-});
-
-const styles = StyleSheet.create({
-    container: {
-        flex:1,
-    },
-    item: {
-        backgroundColor: '#f9c2ff',
-        height: 150,
-        justifyContent: 'center',
-        marginVertical: 8,
-        marginHorizontal: 16,
-        padding: 20,
-    },
-    title: {
-        fontSize: 32
-    },
-})
-/* 
-    GetJob will have an API parameter to get said job information.
-    Then call API methods to retrieve data
-*/
-const getCard = (title, description, qualifications, salary) => {
-    return(
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'top'}}>
-            <View style={Page.pageBG}>
-                <Text style={Page.jobTitle}>default Title</Text>
-                <Text style={Page.jobSection}>Description</Text>
-                <Text>• default description...</Text>
-                <Text>• default description...</Text>
-                <Text style={Page.jobSection}>Qualifications</Text>
-                <Text>default qualifications</Text>
-                <Text style={Page.jobSection}>Salary</Text>
-                <Text>$10def</Text>
-            </View>
-        </View>
-    );
-}
-
-
+import {jobStyles } from '../components/JobStyles';
 
 // DEMO ONLY
 const DemoCard= () => {
     return(
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'top'}}>
-            <View style={Page.pageBG}>
-                <Text style={Page.jobTitle}>Intern Front End Developer</Text>
-                <Text style={Page.jobSection}>Description</Text>
-                <Text>• Development and design of Web based UI solutions to deliver an intuitive user experience</Text>
-                <Text>• Collaborate with users, technical, and architecture teams to solve complex user interface problems</Text>
-                <Text style={Page.jobSection}>Qualifications</Text>
-                <Text>Bachelor, Master or Doctorate of Science degree from an accredited course of study, in engineering, computer science, mathematics, physics or chemistry.</Text>
-                <Text style={Page.jobSection}>Salary</Text>
-                <Text>$20 per hour</Text>
-            </View>
+        <View>
+            <Text style={jobStyles.jobTitle}>Intern Front End Developer</Text>
+            <Text style={jobStyles.jobSection}>Description</Text>
+            <Text>• Development and design of Web based UI solutions to deliver an intuitive user experience</Text>
+            <Text>• Collaborate with users, technical, and architecture teams to solve complex user interface problems</Text>
+            <Text style={jobStyles.jobSection}>Qualifications</Text>
+            <Text>Bachelor, Master or Doctorate of Science degree from an accredited course of study, in engineering, computer science, mathematics, physics or chemistry.</Text>
+            <Text style={jobStyles.jobSection}>Salary</Text>
+            <Text>$20 per hour</Text>
         </View>
     );
 }
 
-const DATA = []
-
-const Item = ({title}) => (
-    <View style={styles.item}>
-        <Text style={styles.title}>{title}</Text>
-    </View>
-)
+const API_ENDPOINT = 'https://api.coresignal.com/cdapi/v1/linkedin/job/search/filter';
 
 export function Jobs({navigator}) {
+    const [isLoading, setIsLoading] = useState(false);
+    const [data, setData] = useState([]);
+    const [error, setError] = useState(null);
+    const [fullData, setFullData] = useState([]);
+    const [searchQuery, setSearchQuery] = useState("");
 
-    // const renderItem = ({item, index}) => {
-    //     return (
-    //         <View key={index} style={styles.item}>
-    //             <Text style={styles.title}>{item.title}</Text>
-    //         </View>
-    //     )
-    // }
+    useEffect(() =>{
+        setIsLoading(true);
+        fetchData(API_ENDPOINT);
+    }, []);
+
+    const fetchData = async(url) => {
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                mode: 'CORS',
+                headers: {
+                    'Authorization': 'eyJhbGciOiJFZERTQSIsImtpZCI6IjY0NWVmNzg3LTZkNmMtZTQ2ZS1kNjRiLWQ0N2FkZWRkZGM4NSJ9.eyJhdWQiOiJ0b3JvbWFpbC5jc3VkaC5lZHUiLCJleHAiOjE3NDM2NDU5NjQsImlhdCI6MTcxMjA4OTAxMiwiaXNzIjoiaHR0cHM6Ly9vcHMuY29yZXNpZ25hbC5jb206ODMwMC92MS9pZGVudGl0eS9vaWRjIiwibmFtZXNwYWNlIjoicm9vdCIsInByZWZlcnJlZF91c2VybmFtZSI6InRvcm9tYWlsLmNzdWRoLmVkdSIsInN1YiI6ImZhMGM0YzljLWMyMWMtZmZkZi1jMGI5LTQ4YWVkNWFmOWMxNiIsInVzZXJpbmZvIjp7InNjb3BlcyI6ImNkYXBpIn19.npUu-sntifY5L1IdkUez1Lw_btDeSOoDyoFrJmZ0dYcK0jECdFa6RJrnHfp30WQVd36x02NTZtoJ59LMCHEUBg'
+                }
+                // body: JSON.stringify(data)
+            });
+            const json = await response.json();
+            setData(json.results);
+
+            console.log(json.results);
+
+        }   catch(error) {
+            
+            setError(error);
+            console.log(error);
+        }
+    };
+
+    const handleSearch = (query) => {
+        setSearchQuery(query);
+    };
+
+    const demoBOOL = true; // TRUE WHILE API ISN'T WORKING
+
     return (
-        // <SafeAreaView style={styles.container}>
-        //     <VirtualizedList
-        //     data={DATA}
-        //     initialNumRender={1}
-        //     renderItem={renderItem}
-        //     />
-        // </SafeAreaView>
-        
-
-        DemoCard()
-    )
-}
+        <SafeAreaView style={{ padding: 10, flex: 1, alignContent: 'center', justifyContent: 'top'}}>
+            <View style={jobStyles.pageBG}>
+                {   
+                    demoBOOL === true ? DemoCard() : 
+                        <TextInput
+                            placeholder="Search"
+                            clearButtonMode="always"
+                            autoCapitalize="none"
+                            autoCorrect={false}
+                            value={searchQuery}
+                            onChangeText={(query) => handleSearch(query)}
+                        />
+                }  
+            </View>
+        </SafeAreaView>
+    );
+};
