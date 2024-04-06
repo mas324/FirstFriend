@@ -8,22 +8,67 @@ import Home from './screens/Home';
 import { Jobs } from './screens/Job';
 import Messages from './screens/Messages';
 import { SignUpPage } from './screens/Signup';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import AppContext from './utils/Authentication/AppContext';
+import { getItem } from './utils/Authentication/LocalStore';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
-export default function App({ navigation }) {
-  // Change route name to Test for development, Login for production
+const LoginStack = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName='Login'>
-        <Stack.Screen name='Test' component={Test} options={{title: 'Dev Test page'}} />
-        <Stack.Screen name='Login' component={LoginPage} options={{title: 'Login'}} />
-        <Stack.Screen name='PassRes' component={PasswordReset} options={{title: 'Forgot Password'}} />
-        <Stack.Screen name='Signup' component={SignUpPage} options={{title: 'Signup'}} />
-        <Stack.Screen name='Home' component={Home} options={{title: 'Home'}} />
-        <Stack.Screen name='Jobs' component={Jobs} options={{title: 'Jobs'}} />
-        <Stack.Screen name='Messages' component={Messages} options={{title: 'Messages'}} />
-      </Stack.Navigator>
-    </NavigationContainer>
-  );
+    <Stack.Navigator initialRouteName='Login' id='Unauth'>
+      <Stack.Screen name='Login' component={LoginPage} options={{ title: 'Login' }} />
+      <Stack.Screen name='PassRes' component={PasswordReset} options={{ title: 'Forgot Password' }} />
+      <Stack.Screen name='Signup' component={SignUpPage} options={{ title: 'Signup' }} />
+    </Stack.Navigator>
+  )
 }
+
+const MainStack = () => {
+  return (
+    <Tab.Navigator initialRouteName='Home' id='Authed'>
+      <Tab.Screen name='Home' component={Home} />
+      <Tab.Screen name='Jobs' component={Jobs} />
+      <Tab.Screen name='Messages' component={Messages} />
+    </Tab.Navigator>
+  )
+}
+
+const App = () => {
+  const dev = false; // For final release remove this and else return
+  const [state, setState] = React.useState('unauth');
+
+  React.useEffect(() => {
+    getItem('@user').then((val) => {
+      console.log('Setting state to:', val);
+      setState(val);
+    })
+  });
+
+  if (!dev) {
+    return (
+      <NavigationContainer>
+        <AppContext.Provider value={{ state, setState }}>
+          {state === null ? <LoginStack /> : <MainStack />}
+        </AppContext.Provider>
+      </NavigationContainer>
+    );
+  } else {
+    return (
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName='Test'>
+          <Stack.Screen name='Test' component={Test} />
+          <Stack.Screen name='Login' component={LoginPage} />
+          <Stack.Screen name='PassRes' component={PasswordReset} />
+          <Stack.Screen name='Signup' component={SignUpPage} />
+          <Stack.Screen name='Home' component={Home} />
+          <Stack.Screen name='Jobs' component={Jobs} />
+          <Stack.Screen name='Messages' component={Messages} />
+        </Stack.Navigator>
+      </NavigationContainer>
+    );
+  }
+}
+
+export default App;
