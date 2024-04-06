@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Button, StyleSheet, Dimensions } from 'react-native';
 import { Text } from '../components/TextFix';
+import { useAuth } from '../utils/Authentication/Auth';
+import AppContext from '../utils/Authentication/AppContext';
 
-const Home = ({navigation}) => {
+const Home = ({ navigation }) => {
+  const { setState } = useContext(AppContext);
   const handleButtonPress = (buttonNumber) => {
     // define actions for each button press here
 
@@ -12,6 +15,11 @@ const Home = ({navigation}) => {
         break;
       case 4:
         navigation.navigate('Messages');
+        break;
+      case 5:
+        useAuth().logout();
+        setState(null);
+        break;
       default:
         console.log('Button', buttonNumber, 'pressed');
         break;
@@ -43,6 +51,11 @@ const Home = ({navigation}) => {
         onPress={() => handleButtonPress(4)}
         color="#4CAF50"
       />
+      <Button
+        title='Logout'
+        onPress={() => handleButtonPress(5)}
+        color='red'
+      />
     </View>
   );
 };
@@ -54,16 +67,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headingContainer: {
-    backgroundColor: '#FF9800', 
-    paddingVertical: 10, 
-    paddingHorizontal: 0.05 * Dimensions.get('window').width, 
-    borderRadius: 5, 
-    marginBottom: 20, 
+    backgroundColor: '#FF9800',
+    paddingVertical: 10,
+    paddingHorizontal: 0.05 * Dimensions.get('window').width,
+    borderRadius: 5,
+    marginBottom: 20,
   },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white', 
+    color: 'white',
   },
 });
 

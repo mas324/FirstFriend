@@ -7,12 +7,13 @@ export class Text extends React.Component<Native.TextProps> {
 
     return (
       <Native.Text style={[style,
-      {...Native.Platform.select({
-          android: {
-            fontFamily: 'monospace',
-          },
-        })
-      }]} {...rest}>
+        {
+          ...Native.Platform.select({
+            android: {
+              fontFamily: 'monospace',
+            },
+          })
+        }]} {...rest}>
         {children}
       </Native.Text>
     )
