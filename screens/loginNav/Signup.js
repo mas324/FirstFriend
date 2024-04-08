@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
-import { TextInput, SafeAreaView, Pressable } from 'react-native';
-import { appStyles } from '../components/AppStyles';
-import { Text } from '../components/TextFix';
-import { userCreate } from '../utils/Database';
+import React, { useContext, useState } from 'react';
+import { TextInput, Pressable, View } from 'react-native';
+import { appStyles } from '../../components/AppStyles';
+import { Text } from '../../components/TextFix';
+import { userCreate } from '../../utils/Database';
+import { useAuth } from '../../utils/Auth';
+import AppContext from '../../utils/AppContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-export function SignUpPage({ navigation }) {
+export default function SignUpPage({ navigation }) {
     const [firstname, setUserFirstName] = useState('');
     const [lastname, setUserLastName] = useState('');
     const [username, setUsername] = useState('');
@@ -14,6 +17,11 @@ export function SignUpPage({ navigation }) {
     const [Major, setUserMajor] = useState('');
     const [password, setPassword] = useState('');
     const [confPassword, setConfPassword] = useState('');
+
+    const [rejection, setRejection] = useState('');
+
+    const { login } = useAuth()
+    const { setState } = useContext(AppContext);
 
     const handleSignUp = () => {
         let verify = true;
@@ -28,66 +36,77 @@ export function SignUpPage({ navigation }) {
         }
 
         if (verify) {
-            let data = {
-                name: {
-                    first: firstname,
-                    last: lastname,
-                    user: username
-                },
-                school: {
-                    sid: SID,
-                    study: Major,
-                    email: email
-                },
+            userCreate({
+                id: SID,
+                email: email,
+                firstName: firstname,
+                lastName: lastname,
+                userName: username,
+                password: password,
                 country: Country_of_Origin,
-                password: password
-            }
-
-            userCreate(data);
+                study: Major
+            }).then((resp) => {
+                if (resp.status === 201) {
+                    login(username);
+                    setState(username);
+                } else {
+                    setRejection('Error occured. Please check if all fields are correct');
+                }
+            })
         }
     };
 
     return (
         <SafeAreaView>
-            <TextInput
-                style={[appStyles.input]}
-                placeholder="First Name"
-                autoComplete='given-name'
-                value={firstname}
-                onChangeText={text => setUserFirstName(text)}
-            />
-            <TextInput
-                style={[appStyles.input]}
-                placeholder="Last Name"
-                autoComplete='family-name'
-                value={lastname}
-                onChangeText={text => setUserLastName(text)}
-            />
+            <Text style={appStyles.reject}>
+                {rejection}
+            </Text>
+            <View style={{flexDirection: 'row', justifyContent: 'space-evenly'}}>
+                <TextInput
+                    style={[appStyles.input, {flex: 1}]}
+                    placeholder="First Name"
+                    value={firstname}
+                    onChangeText={text => setUserFirstName(text)}
+                    enterKeyHint='next'
+                />
+                <TextInput
+                    style={[appStyles.input, {flex: 1}]}
+                    placeholder="Last Name"
+                    value={lastname}
+                    onChangeText={text => setUserLastName(text)}
+                    enterKeyHint='next'
+                />
+            </View>
             <TextInput
                 style={[appStyles.input]}
                 placeholder="Username"
                 autoComplete='username-new'
                 value={username}
                 onChangeText={text => setUsername(text)}
+                enterKeyHint='next'
             />
             <TextInput
                 style={[appStyles.input]}
                 placeholder='Email'
-                autoComplete='email'
                 value={email}
                 onChangeText={text => setEmail(text)}
+                enterKeyHint='next'
+                inputMode='email'
             />
             <TextInput
                 style={[appStyles.input]}
                 placeholder="Country of Origin"
                 value={Country_of_Origin}
                 onChangeText={text => setUserCoO(text)}
+                enterKeyHint='next'
             />
             <TextInput
                 style={[appStyles.input]}
                 placeholder="Student ID"
                 value={SID}
                 onChangeText={text => setSID(text)}
+                enterKeyHint='next'
+                inputMode='numeric'
             />
             <TextInput
                 style={[appStyles.input]}

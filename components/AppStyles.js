@@ -1,6 +1,10 @@
 import { StyleSheet } from "react-native";
 
 export const appStyles = StyleSheet.create({
+  reject: {
+    color: 'red',
+    alignSelf: "center"
+  },
   input: {
     height: 40,
     margin: 10,

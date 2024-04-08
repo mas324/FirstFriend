@@ -1,7 +1,5 @@
 import * as Crypto from 'expo-crypto';
 import { deleteItem, setItem } from "./LocalStore";
-import { useContext } from 'react';
-import AppContext from './AppContext';
 
 // Function to hash any data that is needed, mainly passwords
 export async function hasher(toHash: string) {
