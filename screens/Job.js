@@ -5,6 +5,7 @@ import { Text } from '../components/TextFix';
 import { jobStyles } from '../components/JobStyles';
 import Axios from 'axios';
 import { appStyles } from '../components/AppStyles';
+import { getItem, setItem } from '../utils/Authentication/LocalStore';
 
 // DEMO ONLY
 const DemoCard = () => {
@@ -40,11 +41,15 @@ export function Jobs({ navigator }) {
     const onClickHandler = () => {
         console.log("Search Word = " + searchWord)
         const searchRequest = { title: searchWord };
-        instance.post(API_ENDPOINT, searchRequest).then(resp => {
-            console.log(resp);
-        }).catch(err => {
-            console.error(err);
-        })
+        console.log(getItem('@jobs'));
+        if (getItem('@jobs') === null) {
+            instance.post(API_ENDPOINT, searchRequest).then(resp => {
+                console.log(resp);
+                setItem('@jobs', resp);
+            }).catch(err => {
+                console.error(err);
+            })
+        }
     }
 
     return (
