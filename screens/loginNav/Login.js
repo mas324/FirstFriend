@@ -3,7 +3,7 @@ import { TextInput, Pressable, View } from 'react-native';
 import { Text } from '../../components/TextFix';
 import { appStyles } from '../../components/AppStyles';
 import { userAuth } from '../../utils/Database';
-import { useAuth } from '../../utils/Auth';
+import { getHash, useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -20,7 +20,11 @@ export default function LoginPage({ navigation }) {
             return;
         }
 
-        userAuth(username, password).then((response) => {
+        let hashedPass = '';
+        getHash(password).then(newHash => hashedPass = newHash
+        ).catch(err => setRejection('Unknown err:', err));
+
+        userAuth(username, hashedPass).then((response) => {
             if (response.data && response.status === 202) {
                 setRejection('');
                 login(username);

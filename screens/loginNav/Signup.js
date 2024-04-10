@@ -3,7 +3,7 @@ import { TextInput, Pressable, View, KeyboardAvoidingView, Platform, StyleSheet 
 import { appStyles } from '../../components/AppStyles';
 import { Text } from '../../components/TextFix';
 import { userCreate } from '../../utils/Database';
-import { useAuth } from '../../utils/Auth';
+import { getHash, useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -43,13 +43,17 @@ const SignUpPage = ({ navigation }) => {
             return;
         }
 
+        let hashedPass = '';
+        getHash(password).then(hash => hashedPass = hash
+        ).catch(err => setRejection('Unknown error:', err));
+
         userCreate({
             id: SID,
             email: email,
             firstName: firstname,
             lastName: lastname,
             userName: username,
-            password: password,
+            password: hashedPass,
             country: Country_of_Origin,
             study: Major
         }).then((resp) => {

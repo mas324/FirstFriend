@@ -5,6 +5,7 @@ import { Text } from '../../components/TextFix';
 import { appStyles } from '../../components/AppStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { userReset, userVerify } from '../../utils/Database';
+import { getHash } from '../../utils/Auth';
 
 const Stack = createNativeStackNavigator();
 let key;
@@ -96,7 +97,11 @@ function ResetPage({ navigation }) {
                         return;
                     }
                     if (password === passConf) {
-                        userReset({ password: password, key: key }).then(() => {
+                        let hashedPass = '';
+                        getHash(password).then(hashed => hashedPass = hashed
+                        ).catch(err => setReject('Unknown error:', err));
+
+                        userReset({ password: hashedPass, key: key }).then(() => {
                             navigation.goBack();
                         }).catch((_err) => {
                             setReject('Error in resetting password');
