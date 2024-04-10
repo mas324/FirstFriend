@@ -8,17 +8,17 @@ import { userReset, userVerify } from '../../utils/Database';
 
 const Stack = createNativeStackNavigator();
 let key;
-let outerID;
 
 function FormPage({ navigation }) {
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
     const [id, setID] = useState('');
     const [message, setMessage] = useState('Enter email, username, and student ID');
+    const [color, setColor] = useState(null)
 
     return (
         <SafeAreaView>
-            <Text style={{ textAlign: 'center' }}>
+            <Text style={[{ textAlign: 'center' }, color]}>
                 {message}
             </Text>
             <TextInput
@@ -26,6 +26,7 @@ function FormPage({ navigation }) {
                 placeholder='Email'
                 onChangeText={newmail => setEmail(newmail)}
                 defaultValue={email}
+                inputMode='email'
             />
             <TextInput
                 style={appStyles.input}
@@ -38,19 +39,25 @@ function FormPage({ navigation }) {
                 placeholder='Student ID'
                 onChangeText={newID => setID(newID)}
                 defaultValue={id}
+                inputMode='numeric'
             />
             <Pressable
                 style={appStyles.button}
                 onPress={() => {
+                    if (email === '' || username === '' || id === '') {
+                        setMessage('Fill all fields');
+                        setColor(appStyles.reject);
+                        return;
+                    }
                     userVerify({ email: email, id: id, username: username }).then((resp) => {
                         if (resp.status === 202) {
                             key = resp.data;
-                            outerID = id;
                             navigation.replace('ResetPassword');
                         }
-                    }, (err) => {
-                        setMessage(err.response.data);
-                    })
+                    }).catch(_err => {
+                        setMessage('Failed to verify user');
+                        setColor(appStyles.reject);
+                    });
                 }}
             >
                 <Text style={appStyles.buttonLabel}>Reset Password</Text>
@@ -66,7 +73,7 @@ function ResetPage({ navigation }) {
 
     return (
         <SafeAreaView>
-            <Text>Test input for the next step in reset password</Text>
+            <Text>Enter new password</Text>
             <TextInput
                 style={appStyles.input}
                 secureTextEntry={true}
@@ -77,7 +84,7 @@ function ResetPage({ navigation }) {
             <TextInput
                 style={appStyles.input}
                 secureTextEntry={true}
-                placeholder='Reenter password'
+                placeholder='Confirm password'
                 onChangeText={newPass => setConfirm(newPass)}
                 defaultValue={passConf}
             />
@@ -85,14 +92,14 @@ function ResetPage({ navigation }) {
                 style={appStyles.button}
                 onPress={() => {
                     if (password === '' || passConf === '') {
-                        setReject('Fill out forms');
+                        setReject('Fill out all forms');
                         return;
                     }
                     if (password === passConf) {
-                        userReset({ id: outerID, password: password }).then(() => {
+                        userReset({ password: password, key: key }).then(() => {
                             navigation.goBack();
-                        }).catch((e) => {
-                            setReject(e)
+                        }).catch((_err) => {
+                            setReject('Error in resetting password');
                         });
                     } else {
                         setReject('Password mismatch');

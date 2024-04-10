@@ -18,7 +18,7 @@ const Tab = createBottomTabNavigator();
 
 const LoginStack = () => {
   return (
-    <Stack.Navigator initialRouteName='Login' id='Unauth' key={'main'}>
+    <Stack.Navigator initialRouteName='Login' id='Unauth' key={'main'} screenOptions={{ headerShown: false }}>
       <Stack.Screen name='Login' component={LoginPage} />
       <Stack.Screen name='PassRes' component={PasswordReset} />
       <Stack.Screen name='Signup' component={SignUpPage} />
@@ -42,7 +42,6 @@ const App = () => {
 
   React.useEffect(() => {
     getItem('@user').then((val) => {
-      console.log('Setting state to:', val);
       setState(val);
     })
   });

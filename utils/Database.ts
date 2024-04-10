@@ -11,16 +11,16 @@ type User = {
     password: string
 }
 
-type CompUser = {
-    id: number,
+type CompactUser = {
+    id?: number,
     username: string,
-    email: string
+    email?: string
 }
 
 const inst = Axios.create({
     baseURL: 'http://ssm.mywire.org:3405/api/',
     //baseURL: 'http://localhost:3405/api/',
-    timeout: 5000
+    timeout: 1000,
 });
 
 export async function userAuth(user: string, password: string) {
@@ -32,11 +32,11 @@ export async function userCreate(newUser: User) {
     return inst.post('create', newUser);
 }
 
-export async function userVerify(user: CompUser) {
+export async function userVerify(user: CompactUser) {
     return inst.post('verify', user);
 }
 
-export async function userReset(data: { password: string, id: number }) {
+export async function userReset(data: { password: string, key: string }) {
     return inst.post('reset', data);
 }
 
