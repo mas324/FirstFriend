@@ -6,7 +6,7 @@ import { PasswordReset } from './screens/PassRes';
 import { Test } from './screens/Test';
 import Home from './screens/Home';
 import { Jobs } from './screens/Job';
-import Messages from './screens/Messages';
+import Messages from './screens/messageNav/Messages';
 import { SignUpPage } from './screens/Signup';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AppContext from './utils/Authentication/AppContext';

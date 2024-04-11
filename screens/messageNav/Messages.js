@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { Text, View, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import MessageDetails from '../MessageDetails';
-import SendMessageScreen from '../SendMessageScreen';
+import MessageDetails from './MessageDetails';
+import SendMessageScreen from './SendMessageScreen';
 
 const Stack = createNativeStackNavigator();
 

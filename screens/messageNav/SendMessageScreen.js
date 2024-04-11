@@ -1,8 +1,6 @@
 import {React, useState} from 'react';
 import { View, Text, Button, TextInput, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
 
 const SendMessageScreen = () => {
   const navigation = useNavigation();

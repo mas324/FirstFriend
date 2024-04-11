@@ -2,18 +2,15 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-
 const MessageDetails = ({ route }) => {
   const navigation = useNavigation();
   const [message, setMessage] = useState('');
-  const { userID, onMessageSent} = route.params;
+  const { userID, onMessageSent } = route.params;
 
   const handleSend = () => {
-  console.log('Message sent:', message);
-  onMessageSent(); 
-};
-
-
+    console.log('Message sent:', message);
+    onMessageSent();
+  };
 
   return (
     <View style={styles.container}>
@@ -27,7 +24,7 @@ const MessageDetails = ({ route }) => {
         value={message}
         onChangeText={setMessage}
       />
-      <Button title="Send" color= "#f3e5ab" onPress={handleSend} />
+      <Button title="Send" color="#f3e5ab" onPress={handleSend} />
     </View>
   );
 };
