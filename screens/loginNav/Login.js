@@ -1,15 +1,16 @@
 import React, { useContext, useState } from 'react';
-import { TextInput, SafeAreaView, Pressable, View } from 'react-native';
-import { Text } from '../components/TextFix';
-import { appStyles } from '../components/AppStyles';
-import { userAuth } from '../utils/Database';
-import { useAuth } from '../utils/Authentication/Auth';
-import AppContext from '../utils/Authentication/AppContext';
+import { TextInput, Pressable, View } from 'react-native';
+import { Text } from '../../components/TextFix';
+import { appStyles } from '../../components/AppStyles';
+import { userAuth } from '../../utils/Database';
+import { getHash, useAuth } from '../../utils/Auth';
+import AppContext from '../../utils/AppContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-export function LoginPage({ navigation }) {
+export default function LoginPage({ navigation }) {
     const { setState } = useContext(AppContext);
-    const [username, setName] = useState('jdoe');
-    const [password, setPass] = useState('password1');
+    const [username, setName] = useState('');
+    const [password, setPass] = useState('');
     const [rejectNotif, setRejection] = useState('');
     const { login } = useAuth();
 
@@ -19,26 +20,26 @@ export function LoginPage({ navigation }) {
             return;
         }
 
-        userAuth(username, password).then((resp) => {
-            console.log(resp.data);
-            if (resp.data) {
+        let hashedPass = '';
+        getHash(password).then(newHash => hashedPass = newHash
+        ).catch(err => setRejection('Unknown err:', err));
+
+        userAuth(username, hashedPass).then((response) => {
+            if (response.data && response.status === 202) {
                 setRejection('');
                 login(username);
                 setState(username);
             } else {
                 setRejection('Login information is incorrect');
             }
-        }).catch(() => {
-            setRejection('No connection to server. Try again later.');
+        }, () => {
+            setRejection('Login information is incorrect');
         });
     }
 
     return (
         <SafeAreaView style={{ padding: 10, flex: 1, alignContent: 'center' }}>
-            <Text
-                style={{ color: 'red', alignSelf: 'center', }}
-                textBreakStrategy='simple'
-            >
+            <Text style={appStyles.reject}>
                 {rejectNotif}
             </Text>
             <TextInput

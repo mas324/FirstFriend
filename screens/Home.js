@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { View, Button, StyleSheet, Dimensions, Pressable } from 'react-native';
 import { Text } from '../components/TextFix';
-import { useAuth } from '../utils/Authentication/Auth';
-import AppContext from '../utils/Authentication/AppContext';
 import { appStyles } from '../components/AppStyles';
+import AppContext from '../utils/AppContext';
+import { useAuth } from '../utils/Auth';
 
 const Home = ({ navigation }) => {
   const { setState } = useContext(AppContext);

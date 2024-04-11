@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, FlatList, Image } from 'react-native';
+import { Text, View, StyleSheet, TouchableOpacity, FlatList, Image, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MessageDetails from './MessageDetails';
 import SendMessageScreen from './SendMessageScreen';
+import { messageCreate } from '../../utils/Database';
+import { getItem } from '../../utils/LocalStore';
 
 const Stack = createNativeStackNavigator();
 
@@ -38,38 +40,19 @@ const MessagePage = () => {
   const [messages, setMessages] = useState([]);
 
   const handleMessageSent = () => {
-    const userName = 'John'; // Replace with the actual user name
-    const firstLetter = userName.charAt(0).toUpperCase();
-    const defaultPhoto = `https://ui-avatars.com/api/?name=${firstLetter}&background=random`;
-  
-    const messageData = {
-      name: userName,
-      photo: defaultPhoto,
-      status: 'New'
-    };
-  
-    fetch('http://localhost:3000/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(messageData)
-    })
-    .then(response => {
-      if (response.ok) {
-        console.log('Message sent successfully');
-        // Optionally, update state or perform other actions
-      } else {
-        console.error('Error sending message:', response.statusText);
-        // Handle error
-      }
-    })
-    .catch(error => {
-      console.error('Error sending message:', error);
-      // Handle error
+    getItem('@user').then(val => {
+      const username = val;
+      const defaultPhoto = `https://ui-avatars.com/api/?name=${username}&background=random`;
+      console.log(defaultPhoto);
+      const messageData = {
+        name: username,
+        photo: defaultPhoto,
+        status: 'New'
+      };
+      messageCreate(messageData);
     });
   };
-  
+
 
   const handleAddMessage = (message) => {
     setMessages(prevMessages => [...prevMessages, message]);
@@ -85,6 +68,7 @@ const MessagePage = () => {
       <View style={styles.heading}>
         <Text style={styles.headingText}>First Friend</Text>
       </View>
+      <Button title='Click here' onPress={handleMessageSent} />
       <FlatList
         data={messages}
         renderItem={({ item }) => <Item name={item.name} photo={item.photo} status={item.status} />}
