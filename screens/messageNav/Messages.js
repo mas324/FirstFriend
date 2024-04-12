@@ -1,55 +1,87 @@
-import React, { useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, FlatList, Image, Button } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
+import { Text, View, StyleSheet, TouchableOpacity, FlatList, Image, Pressable, StatusBar } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MessageDetails from './MessageDetails';
 import SendMessageScreen from './SendMessageScreen';
-import { messageCreate } from '../../utils/Database';
-import { getItem } from '../../utils/LocalStore';
+import { getItem, setItem } from '../../utils/LocalStore';
+import { appStyles } from '../../components/AppStyles';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { messageCreate, messageGet } from '../../utils/Database';
+import AppContext from '../../utils/AppContext';
 
 const Stack = createNativeStackNavigator();
 
 const Item = ({ name, photo, status }) => {
-  <View style={styles.item}>
-    <Image source={{ uri: photo }} style={styles.contactPhoto} />
-    <View style={styles.messageContent}>
-      <Text style={styles.name}>{name}</Text>
-      <View style={styles.statusContainer}>
-        <Text style={status === 'New' ? styles.newMessage : styles.readMessage}>{status} Message</Text>
+  return (
+    <View style={styles.item}>
+      <Image source={{ uri: photo }} style={styles.contactPhoto} />
+      <View style={styles.messageContent}>
+        <Text style={styles.name}>{name}</Text>
+        <View style={styles.statusContainer}>
+          <Text style={status === 'New' ? styles.newMessage : styles.readMessage}>{status} Message</Text>
+        </View>
       </View>
     </View>
-  </View>
+  )
 };
 
-const FAB = () => {
-  const navigation = useNavigation();
-
-  const navigateToSendMessageScreen = () => {
-    navigation.navigate('SendMessageScreen');
-  };
-
-  return (
-    <TouchableOpacity onPress={navigateToSendMessageScreen} style={styles.fab}>
-      <Text style={styles.fabIcon}>+</Text>
-    </TouchableOpacity>
-  );
-};
-
-const MessagePage = () => {
-
+const MessagePage = ({ navigation }) => {
   const [messages, setMessages] = useState([]);
+  const { state: user } = useContext(AppContext);
+
+  useEffect(() => {
+    let local = null;
+    let remote = null;
+    getItem('@messages').then(val => {
+      if (val !== null && Array.isArray(val.data) && val.data.length) {
+        local = val;
+      }
+    }).catch(err => {
+      console.error(err)
+    }).finally(() => {
+      messageGet(user).then(val => {
+        console.log(val)
+        if (val !== null && Array.isArray(val.data) && val.data.length) {
+          remote = val.data;
+        }
+      }).catch(err => {
+        console.error(err);
+      }).finally(() => {
+        console.log('', local, remote);
+        if (local !== null && remote !== null) {
+          console.log('Comparison state');
+          /*
+          * Code here to compare timestamps to see what is outdated
+          * The internal storage should be outdated
+          * If not then something is wrong with processing
+          * This is here to fix any problem that may occur with that situation
+          * When in doubt just use remote database, as both users will be synced with that
+          */
+        } else if (local !== null) {
+          setMessages(local);
+        } else if (remote !== null) {
+          setMessages(remote);
+        }
+
+        console.log(messages);
+      });
+    });
+  }, []);
 
   const handleMessageSent = () => {
-    getItem('@user').then(val => {
-      const username = val;
-      const defaultPhoto = `https://ui-avatars.com/api/?name=${username}&background=random`;
-      console.log(defaultPhoto);
-      const messageData = {
-        name: username,
-        photo: defaultPhoto,
-        status: 'New'
-      };
-      messageCreate(messageData);
+    const messageData = {
+      name: user,
+      photo: `https://ui-avatars.com/api/?name=${user}&background=random`,
+      status: 'New'
+    };
+    messageCreate(messageData).then(resp => {
+      console.log(resp)
+      setMessages(messages.concat([messageData]));
+      setItem('@messages', messages);
+    }).catch(rej => {
+      console.error(rej)
+      // Notify user of message failed to send
+      // Do not put message into array
     });
   };
 
@@ -64,24 +96,30 @@ const MessagePage = () => {
 
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.heading}>
         <Text style={styles.headingText}>First Friend</Text>
       </View>
-      <Button title='Click here' onPress={handleMessageSent} />
+      <Pressable // Remove this as soon as possible when the messaging works
+        style={appStyles.button}
+        onPress={() => handleMessageSent()}
+      >
+        <Text style={appStyles.buttonLabel}> Test button </Text>
+      </Pressable>
       <FlatList
         data={messages}
         renderItem={({ item }) => <Item name={item.name} photo={item.photo} status={item.status} />}
       />
-      <FAB />
-    </View>
+      <TouchableOpacity onPress={() => navigation.navigate('SendMessageScreen')} style={styles.fab}>
+        <Text style={styles.fabIcon}>+</Text>
+      </TouchableOpacity>
+    </SafeAreaView>
   )
 }
 
 const Messages = () => {
-
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name='MessageMain' component={MessagePage} />
       <Stack.Screen name='SendMessageScreen' component={SendMessageScreen} />
       <Stack.Screen name='MessageDetails' component={MessageDetails} />
@@ -92,8 +130,8 @@ const Messages = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 25,
-    padding: 20,
+    marginTop: StatusBar.currentHeight || 0,
+    padding: 16,
     backgroundColor: '#800020'
   },
   heading: {

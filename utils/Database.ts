@@ -45,6 +45,5 @@ export async function messageGet(data: string) {
 }
 
 export async function messageCreate(data: any) {
-    console.log(data);
     return inst.post('outbox', data);
 }
