@@ -11,11 +11,11 @@ export function Test({ navigation }) {
 
     return (
         <SafeAreaView
-            style={{padding: 10, flex: 1, backgroundColor: 'skyblue'}}
+            style={{ padding: 10, flex: 1, backgroundColor: 'skyblue' }}
         >
             <Text>DEVELOPER PAGE</Text>
             <View
-                style={{padding: 4}}
+                style={{ padding: 4 }}
             >
                 <Pressable
                     style={button}
@@ -37,9 +37,9 @@ export function Test({ navigation }) {
                 </Pressable>
                 <Pressable
                     style={button}
-                    onPress={() => navigation.navigate('Home')}
+                    onPress={() => navigation.navigate('Maps')}
                 >
-                    <Text style={label}>Home</Text>
+                    <Text style={label}>Maps</Text>
                 </Pressable>
                 <Pressable
                     style={button}
