@@ -38,9 +38,9 @@ export function Test({ navigation }) {
                 </Pressable>
                 <Pressable
                     style={button}
-                    onPress={() => navigation.navigate('Home')}
+                    onPress={() => navigation.navigate('Maps')}
                 >
-                    <Text style={label}>Home</Text>
+                    <Text style={label}>Maps</Text>
                 </Pressable>
                 <Pressable
                     style={button}
