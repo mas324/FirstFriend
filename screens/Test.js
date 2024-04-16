@@ -3,6 +3,7 @@ import { Pressable, SafeAreaView, View } from 'react-native';
 //import { Text } from 'react-native';
 import { Text } from '../components/TextFix';
 import { appStyles } from '../components/AppStyles';
+import { userAuth } from '../utils/Database';
 
 export function Test({ navigation }) {
 
@@ -11,11 +12,11 @@ export function Test({ navigation }) {
 
     return (
         <SafeAreaView
-            style={{padding: 10, flex: 1, backgroundColor: 'skyblue'}}
+            style={{ padding: 10, flex: 1, backgroundColor: 'skyblue' }}
         >
             <Text>DEVELOPER PAGE</Text>
             <View
-                style={{padding: 4}}
+                style={{ padding: 4 }}
             >
                 <Pressable
                     style={button}
@@ -37,9 +38,9 @@ export function Test({ navigation }) {
                 </Pressable>
                 <Pressable
                     style={button}
-                    onPress={() => navigation.navigate('Home')}
+                    onPress={() => navigation.navigate('Maps')}
                 >
-                    <Text style={label}>Home</Text>
+                    <Text style={label}>Maps</Text>
                 </Pressable>
                 <Pressable
                     style={button}
@@ -55,9 +56,17 @@ export function Test({ navigation }) {
                 </Pressable>
                 <Pressable
                     style={button}
-                    onPress={navigation.navigate('Weather')}
+                    onPress={() => {
+                        console.log('Button pressed');
+                        userAuth('jdoe', 'password1').then((response) => {
+                            console.log(response.data);
+                        }).catch((err) => {
+                            console.error(err);
+                            return;
+                        })
+                    }}
                 >
-                    <Text style={label}>Weather</Text>
+                    <Text style={label}>DB Test</Text>
                 </Pressable>
             </View>
         </SafeAreaView>
