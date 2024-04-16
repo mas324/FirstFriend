@@ -8,6 +8,7 @@ import Home from './screens/Home';
 import { Jobs } from './screens/Job';
 import Messages from './screens/Messages';
 import { SignUpPage } from './screens/Signup';
+import WeatherScreen from './screens/WeatherPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,7 @@ export default function App({ navigation }) {
         <Stack.Screen name='Home' component={Home} options={{title: 'Home'}} />
         <Stack.Screen name='Jobs' component={Jobs} options={{title: 'Jobs'}} />
         <Stack.Screen name='Messages' component={Messages} options={{title: 'Messages'}} />
+        <Stack.Screen name='Weather' component={WeatherScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

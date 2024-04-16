@@ -10,6 +10,9 @@ const Home = ({navigation}) => {
       case 2:
         navigation.navigate('Jobs');
         break;
+      case 1:
+        navigation.navigate('Weather');
+        break;
       case 4:
         navigation.navigate('Messages');
       default:

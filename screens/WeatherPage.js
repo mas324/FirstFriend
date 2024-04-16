@@ -4,11 +4,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { MagnifyingGlassIcon, XMarkIcon } from 'react-native-heroicons/outline'
 import { CalendarDaysIcon, MapPinIcon } from 'react-native-heroicons/solid'
 import { debounce } from "lodash";
-import { theme } from '../theme';
-import { fetchLocations, fetchWeatherForecast } from '../api/weather';
+import { fetchLocations, fetchWeatherForecast } from '../utils/WeatherApi/weather';
 import * as Progress from 'react-native-progress';
 import { StatusBar } from 'expo-status-bar';
-import { weatherImages } from '../constants';
+//import { weatherImages } from '../constants';
 import { getData, storeData } from '../utils/asyncStorage';
 
 export default function WeatherScreen() {
@@ -84,7 +83,7 @@ export default function WeatherScreen() {
               <View style={{height: '7%'}} className="mx-4 relative z-50">
                 <View 
                   className="flex-row justify-end items-center rounded-full" 
-                  style={{backgroundColor: showSearch? theme.bgWhite(0.2): 'transparent'}}>
+                  style={{backgroundColor: 'transparent'}}>
                   
                     {
                       showSearch? (
@@ -99,7 +98,7 @@ export default function WeatherScreen() {
                     <TouchableOpacity 
                       onPress={()=> toggleSearch(!showSearch)} 
                       className="rounded-full p-3 m-1" 
-                      style={{backgroundColor: theme.bgWhite(0.3)}}>
+                      style={{backgroundColor: 'white'}}>
                       {
                         showSearch? (
                           <XMarkIcon size="25" color="white" />
@@ -145,7 +144,7 @@ export default function WeatherScreen() {
                 <View className="flex-row justify-center">
                   <Image 
                     // source={{uri: 'https:'+current?.condition?.icon}} 
-                    source={weatherImages[current?.condition?.text || 'other']} 
+                    //source={weatherImages[current?.condition?.text || 'other']} 
                     className="w-52 h-52" />
                   
                 </View>
@@ -201,11 +200,11 @@ export default function WeatherScreen() {
                         <View 
                           key={index} 
                           className="flex justify-center items-center w-24 rounded-3xl py-3 space-y-1 mr-4" 
-                          style={{backgroundColor: theme.bgWhite(0.15)}}
+                          style={{backgroundColor: 'white'}}
                         >
                           <Image 
                             // source={{uri: 'https:'+item?.day?.condition?.icon}}
-                            source={weatherImages[item?.day?.condition?.text || 'other']}
+                            //source={weatherImages[item?.day?.condition?.text || 'other']}
                               className="w-11 h-11" />
                           <Text className="text-white">{dayName}</Text>
                           <Text className="text-white text-xl font-semibold">

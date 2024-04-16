@@ -53,6 +53,12 @@ export function Test({ navigation }) {
                 >
                     <Text style={label}>Messages</Text>
                 </Pressable>
+                <Pressable
+                    style={button}
+                    onPress={navigation.navigate('Weather')}
+                >
+                    <Text style={label}>Weather</Text>
+                </Pressable>
             </View>
         </SafeAreaView>
     )
