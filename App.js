@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Test } from './screens/Test';
 import Home from './screens/Home';
 import { Jobs } from './screens/Job';
-import Messages from './screens/Messages';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AppContext from './utils/AppContext';
 import { getItem } from './utils/LocalStore';
@@ -12,6 +11,7 @@ import LoginPage from './screens/loginNav/Login';
 import PasswordReset from './screens/loginNav/PassRes';
 import SignUpPage from './screens/loginNav/Signup';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Messages from './screens/messageNav/Messages';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -28,7 +28,7 @@ const LoginStack = () => {
 
 const MainStack = () => {
   return (
-    <Tab.Navigator initialRouteName='Home' id='Authed' key={'user'}>
+    <Tab.Navigator initialRouteName='Home' id='Authed' key={'user'} screenOptions={{headerShown: false}}>
       <Tab.Screen name='Home' component={Home} />
       <Tab.Screen name='Jobs' component={Jobs} />
       <Tab.Screen name='Messages' component={Messages} />
@@ -37,7 +37,6 @@ const MainStack = () => {
 }
 
 const App = () => {
-  const dev = false; // For final release remove this and else return
   const [state, setState] = React.useState('unauth');
 
   React.useEffect(() => {
@@ -46,33 +45,15 @@ const App = () => {
     })
   });
 
-  if (!dev) {
-    return (
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <AppContext.Provider value={{ state, setState }}>
-            {state === null ? <LoginStack /> : <MainStack />}
-          </AppContext.Provider>
-        </NavigationContainer>
-      </SafeAreaProvider>
-    );
-  } else {
-    return (
-      <SafeAreaProvider>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName='Test'>
-            <Stack.Screen name='Test' component={Test} />
-            <Stack.Screen name='Login' component={LoginPage} />
-            <Stack.Screen name='PassRes' component={PasswordReset} />
-            <Stack.Screen name='Signup' component={SignUpPage} />
-            <Stack.Screen name='Home' component={Home} />
-            <Stack.Screen name='Jobs' component={Jobs} />
-            <Stack.Screen name='Messages' component={Messages} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </SafeAreaProvider>
-    );
-  }
+  return (
+    <SafeAreaProvider>
+      <NavigationContainer>
+        <AppContext.Provider value={{ state, setState }}>
+          {state === null ? <LoginStack /> : <MainStack />}
+        </AppContext.Provider>
+      </NavigationContainer>
+    </SafeAreaProvider>
+  )
 }
 
 export default App;

@@ -1,8 +1,9 @@
 import React, { useContext } from 'react';
-import { View, Button, StyleSheet, Dimensions } from 'react-native';
+import { View, Button, StyleSheet, Dimensions, Pressable } from 'react-native';
 import { Text } from '../components/TextFix';
-import { useAuth } from '../utils/Auth';
+import { appStyles } from '../components/AppStyles';
 import AppContext from '../utils/AppContext';
+import { useAuth } from '../utils/Auth';
 
 const Home = ({ navigation }) => {
   const { setState } = useContext(AppContext);
@@ -31,31 +32,35 @@ const Home = ({ navigation }) => {
       <View style={styles.headingContainer}>
         <Text style={styles.heading}>Home</Text>
       </View>
-      <Button
-        title="Weather Summary"
+      <Pressable
+        style={[appStyles.button, { backgroundColor: "#841584" }]}
         onPress={() => handleButtonPress(1)}
-        color="#841584"
-      />
-      <Button
-        title="Jobs"
+      >
+        <Text style={[appStyles.label, { color: 'white' }]}>Weather Summary</Text>
+      </Pressable>
+      <Pressable
+        style={[appStyles.button, { backgroundColor: "#1565C0" }]}
         onPress={() => handleButtonPress(2)}
-        color="#1565C0"
-      />
-      <Button
-        title="Travel Service"
+      >
+        <Text style={[appStyles.label, { color: 'white' }]}>Jobs</Text>
+      </Pressable>
+      <Pressable
+        style={[appStyles.button, { backgroundColor: "#FF9800" }]}
         onPress={() => handleButtonPress(3)}
-        color="#FF9800"
-      />
-      <Button
-        title="Messages"
+      >
+        <Text style={[appStyles.label, { color: 'white' }]}>Travel Service</Text>
+      </Pressable>
+      <Pressable
+        style={[appStyles.button, { backgroundColor: "#4CAF50" }]}
         onPress={() => handleButtonPress(4)}
-        color="#4CAF50"
-      />
-      <Button
-        title='Logout'
-        onPress={() => handleButtonPress(5)}
-        color='red'
-      />
+      >
+        <Text style={[appStyles.label, { color: 'white' }]}>Messages</Text>
+      </Pressable>
+      <Pressable
+        style={[appStyles.button, { backgroundColor: 'red' }]}
+        onPress={() => handleButtonPress(5)}>
+        <Text style={[appStyles.label, { color: 'white' }]}>Logout</Text>
+      </Pressable>
     </View>
   );
 };

@@ -40,10 +40,10 @@ export async function userReset(data: { password: string, key: string }) {
     return inst.post('reset', data);
 }
 
-export async function messageGet() {
-    // TODO: Create function to recieve message from a database.
+export async function messageGet(data: string) {
+    return inst.post('inbox', data);
 }
 
-export async function messageCreate() {
-    // TODO: Create function to send message to database.
+export async function messageCreate(data: any) {
+    return inst.post('outbox', data);
 }
