@@ -3,6 +3,7 @@ import { Pressable, SafeAreaView, View } from 'react-native';
 //import { Text } from 'react-native';
 import { Text } from '../components/TextFix';
 import { appStyles } from '../components/AppStyles';
+import { userAuth } from '../utils/Database';
 
 export function Test({ navigation }) {
 
@@ -52,6 +53,20 @@ export function Test({ navigation }) {
                     onPress={() => navigation.navigate('Messages')}
                 >
                     <Text style={label}>Messages</Text>
+                </Pressable>
+                <Pressable
+                    style={button}
+                    onPress={() => {
+                        console.log('Button pressed');
+                        userAuth('jdoe', 'password1').then((response) => {
+                            console.log(response.data);
+                        }).catch((err) => {
+                            console.error(err);
+                            return;
+                        })
+                    }}
+                >
+                    <Text style={label}>DB Test</Text>
                 </Pressable>
             </View>
         </SafeAreaView>
