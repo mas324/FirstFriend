@@ -27,6 +27,7 @@ const instance = Axios.create({
     //baseURL: 'https://api.coresignal.com/cdapi/v1/linkedin/job/collect/',
     timeout: 1000,
     headers: {
+        "Content-Type": 'application/json',
         Authorization: 'Bearer eyJhbGciOiJFZERTQSIsImtpZCI6IjY0NWVmNzg3LTZkNmMtZTQ2ZS1kNjRiLWQ0N2FkZWRkZGM4NSJ9.eyJhdWQiOiJ0b3JvbWFpbC5jc3VkaC5lZHUiLCJleHAiOjE3NDM2NDU5NjQsImlhdCI6MTcxMjA4OTAxMiwiaXNzIjoiaHR0cHM6Ly9vcHMuY29yZXNpZ25hbC5jb206ODMwMC92MS9pZGVudGl0eS9vaWRjIiwibmFtZXNwYWNlIjoicm9vdCIsInByZWZlcnJlZF91c2VybmFtZSI6InRvcm9tYWlsLmNzdWRoLmVkdSIsInN1YiI6ImZhMGM0YzljLWMyMWMtZmZkZi1jMGI5LTQ4YWVkNWFmOWMxNiIsInVzZXJpbmZvIjp7InNjb3BlcyI6ImNkYXBpIn19.npUu-sntifY5L1IdkUez1Lw_btDeSOoDyoFrJmZ0dYcK0jECdFa6RJrnHfp30WQVd36x02NTZtoJ59LMCHEUBg',
     }
 })
@@ -40,7 +41,12 @@ export function Jobs({ navigator }) {
 
     const onClickHandler = () => {
         console.log("Search Word = " + searchWord)
-        const searchRequest = { title: searchWord };
+        const searchRequest = { 
+            "experience_title": searchWord,
+            "country": '(United States)',
+            "location": 'Carson, California',
+            "last_updated_gte": '2024-04-01 00:00:00'
+        };
         console.log(getItem('@jobs'));
         if (getItem('@jobs') === null) {
             instance.post(API_ENDPOINT, searchRequest).then(resp => {
