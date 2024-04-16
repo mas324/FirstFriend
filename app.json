@@ -10,6 +10,9 @@
       "splash": {
         "backgroundColor": "#FFFFFF"
       }
+    },
+    "ios": {
+      "bundleIdentifier": "com.g6.FirstFriend"
     }
   }
 }
