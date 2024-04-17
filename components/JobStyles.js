@@ -2,53 +2,50 @@ import { StyleSheet } from "react-native";
 
 export const jobStyles = StyleSheet.create({
 
-    assembler:{
-        flexdirection:'row'
+    assembler: {
+        flexdirection: 'row'
     },
 
-    Main:{
-        backgroundColor:'#FFF',
-        width:250,
-        height:60,
-        borderWidth:1,
-        borderColor:'black',
-        borderTopLeftRadius:30,
-        borderBottomLeftRadius:30,
+    Main: {
+        backgroundColor: '#FFF',
+        height: 60,
+        borderWidth: 1,
+        borderColor: 'black',
+        borderRadius: 10,
     },
 
-    Input:{
-        marginLeft:10,
-        marginTop:5,
+    Input: {
+        marginLeft: 10,
+        marginTop: 5,
     },
 
-    buttonP:{
-        backgroundColor:'#FFF',
-        width:40,
-        height:60,
-        borderWidth:1,
-        borderColor:'black',
-        borderBottomRightRadius:30,
-        borderTopRightRadius:30,
+    buttonP: {
+        backgroundColor: '#FFF',
+        width: 40,
+        height: 60,
+        borderWidth: 1,
+        borderColor: 'black',
+        borderBottomRightRadius: 30,
+        borderTopRightRadius: 30,
         alignItems: 'center',
-        justifyContent:'center',
+        justifyContent: 'center',
     },
 
     pageBG: {
         alignSelf: 'stretch',
-        flex:1,
+        flex: 1,
     },
 
 
     jobTitle: {
         fontWeight: 'bold',
-        fontSize: 30,
-        paddingBottom: 10,
+        fontSize: 16,
+        paddingBottom: 4,
     },
 
-    jobSection:{
-        paddingTop: 10,
-        fontSize: 15,
-        fontWeight: 'bold',
+    jobSection: {
+        paddingTop: 6,
+        fontSize: 12,
     },
 
     item: {
@@ -61,7 +58,7 @@ export const jobStyles = StyleSheet.create({
     },
 
     container: {
-        flex:1,
+        flex: 1,
     },
 
     item: {
@@ -74,10 +71,6 @@ export const jobStyles = StyleSheet.create({
     },
 
     title: {
-        fontSize: 32
+        fontSize: 20
     },
-
-    
-
-
 });

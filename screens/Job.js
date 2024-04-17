@@ -1,51 +1,115 @@
 // import * as React from 'react';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator, FlatList, TextInput, SafeAreaView, Pressable, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, ActivityIndicator, FlatList, TextInput, SafeAreaView, Pressable, TouchableOpacity, ScrollView } from 'react-native';
 import { Text } from '../components/TextFix';
 import { jobStyles } from '../components/JobStyles';
 import Axios from 'axios';
 import { appStyles } from '../components/AppStyles';
-import { getItem, setItem } from '../utils/Authentication/LocalStore';
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry';
+import { deleteItem, getItem, setItem } from '../utils/Authentication/LocalStore';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+const Stack = createNativeStackNavigator();
 
-// DEMO ONLY
-const DemoCard = () => {
+function DetailedListing({ route }) {
+    const item = route.params;
     return (
-        <View>
-            <Text style={jobStyles.jobTitle}>Intern Front End Developer</Text>
-            <Text style={jobStyles.jobSection}>Description</Text>
-            <Text>• Development and design of Web based UI solutions to deliver an intuitive user experience</Text>
-            <Text>• Collaborate with users, technical, and architecture teams to solve complex user interface problems</Text>
-            <Text style={jobStyles.jobSection}>Qualifications</Text>
-            <Text>Bachelor, Master or Doctorate of Science degree from an accredited course of study, in engineering, computer science, mathematics, physics or chemistry.</Text>
+        <ScrollView>
+            <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 20 }, item.company == undefined ? { height: 0 } : {}]}>{item.company}</Text>
+            <Text style={jobStyles.jobTitle}>{item.title}</Text>
+            <Text style={jobStyles.jobSection}>{item.desc}</Text>
             <Text style={jobStyles.jobSection}>Salary</Text>
-            <Text>$20 per hour</Text>
-        </View>
-    );
+            <Text style={jobStyles.jobSection}>{item.salary}</Text>
+        </ScrollView>
+    )
 }
 
-const Card = () => {
+function JobMain({ navigation }) {
+    const [data, setData] = useState([]);
+    const [searchWord, setSearchWord] = useState("");
+
+    const DATA = require('../assets/job_postings.json');
+    //const DATA_EXTRA = require('../assets/job_postings_extra.json');
+
+    //console.log(DATA);
+    //console.log(DATA_EXTRA);
+
+    useEffect(() => {
+        //console.log('running effect job');
+        getItem('@jobs').then(items => {
+            setData(items);
+        })
+    }, []);
+
+    const JobListing = ({ title, desc, company, salary }) => {
+        return (
+            <TouchableOpacity
+                onPress={() => {
+                    navigation.navigate('JobsDetail', { title: title, desc: desc, company: company, salary: salary });
+                }}
+            >
+                <View style={{ backgroundColor: 'lightgray', marginVertical: 4, paddingBottom: 10 }}>
+                    <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 20 }, company == undefined ? { height: 0 } : {}]}>{company}</Text>
+                    <Text style={jobStyles.jobTitle}>{title}</Text>
+                    <Text style={jobStyles.jobSection} numberOfLines={4}>{desc}</Text>
+                    <Text style={jobStyles.jobSection}>Salary</Text>
+                    <Text style={jobStyles.jobSection}>{salary}</Text>
+                </View>
+            </TouchableOpacity>
+        );
+    }
+
+    const onClickHandler = () => {
+        if (searchWord.toLowerCase() === 'clear') {
+            console.log('Removing data');
+            deleteItem('@jobs');
+            setData([]);
+            return;
+        }
+
+        const searchRequest = {
+            "experience_title": searchWord,
+            "country": '(United States)',
+            "location": 'Carson, California',
+            "last_updated_gte": '2024-04-01 00:00:00'
+        };
+        getItem('@jobs').then(localJobs => {
+            if (localJobs === null) {
+                setItem('@jobs', DATA);
+                setData(DATA);
+            } else {
+                setData(localJobs);
+            }
+        });
+    };
+
     return (
-        <View>
-            <Text style={jobStyles.jobTitle}>Intern Front End Developer</Text>
-            <Text style={jobStyles.jobSection}>Description</Text>
-            <Text>• Development and design of Web based UI solutions to deliver an intuitive user experience</Text>
-            <Text>• Collaborate with users, technical, and architecture teams to solve complex user interface problems</Text>
-            <Text style={jobStyles.jobSection}>Qualifications</Text>
-            <Text>Bachelor, Master or Doctorate of Science degree from an accredited course of study, in engineering, computer science, mathematics, physics or chemistry.</Text>
-            <Text style={jobStyles.jobSection}>Salary</Text>
-            <Text>$20 per hour</Text>
-        </View>
+        <SafeAreaView style={{ flex: 1, justifyContent: 'top' }}>
+            <View style={[jobStyles.Main, { flexDirection: 'row' }]}>
+                <TextInput
+                    style={[appStyles.input, { marginLeft: 10, marginRight: 10, width: '70%' }]}
+                    placeholder="Search"
+                    value={searchWord}
+                    onChangeText={(value) => setSearchWord(value)}
+                />
+                <Pressable
+                    style={[appStyles.button, { margin: 0, minWidth: '20%' }]}
+                    onPress={() => onClickHandler()}
+                >
+                    <Text style={appStyles.buttonLabel}>Search</Text>
+                </Pressable>
+            </View>
+            <View style={{ height: '100%', paddingHorizontal: 4 }}>
+                <FlatList
+                    data={data}
+                    renderItem={({ item }) => <JobListing company={item.company_name} title={item.title} desc={item.description} salary={item.salary} />}
+                    contentContainerStyle={{
+                        flexGrow: 1,
+                    }}
+                />
+            </View>
+        </SafeAreaView>
     );
 }
-
-// const getCard = () => {
-//     fetch("../assets/job_postings.json")
-//         .then(response => response.json())
-//         .then(values => values.forEach(value => console.log(value.title)))
-// }
-
 
 // const instance = Axios.create({
 //     //baseURL: 'https://api.coresignal.com/cdapi/v1/linkedin/job/collect/',
@@ -56,52 +120,13 @@ const Card = () => {
 //     }
 // })
 
-const API_ENDPOINT = 'https://api.coresignal.com/cdapi/v1/linkedin/job/search/filter';
+//const API_ENDPOINT = 'https://api.coresignal.com/cdapi/v1/linkedin/job/search/filter';
 
-export function Jobs({ navigator }) {
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(null);
-    const [searchWord, setSearchWord] = useState("");
-
-    const onClickHandler = () => {
-        console.log("Search Word = " + searchWord)
-                
-        const searchRequest = { 
-            "experience_title": searchWord,
-            "country": '(United States)',
-            "location": 'Carson, California',
-            "last_updated_gte": '2024-04-01 00:00:00'
-        };
-        console.log(getItem('@jobs'));
-        if (getItem('@jobs') === null) {
-            instance.post(API_ENDPOINT, searchRequest).then(resp => {
-                console.log(resp);
-                setItem('@jobs', resp);
-            }).catch(err => {
-                console.error(err);
-            })
-        }
-        
-    }
-
+export function Jobs() {
     return (
-        <SafeAreaView style={{ padding: 10, flex: 1, justifyContent: 'top' }}>
-            <View style={jobStyles.assembler}>
-                <View style={jobStyles.Main}>
-                    <TextInput
-                        style={appStyles.input}
-                        placeholder="Search"
-                        value={searchWord}
-                        onChangeText={(value) => setSearchWord(value)}
-                    />
-                </View>
-                <Pressable
-                    style={appStyles.button}
-                    onPress={() => onClickHandler()}
-                >
-                    <Text style={appStyles.buttonLabel}>Search</Text>
-                </Pressable>
-            </View>
-        </SafeAreaView>
-    );
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='JobsHome' component={JobMain} />
+            <Stack.Screen name='JobsDetail' component={DetailedListing} />
+        </Stack.Navigator>
+    )
 };
