@@ -14,13 +14,15 @@ const Stack = createNativeStackNavigator();
 const Item = ({ name, photo, status }) => {
   return (
     <View style={styles.item}>
-      <Image source={{ uri: photo }} style={styles.contactPhoto} />
-      <View style={styles.messageContent}>
-        <Text style={styles.name}>{name}</Text>
-        <View style={styles.statusContainer}>
-          <Text style={status === 'New' ? styles.newMessage : styles.readMessage}>{status} Message</Text>
+      <TouchableOpacity>
+        <Image source={{ uri: photo }} style={styles.contactPhoto} />
+        <View style={styles.messageContent}>
+          <Text style={styles.name}>{name}</Text>
+          <View style={styles.statusContainer}>
+            <Text style={status === 'New' ? styles.newMessage : styles.readMessage}>{status} Message</Text>
+          </View>
         </View>
-      </View>
+      </TouchableOpacity>
     </View>
   )
 };
@@ -30,6 +32,7 @@ const MessagePage = ({ navigation }) => {
   const { state: user } = useContext(AppContext);
 
   useEffect(() => {
+    return;
     let local = null;
     let remote = null;
     getItem('@messages').then(val => {
@@ -40,14 +43,12 @@ const MessagePage = ({ navigation }) => {
       console.error(err)
     }).finally(() => {
       messageGet(user).then(val => {
-        console.log(val)
         if (val !== null && Array.isArray(val.data) && val.data.length) {
           remote = val.data;
         }
       }).catch(err => {
         console.error(err);
       }).finally(() => {
-        console.log('', local, remote);
         if (local !== null && remote !== null) {
           console.log('Comparison state');
           /*
@@ -74,12 +75,11 @@ const MessagePage = ({ navigation }) => {
       photo: `https://ui-avatars.com/api/?name=${user}&background=random`,
       status: 'New'
     };
-    messageCreate(messageData).then(resp => {
-      console.log(resp)
+    messageCreate(messageData).then(_resp => {
       setMessages(messages.concat([messageData]));
-      setItem('@messages', messages);
+      //setItem('@messages', messages);
     }).catch(rej => {
-      console.error(rej)
+      console.error(rej);
       // Notify user of message failed to send
       // Do not put message into array
     });

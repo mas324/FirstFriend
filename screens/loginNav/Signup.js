@@ -25,7 +25,7 @@ const SignUpPage = ({ navigation }) => {
     const { login } = useAuth()
     const { setState } = useContext(AppContext);
 
-    const handleSignUp = () => {
+    const handleSignUp = async () => {
         if (firstname == '' || lastname == '' || username == '' || SID == '' || password == '' || confPassword == '') {
             const newStyle = StyleSheet.create({
                 reject: {
@@ -43,17 +43,13 @@ const SignUpPage = ({ navigation }) => {
             return;
         }
 
-        let hashedPass = '';
-        getHash(password).then(hash => hashedPass = hash
-        ).catch(err => setRejection('Unknown error:', err));
-
         userCreate({
             id: SID,
             email: email,
             firstName: firstname,
             lastName: lastname,
             userName: username,
-            password: hashedPass,
+            password: await getHash(password),
             country: Country_of_Origin,
             study: Major
         }).then((resp) => {
@@ -66,7 +62,7 @@ const SignUpPage = ({ navigation }) => {
         }).catch(err => {
             console.error(err)
             setRejection(err);
-        })
+        });
     };
 
     return (

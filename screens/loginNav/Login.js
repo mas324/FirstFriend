@@ -14,26 +14,30 @@ export default function LoginPage({ navigation }) {
     const [rejectNotif, setRejection] = useState('');
     const { login } = useAuth();
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (username === '' || password === '') {
             setRejection('Fill out all forms');
             return;
         }
 
-        let hashedPass = '';
-        getHash(password).then(newHash => hashedPass = newHash
-        ).catch(err => setRejection('Unknown err:', err));
+        if (0 == 1) {
+            login('Developer');
+            setState('Developer');
+            return;
+        }
 
-        userAuth(username, hashedPass).then((response) => {
-            if (response.data && response.status === 202) {
+        userAuth(username, await getHash(password)).then((response) => {
+            console.log(response);
+            if (response.data && response.status === 200) {
                 setRejection('');
                 login(username);
                 setState(username);
             } else {
                 setRejection('Login information is incorrect');
             }
-        }, () => {
-            setRejection('Login information is incorrect');
+        }).catch(_err => {
+            console.error(_err.message);
+            setRejection(_err.request.status === 401 ? 'Login information is incorrect' : 'Server unavailable');
         });
     }
 

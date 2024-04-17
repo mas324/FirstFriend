@@ -91,17 +91,13 @@ function ResetPage({ navigation }) {
             />
             <Pressable
                 style={appStyles.button}
-                onPress={() => {
+                onPress={async () => {
                     if (password === '' || passConf === '') {
                         setReject('Fill out all forms');
                         return;
                     }
                     if (password === passConf) {
-                        let hashedPass = '';
-                        getHash(password).then(hashed => hashedPass = hashed
-                        ).catch(err => setReject('Unknown error:', err));
-
-                        userReset({ password: hashedPass, key: key }).then(() => {
+                        userReset({ password: await getHash(password), key: key }).then(() => {
                             navigation.goBack();
                         }).catch((_err) => {
                             setReject('Error in resetting password');
