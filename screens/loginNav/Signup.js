@@ -39,13 +39,21 @@ const SignUpPage = ({ navigation }) => {
             return;
         }
 
+        let parseSID;
+        try {
+            parseSID = Number.parseInt(SID);
+        } catch (e) {
+            setRejection('Student ID is not a number');
+            return;
+        }
+
         if (password !== confPassword) {
             setRejection('Passwords do not match');
             return;
         }
 
         userCreate({
-            id: SID,
+            id: parseSID,
             email: email,
             firstName: firstname,
             lastName: lastname,
@@ -56,14 +64,15 @@ const SignUpPage = ({ navigation }) => {
         }).then((resp) => {
             if (resp.status === 201) {
                 const user = convertToUserJSON({
-                    id: Number.parseInt(SID),
+                    id: parseSID,
                     email: email,
                     firstname: firstname,
                     lastname: lastname,
                     username: username,
                     country: Country_of_Origin,
                     major: Major
-                })
+                });
+                setRejection('');
                 login(user);
                 setState(user);
             } else {
@@ -71,7 +80,7 @@ const SignUpPage = ({ navigation }) => {
             }
         }).catch(err => {
             console.error(err)
-            setRejection(err);
+            setRejection('Unknown error');
         });
     };
 
