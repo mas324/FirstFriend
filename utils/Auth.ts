@@ -1,23 +1,17 @@
 import * as Crypto from 'expo-crypto';
-import { deleteItem, setItem } from "./LocalStore";
-import { useContext } from 'react';
-import AppContext from './AppContext';
+import { User, deleteItem, setItem } from "./LocalStore";
 
 // Function to hash any data that is needed, mainly passwords
-export async function hasher(toHash: string) {
-
+export async function getHash(toHash: string) {
     const digest = await Crypto.digestStringAsync(
         Crypto.CryptoDigestAlgorithm.SHA512,
         toHash
     );
-
-    console.log('Recieved: ', toHash);
-    console.log('Returning: ', digest);
     return (digest);
 }
 
 export const useAuth = () => {
-    const login = (user: string) => {
+    const login = (user: User) => {
         setItem('@user', user)
     }
 

@@ -1,44 +1,60 @@
 import React, { useContext, useState } from 'react';
-import { TextInput, SafeAreaView, Pressable, View } from 'react-native';
-import { Text } from '../components/TextFix';
-import { appStyles } from '../components/AppStyles';
-import { userAuth } from '../utils/Database';
-import { useAuth } from '../utils/Authentication/Auth';
-import AppContext from '../utils/Authentication/AppContext';
+import { TextInput, Pressable, View } from 'react-native';
+import { Text } from '../../components/TextFix';
+import { appStyles } from '../../components/AppStyles';
+import { userAuth } from '../../utils/Database';
+import { getHash, useAuth } from '../../utils/Auth';
+import AppContext from '../../utils/AppContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { convertToUserJSON } from '../../utils/LocalStore';
 
-export function LoginPage({ navigation }) {
+export default function LoginPage({ navigation }) {
     const { setState } = useContext(AppContext);
-    const [username, setName] = useState('jdoe');
-    const [password, setPass] = useState('password1');
+    const [username, setName] = useState('');
+    const [password, setPass] = useState('');
     const [rejectNotif, setRejection] = useState('');
     const { login } = useAuth();
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         if (username === '' || password === '') {
             setRejection('Fill out all forms');
             return;
         }
 
-        userAuth(username, password).then((resp) => {
-            console.log(resp.data);
-            if (resp.data) {
+        if (0 == 1) {
+            login('Developer');
+            setState('Developer');
+            return;
+        }
+
+        userAuth(username, await getHash(password)).then((response) => {
+            //console.log(response);
+            if (response.data && response.status === 200) {
                 setRejection('');
-                login(username);
-                setState(username);
+                const DATA = response.data;
+                const input = convertToUserJSON({
+                    id: DATA.sid,
+                    username: DATA.username,
+                    firstname: DATA.firstname,
+                    lastname: DATA.lastname,
+                    email: DATA.email,
+                    major: DATA.major,
+                    country: DATA.country
+                })
+                login(input);
+                setState(input);
             } else {
                 setRejection('Login information is incorrect');
             }
-        }).catch(() => {
-            setRejection('No connection to server. Try again later.');
+        }).catch(_err => {
+            console.error(_err.message);
+            setRejection(_err.request.status === 401 ? 'Login information is incorrect' : 'Server unavailable');
         });
     }
 
     return (
         <SafeAreaView style={{ padding: 10, flex: 1, alignContent: 'center' }}>
-            <Text
-                style={{ color: 'red', alignSelf: 'center', }}
-                textBreakStrategy='simple'
-            >
+            <Text style={appStyles.reject}>
                 {rejectNotif}
             </Text>
             <TextInput
