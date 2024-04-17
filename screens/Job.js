@@ -1,25 +1,28 @@
 // import * as React from 'react';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, ActivityIndicator, FlatList, TextInput, SafeAreaView, Pressable, TouchableOpacity, ScrollView } from 'react-native';
+import { View, FlatList, TextInput, Pressable, TouchableOpacity, ScrollView } from 'react-native';
 import { Text } from '../components/TextFix';
 import { jobStyles } from '../components/JobStyles';
-import Axios from 'axios';
 import { appStyles } from '../components/AppStyles';
-import { deleteItem, getItem, setItem } from '../utils/Authentication/LocalStore';
+import { deleteItem, getItem, setItem } from '../utils/LocalStore';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Stack = createNativeStackNavigator();
 
 function DetailedListing({ route }) {
     const item = route.params;
     return (
-        <ScrollView>
-            <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 20 }, item.company == undefined ? { height: 0 } : {}]}>{item.company}</Text>
-            <Text style={jobStyles.jobTitle}>{item.title}</Text>
-            <Text style={jobStyles.jobSection}>{item.desc}</Text>
-            <Text style={jobStyles.jobSection}>Salary</Text>
-            <Text style={jobStyles.jobSection}>{item.salary}</Text>
-        </ScrollView>
+        <SafeAreaView style={{ marginTop: 8, marginBottom: 6, paddingHorizontal: 8 }}>
+            <ScrollView>
+                <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 24 }, item.company == undefined ? { height: 0 } : {}]}>{item.company}</Text>
+                <Text style={[jobStyles.jobTitle, { fontSize: 20 }]}>{item.title}</Text>
+                <Text style={[jobStyles.jobSection, { fontSize: 14 }]}>{item.desc}</Text>
+                <Text style={[jobStyles.jobSection, { fontWeight: 'bold', fontSize: 18, textAlign: 'center' }]}>Salary: {
+                    <Text style={[jobStyles.jobSection, { fontSize: 16 }]}>{item.salary}</Text>
+                }</Text>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 
@@ -47,12 +50,14 @@ function JobMain({ navigation }) {
                     navigation.navigate('JobsDetail', { title: title, desc: desc, company: company, salary: salary });
                 }}
             >
-                <View style={{ backgroundColor: 'lightgray', marginVertical: 4, paddingBottom: 10 }}>
+                <View style={{ backgroundColor: 'lightgray', marginVertical: 4, paddingBottom: 10, paddingTop: 2, paddingHorizontal: 6 }}>
                     <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 20 }, company == undefined ? { height: 0 } : {}]}>{company}</Text>
                     <Text style={jobStyles.jobTitle}>{title}</Text>
                     <Text style={jobStyles.jobSection} numberOfLines={4}>{desc}</Text>
-                    <Text style={jobStyles.jobSection}>Salary</Text>
-                    <Text style={jobStyles.jobSection}>{salary}</Text>
+                    <Text style={[jobStyles.jobSection, { fontWeight: 'bold' }]}>Salary: {
+                        <Text style={jobStyles.jobSection}>{salary}</Text>
+                    }</Text>
+
                 </View>
             </TouchableOpacity>
         );
@@ -83,8 +88,8 @@ function JobMain({ navigation }) {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, justifyContent: 'top' }}>
-            <View style={[jobStyles.Main, { flexDirection: 'row' }]}>
+        <SafeAreaView style={{ flex: 1, justifyContent: 'top', marginBottom: 50 }}>
+            <View style={[jobStyles.Main, { flexDirection: 'row', marginTop: 10 }]}>
                 <TextInput
                     style={[appStyles.input, { marginLeft: 10, marginRight: 10, width: '70%' }]}
                     placeholder="Search"
