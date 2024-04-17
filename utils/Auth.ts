@@ -1,5 +1,5 @@
 import * as Crypto from 'expo-crypto';
-import { deleteItem, setItem } from "./LocalStore";
+import { User, deleteItem, setItem } from "./LocalStore";
 
 // Function to hash any data that is needed, mainly passwords
 export async function getHash(toHash: string) {
@@ -11,7 +11,7 @@ export async function getHash(toHash: string) {
 }
 
 export const useAuth = () => {
-    const login = (user: string) => {
+    const login = (user: User) => {
         setItem('@user', user)
     }
 

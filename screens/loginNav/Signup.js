@@ -6,6 +6,7 @@ import { userCreate } from '../../utils/Database';
 import { getHash, useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { convertToUserJSON } from '../../utils/LocalStore';
 
 const SignUpPage = ({ navigation }) => {
     const [firstname, setUserFirstName] = useState('');
@@ -54,8 +55,17 @@ const SignUpPage = ({ navigation }) => {
             study: Major
         }).then((resp) => {
             if (resp.status === 201) {
-                login(username);
-                setState(username);
+                const user = convertToUserJSON({
+                    id: Number.parseInt(SID),
+                    email: email,
+                    firstname: firstname,
+                    lastname: lastname,
+                    username: username,
+                    country: Country_of_Origin,
+                    major: Major
+                })
+                login(user);
+                setState(user);
             } else {
                 setRejection('Error occured. Please check if all fields are correct');
             }

@@ -41,9 +41,10 @@ const App = () => {
 
   React.useEffect(() => {
     getItem('@user').then((val) => {
+      console.log(val);
       setState(val);
     })
-  });
+  }, []);
 
   return (
     <SafeAreaProvider>

@@ -6,6 +6,7 @@ import { userAuth } from '../../utils/Database';
 import { getHash, useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { convertToUserJSON } from '../../utils/LocalStore';
 
 export default function LoginPage({ navigation }) {
     const { setState } = useContext(AppContext);
@@ -27,11 +28,21 @@ export default function LoginPage({ navigation }) {
         }
 
         userAuth(username, await getHash(password)).then((response) => {
-            console.log(response);
+            //console.log(response);
             if (response.data && response.status === 200) {
                 setRejection('');
-                login(username);
-                setState(username);
+                const DATA = response.data;
+                const input = convertToUserJSON({
+                    id: DATA.sid,
+                    username: DATA.username,
+                    firstname: DATA.firstname,
+                    lastname: DATA.lastname,
+                    email: DATA.email,
+                    major: DATA.major,
+                    country: DATA.country
+                })
+                login(input);
+                setState(input);
             } else {
                 setRejection('Login information is incorrect');
             }
