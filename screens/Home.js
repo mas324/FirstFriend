@@ -40,9 +40,6 @@ function HomePage({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.headingContainer}>
-        <Text style={styles.heading}>Home</Text>
-      </View>
       <Pressable
         style={[appStyles.button, { backgroundColor: "#841584" }]}
         onPress={() => handleButtonPress(1)}

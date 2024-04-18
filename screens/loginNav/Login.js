@@ -28,7 +28,7 @@ export default function LoginPage({ navigation }) {
         }
 
         userAuth(username, await getHash(password)).then((response) => {
-            //console.log(response);
+            console.log(response);
             if (response.data && response.status === 200) {
                 setRejection('');
                 const DATA = response.data;

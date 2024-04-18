@@ -18,9 +18,10 @@ type CompactUser = {
 }
 
 const inst = Axios.create({
-    baseURL: 'http://ssm.mywire.org:3405/api/', //Production server
+    //baseURL: 'http://ssm.mywire.org:3405/api/', //Production server
     //baseURL: 'http://localhost:3405/api/', //Dev with phyiscal device
-    //baseURL: 'http://10.0.2.2:3405/api/', //Dev with emulator
+    baseURL: 'http://10.0.2.2:3405/api/', //Dev with emulator
+    //baseURL: 'http://192.168.137.1:3405/api/', //Dev again
     timeout: 2000,
 });
 

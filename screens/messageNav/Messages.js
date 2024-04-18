@@ -3,7 +3,7 @@ import { Text, View, StyleSheet, TouchableOpacity, FlatList, Image, Pressable, S
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MessageDetails from './MessageDetails';
 import SendMessageScreen from './SendMessageScreen';
-import { getItem, setItem } from '../../utils/LocalStore';
+import { deleteItem, getItem, setItem } from '../../utils/LocalStore';
 import { appStyles } from '../../components/AppStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { messageCreate, messageGet } from '../../utils/Database';
@@ -29,7 +29,7 @@ const Item = ({ name, photo, status }) => {
 
 const MessagePage = ({ navigation }) => {
   const [messages, setMessages] = useState([]);
-  const { state: user } = useContext(AppContext);
+  const { state } = useContext(AppContext);
 
   useEffect(() => {
     return;
@@ -70,9 +70,10 @@ const MessagePage = ({ navigation }) => {
   }, []);
 
   const handleMessageSent = () => {
+    const username = state.username;
     const messageData = {
-      name: user,
-      photo: `https://ui-avatars.com/api/?name=${user}&background=random`,
+      name: username,
+      photo: `https://ui-avatars.com/api/?name=${username}&background=random`,
       status: 'New'
     };
 
@@ -115,7 +116,7 @@ const MessagePage = ({ navigation }) => {
         data={messages}
         renderItem={({ item }) => <Item name={item.name} photo={item.photo} status={item.status} />}
       />
-      <TouchableOpacity onPress={() => navigation.navigate('SendMessageScreen')} style={styles.fab}>
+      <TouchableOpacity onPress={() => {navigation.navigate('SendMessageScreen'); deleteItem('@messages')}} style={styles.fab}>
         <Text style={styles.fabIcon}>+</Text>
       </TouchableOpacity>
     </SafeAreaView>
