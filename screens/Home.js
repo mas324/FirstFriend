@@ -4,8 +4,12 @@ import { Text } from '../components/TextFix';
 import { appStyles } from '../components/AppStyles';
 import AppContext from '../utils/AppContext';
 import { useAuth } from '../utils/Auth';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import WeatherPage from './WeatherPageAdapt';
 
-const Home = ({ navigation }) => {
+const Stack = createNativeStackNavigator();
+
+function HomePage({ navigation }) {
   const { setState } = useContext(AppContext);
   const handleButtonPress = (buttonNumber) => {
     // define actions for each button press here
@@ -13,6 +17,9 @@ const Home = ({ navigation }) => {
     switch (buttonNumber) {
       case 2:
         navigation.navigate('Jobs');
+        break;
+      case 1:
+        navigation.navigate('Weather');
         break;
       case 4:
         navigation.navigate('Messages');
@@ -63,6 +70,15 @@ const Home = ({ navigation }) => {
       </Pressable>
     </View>
   );
+}
+
+const Home = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name='HomePage' component={HomePage} />
+      <Stack.Screen name='Weather' component={WeatherPage} />
+    </Stack.Navigator>
+  )
 };
 
 const styles = StyleSheet.create({
