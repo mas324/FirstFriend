@@ -1,125 +1,137 @@
-import * as React from 'react';
-import { View, StyleSheet, VirtualizedList} from 'react-native';
+// import * as React from 'react';
+import React, { useEffect, useState } from 'react';
+import { View, FlatList, TextInput, Pressable, TouchableOpacity, ScrollView } from 'react-native';
 import { Text } from '../components/TextFix';
+import { jobStyles } from '../components/JobStyles';
+import { appStyles } from '../components/AppStyles';
+import { deleteItem, getItem, setItem } from '../utils/LocalStore';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-const Page = StyleSheet.create({
-    pageBG: {
-        backgroundColor: '#E6EBEB',
-        alignSelf: 'stretch',
-        textAlign: 'left',
-        paddingLeft: 30,
-        paddingRight: 30,
-        padding: 20,
-        justifyContent: 'top',
-        flex:1,
-    },
+const Stack = createNativeStackNavigator();
 
-    jobTitle: {
-        fontWeight: 'bold',
-        fontSize: 30,
-        paddingBottom: 10,
-    },
-
-    jobSection:{
-        paddingTop: 10,
-        fontSize: 15,
-        fontWeight: 'bold',
-    },
-
-    item: {
-        backgroundColor: '#E6EBEB',
-        height: 150,
-        justifyContent: 'center',
-        marginVertical: 8,
-        marginHorizontal: 16,
-        padding: 20
-    }
-});
-
-const styles = StyleSheet.create({
-    container: {
-        flex:1,
-    },
-    item: {
-        backgroundColor: '#f9c2ff',
-        height: 150,
-        justifyContent: 'center',
-        marginVertical: 8,
-        marginHorizontal: 16,
-        padding: 20,
-    },
-    title: {
-        fontSize: 32
-    },
-})
-/* 
-    GetJob will have an API parameter to get said job information.
-    Then call API methods to retrieve data
-*/
-const getCard = (title, description, qualifications, salary) => {
-    return(
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'top'}}>
-            <View style={Page.pageBG}>
-                <Text style={Page.jobTitle}>default Title</Text>
-                <Text style={Page.jobSection}>Description</Text>
-                <Text>• default description...</Text>
-                <Text>• default description...</Text>
-                <Text style={Page.jobSection}>Qualifications</Text>
-                <Text>default qualifications</Text>
-                <Text style={Page.jobSection}>Salary</Text>
-                <Text>$10def</Text>
-            </View>
-        </View>
-    );
-}
-
-
-
-// DEMO ONLY
-const DemoCard= () => {
-    return(
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'top'}}>
-            <View style={Page.pageBG}>
-                <Text style={Page.jobTitle}>Intern Front End Developer</Text>
-                <Text style={Page.jobSection}>Description</Text>
-                <Text>• Development and design of Web based UI solutions to deliver an intuitive user experience</Text>
-                <Text>• Collaborate with users, technical, and architecture teams to solve complex user interface problems</Text>
-                <Text style={Page.jobSection}>Qualifications</Text>
-                <Text>Bachelor, Master or Doctorate of Science degree from an accredited course of study, in engineering, computer science, mathematics, physics or chemistry.</Text>
-                <Text style={Page.jobSection}>Salary</Text>
-                <Text>$20 per hour</Text>
-            </View>
-        </View>
-    );
-}
-
-const DATA = []
-
-const Item = ({title}) => (
-    <View style={styles.item}>
-        <Text style={styles.title}>{title}</Text>
-    </View>
-)
-
-export function Jobs({navigator}) {
-
-    // const renderItem = ({item, index}) => {
-    //     return (
-    //         <View key={index} style={styles.item}>
-    //             <Text style={styles.title}>{item.title}</Text>
-    //         </View>
-    //     )
-    // }
+function DetailedListing({ route }) {
+    const item = route.params;
     return (
-        // <SafeAreaView style={styles.container}>
-        //     <VirtualizedList
-        //     data={DATA}
-        //     initialNumRender={1}
-        //     renderItem={renderItem}
-        //     />
-        // </SafeAreaView>
-        
-
-        DemoCard()
+        <SafeAreaView style={{ marginTop: 8, marginBottom: 6, paddingHorizontal: 8 }}>
+            <ScrollView>
+                <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 24 }, item.company == undefined ? { height: 0 } : {}]}>{item.company}</Text>
+                <Text style={[jobStyles.jobTitle, { fontSize: 20 }]}>{item.title}</Text>
+                <Text style={[jobStyles.jobSection, { fontSize: 14 }]}>{item.desc}</Text>
+                <Text style={[jobStyles.jobSection, { fontWeight: 'bold', fontSize: 18, textAlign: 'center' }]}>Salary: {
+                    <Text style={[jobStyles.jobSection, { fontSize: 16 }]}>{item.salary}</Text>
+                }</Text>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
+
+function JobMain({ navigation }) {
+    const [data, setData] = useState([]);
+    const [searchWord, setSearchWord] = useState("");
+
+    const DATA = require('../assets/job_postings.json');
+    //const DATA_EXTRA = require('../assets/job_postings_extra.json');
+
+    //console.log(DATA);
+    //console.log(DATA_EXTRA);
+
+    useEffect(() => {
+        //console.log('running effect job');
+        getItem('@jobs').then(items => {
+            setData(items);
+        })
+    }, []);
+
+    const JobListing = ({ title, desc, company, salary }) => {
+        return (
+            <TouchableOpacity
+                onPress={() => {
+                    navigation.navigate('JobsDetail', { title: title, desc: desc, company: company, salary: salary });
+                }}
+            >
+                <View style={{ backgroundColor: 'lightgray', marginVertical: 4, paddingBottom: 10, paddingTop: 2, paddingHorizontal: 6 }}>
+                    <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 20 }, company == undefined ? { height: 0 } : {}]}>{company}</Text>
+                    <Text style={jobStyles.jobTitle}>{title}</Text>
+                    <Text style={jobStyles.jobSection} numberOfLines={4}>{desc}</Text>
+                    <Text style={[jobStyles.jobSection, { fontWeight: 'bold' }]}>Salary: {
+                        <Text style={jobStyles.jobSection}>{salary}</Text>
+                    }</Text>
+
+                </View>
+            </TouchableOpacity>
+        );
+    }
+
+    const onClickHandler = () => {
+        if (searchWord.toLowerCase() === 'clear') {
+            console.log('Removing data');
+            deleteItem('@jobs');
+            setData([]);
+            return;
+        }
+
+        const searchRequest = {
+            "experience_title": searchWord,
+            "country": '(United States)',
+            "location": 'Carson, California',
+            "last_updated_gte": '2024-04-01 00:00:00'
+        };
+        getItem('@jobs').then(localJobs => {
+            if (localJobs === null) {
+                setItem('@jobs', DATA);
+                setData(DATA);
+            } else {
+                setData(localJobs);
+            }
+        });
+    };
+
+    return (
+        <SafeAreaView style={{ flex: 1, justifyContent: 'top', marginBottom: 50 }}>
+            <View style={[jobStyles.Main, { flexDirection: 'row', marginTop: 10 }]}>
+                <TextInput
+                    style={[appStyles.input, { marginLeft: 10, marginRight: 10, width: '70%' }]}
+                    placeholder="Search"
+                    value={searchWord}
+                    onChangeText={(value) => setSearchWord(value)}
+                />
+                <Pressable
+                    style={[appStyles.button, { margin: 0, minWidth: '20%' }]}
+                    onPress={() => onClickHandler()}
+                >
+                    <Text style={appStyles.buttonLabel}>Search</Text>
+                </Pressable>
+            </View>
+            <View style={{ height: '100%', paddingHorizontal: 4 }}>
+                <FlatList
+                    data={data}
+                    renderItem={({ item }) => <JobListing company={item.company_name} title={item.title} desc={item.description} salary={item.salary} />}
+                    contentContainerStyle={{
+                        flexGrow: 1,
+                    }}
+                />
+            </View>
+        </SafeAreaView>
+    );
+}
+
+// const instance = Axios.create({
+//     //baseURL: 'https://api.coresignal.com/cdapi/v1/linkedin/job/collect/',
+//     timeout: 1000,
+//     headers: {
+//         "Content-Type": 'application/json',
+//         Authorization: 'Bearer eyJhbGciOiJFZERTQSIsImtpZCI6IjY0NWVmNzg3LTZkNmMtZTQ2ZS1kNjRiLWQ0N2FkZWRkZGM4NSJ9.eyJhdWQiOiJ0b3JvbWFpbC5jc3VkaC5lZHUiLCJleHAiOjE3NDM2NDU5NjQsImlhdCI6MTcxMjA4OTAxMiwiaXNzIjoiaHR0cHM6Ly9vcHMuY29yZXNpZ25hbC5jb206ODMwMC92MS9pZGVudGl0eS9vaWRjIiwibmFtZXNwYWNlIjoicm9vdCIsInByZWZlcnJlZF91c2VybmFtZSI6InRvcm9tYWlsLmNzdWRoLmVkdSIsInN1YiI6ImZhMGM0YzljLWMyMWMtZmZkZi1jMGI5LTQ4YWVkNWFmOWMxNiIsInVzZXJpbmZvIjp7InNjb3BlcyI6ImNkYXBpIn19.npUu-sntifY5L1IdkUez1Lw_btDeSOoDyoFrJmZ0dYcK0jECdFa6RJrnHfp30WQVd36x02NTZtoJ59LMCHEUBg',
+//     }
+// })
+
+//const API_ENDPOINT = 'https://api.coresignal.com/cdapi/v1/linkedin/job/search/filter';
+
+export function Jobs() {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='JobsHome' component={JobMain} />
+            <Stack.Screen name='JobsDetail' component={DetailedListing} />
+        </Stack.Navigator>
+    )
+};

@@ -1,17 +1,37 @@
-import React from 'react';
-import { View, Button, StyleSheet, Dimensions } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Button, StyleSheet, Dimensions, Pressable } from 'react-native';
 import { Text } from '../components/TextFix';
+import { appStyles } from '../components/AppStyles';
+import AppContext from '../utils/AppContext';
+import { useAuth } from '../utils/Auth';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import WeatherPage from './WeatherPageAdapt';
+import VeniceBeachCoffeeFinder from './travelNav/MapApp';
 
-const Home = ({navigation}) => {
+const Stack = createNativeStackNavigator();
+
+function HomePage({ navigation }) {
+  const { setState } = useContext(AppContext);
   const handleButtonPress = (buttonNumber) => {
     // define actions for each button press here
 
     switch (buttonNumber) {
+      case 1:
+        navigation.navigate('Weather');
+        break;
       case 2:
         navigation.navigate('Jobs');
         break;
+      case 3:
+        navigation.navigate('Travels');
+        break;
       case 4:
         navigation.navigate('Messages');
+        break;
+      case 5:
+        useAuth().logout();
+        setState(null);
+        break;
       default:
         console.log('Button', buttonNumber, 'pressed');
         break;
@@ -23,28 +43,47 @@ const Home = ({navigation}) => {
       <View style={styles.headingContainer}>
         <Text style={styles.heading}>Home</Text>
       </View>
-      <Button
-        title="Weather Summary"
+      <Pressable
+        style={[appStyles.button, { backgroundColor: "#841584" }]}
         onPress={() => handleButtonPress(1)}
-        color="#841584"
-      />
-      <Button
-        title="Jobs"
+      >
+        <Text style={[appStyles.label, { color: 'white' }]}>Weather Summary</Text>
+      </Pressable>
+      <Pressable
+        style={[appStyles.button, { backgroundColor: "#1565C0" }]}
         onPress={() => handleButtonPress(2)}
-        color="#1565C0"
-      />
-      <Button
-        title="Travel Service"
+      >
+        <Text style={[appStyles.label, { color: 'white' }]}>Jobs</Text>
+      </Pressable>
+      <Pressable
+        style={[appStyles.button, { backgroundColor: "#FF9800" }]}
         onPress={() => handleButtonPress(3)}
-        color="#FF9800"
-      />
-      <Button
-        title="Messages"
+      >
+        <Text style={[appStyles.label, { color: 'white' }]}>Travel Service</Text>
+      </Pressable>
+      <Pressable
+        style={[appStyles.button, { backgroundColor: "#4CAF50" }]}
         onPress={() => handleButtonPress(4)}
-        color="#4CAF50"
-      />
+      >
+        <Text style={[appStyles.label, { color: 'white' }]}>Messages</Text>
+      </Pressable>
+      <Pressable
+        style={[appStyles.button, { backgroundColor: 'red' }]}
+        onPress={() => handleButtonPress(5)}>
+        <Text style={[appStyles.label, { color: 'white' }]}>Logout</Text>
+      </Pressable>
     </View>
   );
+}
+
+const Home = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name='HomePage' component={HomePage} />
+      <Stack.Screen name='Weather' component={WeatherPage} />
+      <Stack.Screen name='Travels' component={VeniceBeachCoffeeFinder} />
+    </Stack.Navigator>
+  )
 };
 
 const styles = StyleSheet.create({
@@ -54,16 +93,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headingContainer: {
-    backgroundColor: '#FF9800', 
-    paddingVertical: 10, 
-    paddingHorizontal: 0.05 * Dimensions.get('window').width, 
-    borderRadius: 5, 
-    marginBottom: 20, 
+    backgroundColor: '#FF9800',
+    paddingVertical: 10,
+    paddingHorizontal: 0.05 * Dimensions.get('window').width,
+    borderRadius: 5,
+    marginBottom: 20,
   },
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white', 
+    color: 'white',
   },
 });
 
