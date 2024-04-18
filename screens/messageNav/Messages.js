@@ -64,7 +64,7 @@ const MessagePage = ({ navigation }) => {
           setMessages(remote);
         }
 
-        console.log(messages);
+        //console.log(messages);
       });
     });
   }, []);
@@ -75,6 +75,11 @@ const MessagePage = ({ navigation }) => {
       photo: `https://ui-avatars.com/api/?name=${user}&background=random`,
       status: 'New'
     };
+
+    setMessages(messages.concat([messageData]));
+    setItem('@messages', messages);
+    return;
+
     messageCreate(messageData).then(_resp => {
       setMessages(messages.concat([messageData]));
       //setItem('@messages', messages);

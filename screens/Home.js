@@ -6,6 +6,7 @@ import AppContext from '../utils/AppContext';
 import { useAuth } from '../utils/Auth';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WeatherPage from './WeatherPageAdapt';
+import VeniceBeachCoffeeFinder from './travelNav/MapApp';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,11 +16,14 @@ function HomePage({ navigation }) {
     // define actions for each button press here
 
     switch (buttonNumber) {
+      case 1:
+        navigation.navigate('Weather');
+        break;
       case 2:
         navigation.navigate('Jobs');
         break;
-      case 1:
-        navigation.navigate('Weather');
+      case 3:
+        navigation.navigate('Travels');
         break;
       case 4:
         navigation.navigate('Messages');
@@ -77,6 +81,7 @@ const Home = () => {
     <Stack.Navigator>
       <Stack.Screen name='HomePage' component={HomePage} />
       <Stack.Screen name='Weather' component={WeatherPage} />
+      <Stack.Screen name='Travels' component={VeniceBeachCoffeeFinder} />
     </Stack.Navigator>
   )
 };
