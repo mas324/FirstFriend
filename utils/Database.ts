@@ -37,7 +37,7 @@ const inst = Axios.create({
 
 export async function userAuth(user: string, password: string) {
     //return inst.post('auth', { userName: user, pass: password });
-    return DEV_USER; // For development use
+    return {data: DEV_USER, status: 200}; // For development use
 }
 
 export async function userCreate(newUser: User) {
