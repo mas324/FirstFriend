@@ -21,12 +21,6 @@ export default function LoginPage({ navigation }) {
             return;
         }
 
-        if (0 == 1) {
-            login('Developer');
-            setState('Developer');
-            return;
-        }
-
         userAuth(username, await getHash(password)).then((response) => {
             console.log(response);
             if (response.data && response.status === 200) {

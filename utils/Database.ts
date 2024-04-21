@@ -17,17 +17,27 @@ type CompactUser = {
     email?: string
 }
 
+const DEV_USER = {
+    sid: 0,
+    username: 'Developer',
+    firstname: 'Deve',
+    lastname: 'Loper',
+    email: 'dev0@toromail.csudh.edu',
+    major: 'Computer Science',
+    country: 'USA'
+}
+
 const inst = Axios.create({
     //baseURL: 'http://ssm.mywire.org:3405/api/', //Production server
-    //baseURL: 'http://localhost:3405/api/', //Dev with phyiscal device
-    baseURL: 'http://10.0.2.2:3405/api/', //Dev with emulator
+    baseURL: 'http://localhost:3405/api/', //Dev with phyiscal device
+    //baseURL: 'http://10.0.2.2:3405/api/', //Dev with emulator
     //baseURL: 'http://192.168.137.1:3405/api/', //Dev again
     timeout: 2000,
 });
 
 export async function userAuth(user: string, password: string) {
-    return inst.post('auth', { userName: user, pass: password });
-    //return { data: true } // For development use
+    //return inst.post('auth', { userName: user, pass: password });
+    return DEV_USER; // For development use
 }
 
 export async function userCreate(newUser: User) {
