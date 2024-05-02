@@ -18,13 +18,13 @@ const MessageDetails = ({ route }) => {
       <Text style={styles.userInfo}> {userID}</Text>
       <TextInput
         placeholder="Type your message here..."
-        placeholderTextColor="#f3e5ab"
+        placeholderTextColor="#eee8aa"
         multiline
         style={styles.input}
         value={message}
         onChangeText={setMessage}
       />
-      <Button title="Send" color="#f3e5ab" onPress={handleSend} />
+      <Button title="Send" color="#eee8aa" onPress={handleSend} />
     </View>
   );
 };
@@ -37,22 +37,22 @@ const styles = StyleSheet.create({
   },
   heading: {
     fontSize: 24,
-    color: '#f3e5ab',
+    color: '#eee8aa',
     fontWeight: 'bold',
     marginBottom: 20,
   },
   userInfo: {
     fontSize: 18,
-    color: '#f3e5ab',
+    color: '#eee8aa',
     marginBottom: 20,
   },
   input: {
     height: 75,
     borderWidth: 2,
-    borderColor: '#f3e5ab',
+    borderColor: '##eee8aa',
     borderRadius: 10,
     padding: 10,
-    color: '#f3e5ab',
+    color: '#eee8aa',
     marginBottom: 20,
   },
 });

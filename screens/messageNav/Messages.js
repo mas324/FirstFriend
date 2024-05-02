@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
   headingText: {
     fontSize: 24,
-    color: '#f3e5ab',
+    color: '#eee8aa',
     fontWeight: 'bold',
   },
   item: {
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 8,
     alignItems: 'center',
-    backgroundColor: '#f3e5ab',
+    backgroundColor: '#eee8aa',
     marginBottom: 6,
     borderRadius: 8,
     shadowColor: '#000',
@@ -208,7 +208,7 @@ const styles = StyleSheet.create({
   },
   fabIcon: {
     fontSize: 40,
-    color: '#f3e5ab',
+    color: '#eee8aa',
   },
 });
 

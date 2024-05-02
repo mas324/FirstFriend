@@ -76,7 +76,8 @@ export default function LoginPage({ navigation }) {
                 style={{
                     flexDirection: 'row',
                     padding: 20,
-                    justifyContent: 'space-evenly'
+                    justifyContent: 'space-evenly',
+                    color: '#EEE8AA'
                 }}
             >
                 <Pressable onPress={() => { navigation.navigate('Signup') }}>

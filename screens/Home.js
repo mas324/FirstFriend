@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   headingContainer: {
-    backgroundColor: '#FF9800',
+    backgroundColor: '#800020',
     paddingVertical: 10,
     paddingHorizontal: 0.05 * Dimensions.get('window').width,
     borderRadius: 5,
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   heading: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: 'white',
+    color: '#EEE8AA',
   },
 });
 
