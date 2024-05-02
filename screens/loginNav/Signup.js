@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react';
 import { TextInput, Pressable, View, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { appStyles } from '../../components/AppStyles';
 import { Text } from '../../components/TextFix';
-import { userCreate } from '../../utils/Database';
 import { getHash, useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { convertToUserJSON } from '../../utils/LocalStore';
+import { signUp } from '../../utils/Firestore';
 
 const SignUpPage = ({ navigation }) => {
     const [firstname, setUserFirstName] = useState('');
@@ -52,36 +52,36 @@ const SignUpPage = ({ navigation }) => {
             return;
         }
 
-        userCreate({
+        let userType;
+        if (email.endsWith('@toromail.csudh.edu')) {
+            userType = 'student';
+        } else if (email.endsWith('@csudh.edu')) {
+            userType = 'staff';
+        } else {
+            setRejection('Invalid CSUDH email');
+            return;
+        }
+
+        const user = convertToUserJSON({
             id: parseSID,
             email: email,
-            firstName: firstname,
-            lastName: lastname,
-            userName: username,
-            password: await getHash(password),
+            firstname: firstname,
+            lastname: lastname,
+            username: username,
             country: Country_of_Origin,
-            study: Major
-        }).then((resp) => {
+            major: Major,
+            type: userType,
+        });
+
+        signUp(user, await getHash(password)).then((resp) => {
             if (resp.status === 201) {
-                const user = convertToUserJSON({
-                    id: parseSID,
-                    email: email,
-                    firstname: firstname,
-                    lastname: lastname,
-                    username: username,
-                    country: Country_of_Origin,
-                    major: Major
-                });
                 setRejection('');
                 login(user);
                 setState(user);
             } else {
                 setRejection('Error occured. Please check if all fields are correct');
             }
-        }).catch(err => {
-            console.error(err)
-            setRejection('Unknown error');
-        });
+        })
     };
 
     return (
