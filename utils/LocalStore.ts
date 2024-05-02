@@ -7,7 +7,8 @@ export type User = {
     username: string,
     email: string,
     country?: string,
-    major?: string
+    major?: string,
+    type: 'student' | 'staff',
 }
 
 export function convertToUserJSON(data: User) {

@@ -2,40 +2,48 @@ import { StyleSheet } from "react-native";
 
 export const jobStyles = StyleSheet.create({
 
-    assembler: {
-        flexdirection: 'row'
-    },
-
     Main: {
+        margin: 3,
         backgroundColor: '#FFF',
         height: 60,
         borderWidth: 1,
-        borderColor: 'black',
+        borderColor: 'grey',
         borderRadius: 10,
     },
 
-    Input: {
-        marginLeft: 10,
-        marginTop: 5,
-    },
+    input: {
+        height: 40,
+        margin: 10,
+        // borderWidth: 1,
+        padding: 10,
+        fontSize: 20,
+      },
 
-    buttonP: {
-        backgroundColor: '#FFF',
-        width: 40,
-        height: 60,
-        borderWidth: 1,
-        borderColor: 'black',
-        borderBottomRightRadius: 30,
-        borderTopRightRadius: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
+    button: {
+        paddingHorizontal: 10,
+        paddingVertical: 8,
+        borderRadius: 8,
+        // backgroundColor: 'maroon',
+        // backgroundColor: '#C75A6D',
+        alignSelf: 'center',
+        marginHorizontal: '1%',
+        marginBottom: 6,
+        minWidth: '48%',
+        textAlign: 'center',
+        color: 'black',
+      },
 
-    pageBG: {
-        alignSelf: 'stretch',
-        flex: 1,
-    },
+    buttonLabel: {
+        fontSize: 20,
+        fontWeight: '500',
+        color: 'black',
+        textAlign: 'center',
+      },
 
+    company: {
+        fontSize: 20,
+        paddingBottom: 4,
+    },
 
     jobTitle: {
         fontWeight: 'bold',
@@ -47,30 +55,16 @@ export const jobStyles = StyleSheet.create({
         paddingTop: 6,
         fontSize: 12,
     },
-
-    item: {
-        backgroundColor: '#E6EBEB',
-        height: 150,
+    fab: {
+        // position: 'absolute',
+        width: 56,
+        height: 56,
+        alignItems: 'center',
         justifyContent: 'center',
-        marginVertical: 8,
-        marginHorizontal: 16,
-        padding: 20
-    },
-
-    container: {
-        flex: 1,
-    },
-
-    item: {
-        backgroundColor: '#f9c2ff',
-        height: 150,
-        // justifyContent: 'center',
-        marginVertical: 8,
-        marginHorizontal: 16,
-        padding: 20,
-    },
-
-    title: {
-        fontSize: 20
-    },
+        right: 20,
+        bottom: 20,
+        backgroundColor: '#800020',
+        borderRadius: 30,
+        elevation: 8,
+      },
 });

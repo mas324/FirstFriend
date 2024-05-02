@@ -1,5 +1,5 @@
 // import * as React from 'react';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, FlatList, TextInput, Pressable, TouchableOpacity, ScrollView } from 'react-native';
 import { Text } from '../components/TextFix';
 import { jobStyles } from '../components/JobStyles';
@@ -7,6 +7,8 @@ import { appStyles } from '../components/AppStyles';
 import { deleteItem, getItem, setItem } from '../utils/LocalStore';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import AppContext from '../utils/AppContext';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,8 +17,8 @@ function DetailedListing({ route }) {
     return (
         <SafeAreaView style={{ marginTop: 8, marginBottom: 6, paddingHorizontal: 8 }}>
             <ScrollView>
-                <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 24 }, item.company == undefined ? { height: 0 } : {}]}>{item.company}</Text>
-                <Text style={[jobStyles.jobTitle, { fontSize: 20 }]}>{item.title}</Text>
+                <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 24 }, item.position == undefined ? { height: 0 } : {}]}>{item.position}</Text>
+                <Text style={[jobStyles.jobTitle, { fontSize: 20 }]}>{item.recruiter}</Text>
                 <Text style={[jobStyles.jobSection, { fontSize: 14 }]}>{item.desc}</Text>
                 <Text style={[jobStyles.jobSection, { fontWeight: 'bold', fontSize: 18, textAlign: 'center' }]}>Salary: {
                     <Text style={[jobStyles.jobSection, { fontSize: 16 }]}>{item.salary}</Text>
@@ -25,10 +27,19 @@ function DetailedListing({ route }) {
         </SafeAreaView>
     )
 }
-
+// search, setSearch Search should only show search array
 function JobMain({ navigation }) {
     const [data, setData] = useState([]);
+    const [search, setSearch] = useState([]);   
     const [searchWord, setSearchWord] = useState("");
+    const {state} = useContext(AppContext);
+
+    if (state.type === 'staff'){
+
+    }
+    if (state.type === 'staff'){
+
+    }
 
     const DATA = require('../assets/job_postings.json');
     //const DATA_EXTRA = require('../assets/job_postings_extra.json');
@@ -43,16 +54,16 @@ function JobMain({ navigation }) {
         })
     }, []);
 
-    const JobListing = ({ title, desc, company, salary }) => {
+    const JobListing = ({ recruiter, desc, position, salary }) => {
         return (
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('JobsDetail', { title: title, desc: desc, company: company, salary: salary });
+                    navigation.navigate('JobsDetail', { recruiter: recruiter, desc: desc, position: position, salary: salary });
                 }}
-            >
+            > 
                 <View style={{ backgroundColor: 'lightgray', marginVertical: 4, paddingBottom: 10, paddingTop: 2, paddingHorizontal: 6 }}>
-                    <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 20 }, company == undefined ? { height: 0 } : {}]}>{company}</Text>
-                    <Text style={jobStyles.jobTitle}>{title}</Text>
+                    <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 20 } , position == undefined ? { height: 0 } : {}]}>{position}</Text>
+                    <Text style={jobStyles.jobTitle}>{recruiter}</Text>
                     <Text style={jobStyles.jobSection} numberOfLines={4}>{desc}</Text>
                     <Text style={[jobStyles.jobSection, { fontWeight: 'bold' }]}>Salary: {
                         <Text style={jobStyles.jobSection}>{salary}</Text>
@@ -88,33 +99,46 @@ function JobMain({ navigation }) {
     };
 
     return (
-        <SafeAreaView style={{ flex: 1, justifyContent: 'top', marginBottom: 50 }}>
-            <View style={[jobStyles.Main, { flexDirection: 'row', marginTop: 10 }]}>
+        <SafeAreaView style={{ flex: 1, justifyContent: 'top' }}>
+            <View style={[jobStyles.Main, { flexDirection: 'row', marginTop: -12, marginHorizontal: 5 }]}>
                 <TextInput
-                    style={[appStyles.input, { marginLeft: 10, marginRight: 10, width: '70%' }]}
+                    style={[jobStyles.input, { marginLeft: 10, marginRight: 10, width: '70%' }]}
                     placeholder="Search"
                     value={searchWord}
                     onChangeText={(value) => setSearchWord(value)}
                 />
                 <Pressable
-                    style={[appStyles.button, { margin: 0, minWidth: '20%' }]}
+                    style={[jobStyles.button, { margin: 7, minWidth: '20%' }]}
                     onPress={() => onClickHandler()}
                 >
-                    <Text style={appStyles.buttonLabel}>Search</Text>
+                    <Icon name="search" size={20} color="grey" style={{marginLeft: 38}}/>
+                    {/* <Text style={jobStyles.buttonLabel}>Search</Text> */}
                 </Pressable>
+                
             </View>
-            <View style={{ height: '100%', paddingHorizontal: 4 }}>
+            <View style={{ height: '100%', paddingHorizontal: 7 }}>
                 <FlatList
-                    data={data}
-                    renderItem={({ item }) => <JobListing company={item.company_name} title={item.title} desc={item.description} salary={item.salary} />}
+                    data={data.slice(0,2)}
+                    renderItem={({ item }) => <JobListing position={item.company_name} recruiter={item.title} desc={item.description} salary={item.salary} />}
                     contentContainerStyle={{
                         flexGrow: 1,
                     }}
                 />
+                <TouchableOpacity style={jobStyles.fab}>
+                    <Text>+</Text>
+                 </TouchableOpacity>
             </View>
+            
         </SafeAreaView>
     );
+
 }
+
+
+// <TouchableOpacity onPress={() => {navigation.navigate('SendMessageScreen'); deleteItem('@messages')}} style={styles.fab}>
+//         <Text style={styles.fabIcon}>+</Text>
+//       </TouchableOpacity>
+
 
 // const instance = Axios.create({
 //     //baseURL: 'https://api.coresignal.com/cdapi/v1/linkedin/job/collect/',
@@ -129,9 +153,10 @@ function JobMain({ navigation }) {
 
 export function Jobs() {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator screenOptions={{ headerShown: true }}>
             <Stack.Screen name='JobsHome' component={JobMain} />
             <Stack.Screen name='JobsDetail' component={DetailedListing} />
+            <Stack.Screen name='JobsApplication' component={DetailedListing} />
         </Stack.Navigator>
     )
 };
