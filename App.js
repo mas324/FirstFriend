@@ -12,6 +12,7 @@ import SignUpPage from './screens/loginNav/Signup';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Messages from './screens/messageNav/Messages';
 import BottomTab from './components/TabBar';
+import { reAuth } from './utils/Firestore';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -41,8 +42,9 @@ const App = () => {
 
   React.useEffect(() => {
     getItem('@user').then((val) => {
-      console.log(val);
+      console.log("appstart", val);
       setState(val);
+      reAuth();
     })
   }, []);
 
