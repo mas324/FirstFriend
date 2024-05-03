@@ -12,7 +12,8 @@ import SignUpPage from './screens/loginNav/Signup';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Messages from './screens/messageNav/Messages';
 import BottomTab from './components/TabBar';
-import { reAuth } from './utils/Firestore';
+import { reauthenticate } from './utils/Firestore';
+import { useAuth } from './utils/Auth';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -38,13 +39,24 @@ const MainStack = () => {
 }
 
 const App = () => {
-  const [state, setState] = React.useState('unauth');
+  const [state, setState] = React.useState(null);
 
   React.useEffect(() => {
     getItem('@user').then((val) => {
       console.log("appstart", val);
       setState(val);
-      reAuth();
+      if (val == null) {
+        return;
+      }
+      reauthenticate().then(loaded => {
+        if (!loaded) {
+          console.log('App: token not set forcing logout');
+          setState(null);
+          useAuth().logout();
+        } else {
+          console.log('App: user set successfully')
+        }
+      })
     })
   }, []);
 

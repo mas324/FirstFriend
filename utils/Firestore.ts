@@ -29,7 +29,10 @@ const auth = initializeAuth(firebaseApp, {
 })
 const db = getFirestore();
 auth.onAuthStateChanged(change => {
-    console.log('Firestore: auth change:', change == null ? change : 'user is set');
+    const nullCheck = change === null;
+    console.log('Firestore: auth change:', nullCheck ? change : 'user is set');
+    nullCheck ? null : change.getIdToken(true);
+    //console.log('Firestore: auth change:', change);
 })
 
 export async function signIn(username: string, password: string) {
@@ -53,14 +56,23 @@ export async function signOut() {
     fireOut(auth);
 }
 
-export async function reAuth() {
+export async function reauthenticate() {
     const user = auth.currentUser;
     if (user == undefined || user == null) {
         const newUser = await getItem('@fireUser');
-        console.log('Firestore: retrieved and setting past user');
-        auth.updateCurrentUser(newUser);
+        if (newUser == undefined || newUser == null) {
+            console.log('Firestore: no past user tokens. logging out of app');
+            return false;
+        }
+        console.log('Firestore: loading user as', newUser.email);
+        auth.updateCurrentUser(newUser).catch(_err => {
+            //console.log('Firestore: ignore', _err);
+        });
+        return true;
     } else {
-        user.getIdToken(true);
+        user.getIdToken(true).catch(_err => { }).finally(() =>
+            console.log('Firestore: token refresh'));
+        return true;
     }
 }
 

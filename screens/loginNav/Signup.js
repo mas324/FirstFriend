@@ -41,7 +41,10 @@ const SignUpPage = ({ navigation }) => {
 
         let parseSID;
         try {
-            parseSID = Number.parseInt(SID);
+            if (SID.includes('.') || SID.includes('-')) {
+                throw new Error('No decimals');
+            }
+            parseSID = Number.parseInt(SID, 10);
         } catch (e) {
             setRejection('Student ID is not a number');
             return;

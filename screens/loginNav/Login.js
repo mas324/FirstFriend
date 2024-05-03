@@ -9,8 +9,8 @@ import { FireStatusCodes, signIn } from '../../utils/Firestore';
 
 export default function LoginPage({ navigation }) {
     const { setState } = useContext(AppContext);
-    const [username, setName] = useState('');
-    const [password, setPass] = useState('');
+    const [username, setName] = useState('dev@firstfriend.com');
+    const [password, setPass] = useState('123456');
     const [rejectNotif, setRejection] = useState('');
     const { login } = useAuth();
 
