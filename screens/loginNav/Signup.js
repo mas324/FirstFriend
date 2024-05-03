@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react';
 import { TextInput, Pressable, View, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { appStyles } from '../../components/AppStyles';
 import { Text } from '../../components/TextFix';
-import { getHash, useAuth } from '../../utils/Auth';
+import { useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { convertToUserJSON } from '../../utils/LocalStore';
-import { signUp } from '../../utils/Firestore';
+import { FireStatusCodes, signUp } from '../../utils/Firestore';
 
 const SignUpPage = ({ navigation }) => {
     const [firstname, setUserFirstName] = useState('');
@@ -26,7 +26,7 @@ const SignUpPage = ({ navigation }) => {
     const { login } = useAuth()
     const { setState } = useContext(AppContext);
 
-    const handleSignUp = async () => {
+    const handleSignUp = () => {
         if (firstname == '' || lastname == '' || username == '' || SID == '' || password == '' || confPassword == '') {
             const newStyle = StyleSheet.create({
                 reject: {
@@ -73,10 +73,10 @@ const SignUpPage = ({ navigation }) => {
             type: userType,
         });
 
-        signUp(user, await getHash(password)).then((resp) => {
-            if (resp.status === 201) {
+        signUp(user, password).then((resp) => {
+            if (resp.status === FireStatusCodes.SUCCESS) {
                 setRejection('');
-                login(user);
+                login(user, resp.data);
                 setState(user);
             } else {
                 setRejection('Error occured. Please check if all fields are correct');
@@ -195,7 +195,7 @@ const SignUpPage = ({ navigation }) => {
                     ref={(input) => { this.newp = input }}
                     blurOnSubmit={true}
                 />
-                <Pressable style={appStyles.button} onPress={handleSignUp}>
+                <Pressable style={appStyles.button} onPress={() => handleSignUp()}>
                     <Text style={appStyles.buttonLabel}>Sign up</Text>
                 </Pressable>
             </SafeAreaView>

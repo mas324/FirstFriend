@@ -4,21 +4,18 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { Text } from '../../components/TextFix';
 import { appStyles } from '../../components/AppStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { userReset, userVerify } from '../../utils/Database';
-import { getHash } from '../../utils/Auth';
+import { confirmReset, sendPasswordReset } from '../../utils/Firestore';
 
 const Stack = createNativeStackNavigator();
-let key;
 
 function FormPage({ navigation }) {
     const [email, setEmail] = useState('');
-    const [username, setUsername] = useState('');
-    const [id, setID] = useState('');
     const [message, setMessage] = useState('Enter email, username, and student ID');
+    const [buttonMessage, setButtonMessage] = useState('Reset Password');
     const [color, setColor] = useState(null)
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{ marginTop: '25%' }}>
             <Text style={[{ textAlign: 'center' }, color]}>
                 {message}
             </Text>
@@ -29,39 +26,30 @@ function FormPage({ navigation }) {
                 defaultValue={email}
                 inputMode='email'
             />
-            <TextInput
-                style={appStyles.input}
-                placeholder='Username'
-                onChangeText={uname => setUsername(uname)}
-                defaultValue={username}
-            />
-            <TextInput
-                style={appStyles.input}
-                placeholder='Student ID'
-                onChangeText={newID => setID(newID)}
-                defaultValue={id}
-                inputMode='numeric'
-            />
             <Pressable
                 style={appStyles.button}
                 onPress={() => {
-                    if (email === '' || username === '' || id === '') {
+                    if (buttonMessage === 'Go back') {
+                        navigation.goBack();
+                    }
+                    if (email === '') {
                         setMessage('Fill all fields');
                         setColor(appStyles.reject);
                         return;
                     }
-                    userVerify({ email: email, id: id, username: username }).then((resp) => {
-                        if (resp.status === 202) {
-                            key = resp.data;
-                            navigation.replace('ResetPassword');
-                        }
-                    }).catch(_err => {
+
+                    sendPasswordReset(email).then(() => {
+                        setMessage('Link has been sent to the specified email\nFollow the instructions and return to the login page.');
+                        setButtonMessage('Go back');
+                        setColor({ color: 'black' })
+                        //navigation.replace('ResetPassword')
+                    }).catch((_err) => {
                         setMessage('Failed to verify user');
                         setColor(appStyles.reject);
-                    });
+                    })
                 }}
             >
-                <Text style={appStyles.buttonLabel}>Reset Password</Text>
+                <Text style={appStyles.buttonLabel}>{buttonMessage}</Text>
             </Pressable>
         </SafeAreaView>
     )
@@ -70,6 +58,7 @@ function FormPage({ navigation }) {
 function ResetPage({ navigation }) {
     const [password, setPass] = useState('');
     const [passConf, setConfirm] = useState('');
+    const [code, setCode] = useState('');
     const [reject, setReject] = useState('');
 
     return (
@@ -89,17 +78,24 @@ function ResetPage({ navigation }) {
                 onChangeText={newPass => setConfirm(newPass)}
                 defaultValue={passConf}
             />
+            <Text>Enter code from email</Text>
+            <TextInput
+                style={appStyles.input}
+                placeholder='Verification code'
+                onChangeText={newCode => setCode(newCode)}
+                defaultValue={code}
+            />
             <Pressable
                 style={appStyles.button}
                 onPress={async () => {
-                    if (password === '' || passConf === '') {
+                    if (password === '' || passConf === '' || code === '') {
                         setReject('Fill out all forms');
                         return;
                     }
                     if (password === passConf) {
-                        userReset({ password: await getHash(password), key: key }).then(() => {
+                        confirmReset(code, password).then(() => {
                             navigation.goBack();
-                        }).catch((_err) => {
+                        }).catch(_err => {
                             setReject('Error in resetting password');
                         });
                     } else {
