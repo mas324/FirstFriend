@@ -2,47 +2,42 @@ import React, { useContext, useState } from 'react';
 import { TextInput, Pressable, View } from 'react-native';
 import { Text } from '../../components/TextFix';
 import { appStyles } from '../../components/AppStyles';
-import { userAuth } from '../../utils/Database';
-import { getHash, useAuth } from '../../utils/Auth';
+import { useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { convertToUserJSON } from '../../utils/LocalStore';
+import { FireStatusCodes, signIn } from '../../utils/Firestore';
 
 export default function LoginPage({ navigation }) {
     const { setState } = useContext(AppContext);
-    const [username, setName] = useState('');
-    const [password, setPass] = useState('');
+    const [username, setName] = useState('dev@firstfriend.com');
+    const [password, setPass] = useState('123456');
     const [rejectNotif, setRejection] = useState('');
     const { login } = useAuth();
 
-    const handleLogin = async () => {
+    const handleLogin = () => {
         if (username === '' || password === '') {
             setRejection('Fill out all forms');
             return;
         }
 
-        userAuth(username, await getHash(password)).then((response) => {
-            console.log(response);
-            if (response.data && response.status === 200) {
-                setRejection('');
-                const DATA = response.data;
-                const input = convertToUserJSON({
-                    id: DATA.sid,
-                    username: DATA.username,
-                    firstname: DATA.firstname,
-                    lastname: DATA.lastname,
-                    email: DATA.email,
-                    major: DATA.major,
-                    country: DATA.country
-                })
-                login(input);
-                setState(input);
-            } else {
-                setRejection('Login information is incorrect');
+        signIn(username, password).then(({ status, data, user }) => {
+            console.log("login:", data.data());
+            switch (status) {
+                case FireStatusCodes.NO_USER:
+                    setRejection('User does not exist');
+                    return;
+                case FireStatusCodes.LOGIN_INVALID:
+                    setRejection('Invalid login information');
+                    return;
+                default:
+                    if (data != undefined && data != null && data.exists()) {
+                        setRejection('');
+                        login(data.data(), user);
+                        setState(data.data());
+                    } else {
+                        console.log("No data exists. Reason:", status);
+                    }
             }
-        }).catch(_err => {
-            console.error(_err.message);
-            setRejection(_err.request.status === 401 ? 'Login information is incorrect' : 'Server unavailable');
         });
     }
 

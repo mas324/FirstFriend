@@ -2,11 +2,11 @@ import React, { useContext, useState } from 'react';
 import { TextInput, Pressable, View, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { appStyles } from '../../components/AppStyles';
 import { Text } from '../../components/TextFix';
-import { userCreate } from '../../utils/Database';
-import { getHash, useAuth } from '../../utils/Auth';
+import { useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { convertToUserJSON } from '../../utils/LocalStore';
+import { FireStatusCodes, signUp } from '../../utils/Firestore';
 
 const SignUpPage = ({ navigation }) => {
     const [firstname, setUserFirstName] = useState('');
@@ -26,7 +26,7 @@ const SignUpPage = ({ navigation }) => {
     const { login } = useAuth()
     const { setState } = useContext(AppContext);
 
-    const handleSignUp = async () => {
+    const handleSignUp = () => {
         if (firstname == '' || lastname == '' || username == '' || SID == '' || password == '' || confPassword == '') {
             const newStyle = StyleSheet.create({
                 reject: {
@@ -41,7 +41,10 @@ const SignUpPage = ({ navigation }) => {
 
         let parseSID;
         try {
-            parseSID = Number.parseInt(SID);
+            if (SID.includes('.') || SID.includes('-')) {
+                throw new Error('No decimals');
+            }
+            parseSID = Number.parseInt(SID, 10);
         } catch (e) {
             setRejection('Student ID is not a number');
             return;
@@ -52,36 +55,36 @@ const SignUpPage = ({ navigation }) => {
             return;
         }
 
-        userCreate({
+        let userType;
+        if (email.endsWith('@toromail.csudh.edu')) {
+            userType = 'student';
+        } else if (email.endsWith('@csudh.edu')) {
+            userType = 'staff';
+        } else {
+            setRejection('Invalid CSUDH email');
+            return;
+        }
+
+        const user = convertToUserJSON({
             id: parseSID,
             email: email,
-            firstName: firstname,
-            lastName: lastname,
-            userName: username,
-            password: await getHash(password),
+            firstname: firstname,
+            lastname: lastname,
+            username: username,
             country: Country_of_Origin,
-            study: Major
-        }).then((resp) => {
-            if (resp.status === 201) {
-                const user = convertToUserJSON({
-                    id: parseSID,
-                    email: email,
-                    firstname: firstname,
-                    lastname: lastname,
-                    username: username,
-                    country: Country_of_Origin,
-                    major: Major
-                });
+            major: Major,
+            type: userType,
+        });
+
+        signUp(user, password).then((resp) => {
+            if (resp.status === FireStatusCodes.SUCCESS) {
                 setRejection('');
-                login(user);
+                login(user, resp.data);
                 setState(user);
             } else {
                 setRejection('Error occured. Please check if all fields are correct');
             }
-        }).catch(err => {
-            console.error(err)
-            setRejection('Unknown error');
-        });
+        })
     };
 
     return (
@@ -195,7 +198,7 @@ const SignUpPage = ({ navigation }) => {
                     ref={(input) => { this.newp = input }}
                     blurOnSubmit={true}
                 />
-                <Pressable style={appStyles.button} onPress={handleSignUp}>
+                <Pressable style={appStyles.button} onPress={() => handleSignUp()}>
                     <Text style={appStyles.buttonLabel}>Sign up</Text>
                 </Pressable>
             </SafeAreaView>

@@ -1,31 +1,5 @@
 import Axios from 'axios';
-
-type User = {
-    id: number,
-    firstName: string,
-    lastName: string,
-    userName: string,
-    email: string,
-    country?: string,
-    study?: string,
-    password: string
-}
-
-type CompactUser = {
-    id?: number,
-    username: string,
-    email?: string
-}
-
-const DEV_USER = {
-    sid: 0,
-    username: 'Developer',
-    firstname: 'Deve',
-    lastname: 'Loper',
-    email: 'dev0@toromail.csudh.edu',
-    major: 'Computer Science',
-    country: 'USA'
-}
+import { DEV_USER, compactUser } from '../components/Types';
 
 const inst = Axios.create({
     //baseURL: 'http://ssm.mywire.org:3405/api/', //Production server
@@ -40,11 +14,7 @@ export async function userAuth(user: string, password: string) {
     return {data: DEV_USER, status: 200}; // For development use
 }
 
-export async function userCreate(newUser: User) {
-    return inst.post('create', newUser);
-}
-
-export async function userVerify(user: CompactUser) {
+export async function userVerify(user: compactUser) {
     return inst.post('verify', user);
 }
 
