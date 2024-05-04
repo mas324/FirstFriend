@@ -13,7 +13,11 @@ import { postJob } from '../utils/Firestore';
 
 const Stack = createNativeStackNavigator();
 
-
+let definePosting = {
+    position: '',
+    recruiter: '',
+    description: '',
+}
 
 function DetailedListing({ route }) {
     const item = route.params;
@@ -28,6 +32,46 @@ function DetailedListing({ route }) {
                 }</Text>
             </ScrollView>
         </SafeAreaView>
+    )
+}
+
+function JobsApplication ({route, navigation}) {
+    const item = route.params;
+    const [position, setPosition] = useState("");
+    const [salary, setSalary] = useState("");
+    const [description, setDescription] = useState("");
+
+    return(
+    <View style={{paddingTop: 25}}>
+            <TextInput 
+                placeholder='Position' 
+                style={jobStyles.jobAppInput}
+                onChangeText={text => setPosition(text)}/>
+            <TextInput 
+                placeholder='Salary'
+                style={jobStyles.jobAppInput}
+                onChangeText={text => setSalary(text)}/>
+            <TextInput 
+                placeholder='Description' 
+                onChangeText={text => setDescription(text)}
+                style={jobStyles.inputDescription}
+                multiline={true}
+                numberOfLines={10}
+            />
+            <TouchableOpacity 
+                onPress = {() => {
+                    
+                    definePosting.recruiter = item.firstname + ' ' + item.lastname
+                    definePosting.position = position
+                    definePosting.description = description
+
+                    postJob(definePosting, item.id)
+                    navigation.popToTop()
+                }}
+            >    
+                <Text style={jobStyles.textButton}>Submit</Text>
+            </TouchableOpacity>
+    </View>
     )
 }
 // search, setSearch Search should only show search array
@@ -75,6 +119,8 @@ function JobMain({ navigation }) {
         );
     }
 
+    
+
     const onClickHandler = () => {
         if (searchWord.toLowerCase() === 'clear') {
             console.log('Removing data');
@@ -99,22 +145,17 @@ function JobMain({ navigation }) {
         });
     };
 
-    let definePosting = {
-        position: '',
-        recruiter: '',
-        description: '',
-    }
-
     // Make button work
     const addOnClickHandler = () => {
         if (state.type === 'staff'){
-            postJob(definePosting, state.id)
+            navigation.navigate('JobsApplication',state)
+            
             console.log("DEMO")
         }
     }
 
     return (
-        <SafeAreaView style={{ flex: 1, justifyContent: 'top' }}>
+        <SafeAreaView style={{ flex: 1, justifyContent: 'top', paddingTop: 25}}>
             <View style={[jobStyles.Main, { flexDirection: 'row', marginTop: -12, marginHorizontal: 5 }]}>
                 <TextInput
                     style={[jobStyles.input, { marginLeft: 10, marginRight: 10, width: '70%' }]}
@@ -140,10 +181,9 @@ function JobMain({ navigation }) {
                     }}
                 />
                 <TouchableOpacity onPress={() => addOnClickHandler()} style={jobStyles.fab}>
-                    <Text>+</Text>
+                    <Icon name="plus" style={jobStyles.plusr} />
                  </TouchableOpacity>
             </View>
-            
         </SafeAreaView>
     );
 
@@ -168,10 +208,10 @@ function JobMain({ navigation }) {
 
 export function Jobs() {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: true }}>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
             <Stack.Screen name='JobsHome' component={JobMain} />
             <Stack.Screen name='JobsDetail' component={DetailedListing} />
-            <Stack.Screen name='JobsApplication' component={DetailedListing} />
+            <Stack.Screen name='JobsApplication' component={JobsApplication} />
         </Stack.Navigator>
     )
 };
