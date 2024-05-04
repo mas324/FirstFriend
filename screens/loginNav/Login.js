@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { FireStatusCodes, signIn } from '../../utils/Firestore';
 
 export default function LoginPage({ navigation }) {
-    const { setState } = useContext(AppContext);
+    const { setUser } = useContext(AppContext);
     const [username, setName] = useState('dev@firstfriend.com');
     const [password, setPass] = useState('123456');
     const [rejectNotif, setRejection] = useState('');
@@ -21,7 +21,7 @@ export default function LoginPage({ navigation }) {
         }
 
         signIn(username, password).then(({ status, data, user }) => {
-            console.log("login:", data.data());
+            console.log("Login:", data.data());
             switch (status) {
                 case FireStatusCodes.NO_USER:
                     setRejection('User does not exist');
@@ -33,9 +33,9 @@ export default function LoginPage({ navigation }) {
                     if (data != undefined && data != null && data.exists()) {
                         setRejection('');
                         login(data.data(), user);
-                        setState(data.data());
+                        setUser(data.data());
                     } else {
-                        console.log("No data exists. Reason:", status);
+                        console.log("Login: no data exists", status);
                     }
             }
         });

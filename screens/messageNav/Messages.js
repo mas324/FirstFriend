@@ -29,7 +29,7 @@ const Item = ({ name, photo, status }) => {
 
 const MessagePage = ({ navigation }) => {
   const [messages, setMessages] = useState([]);
-  const { state } = useContext(AppContext);
+  const { user } = useContext(AppContext);
 
   useEffect(() => {
     return;
@@ -70,7 +70,7 @@ const MessagePage = ({ navigation }) => {
   }, []);
 
   const handleMessageSent = () => {
-    const username = state.username;
+    const username = user.username;
     const messageData = {
       name: username,
       photo: `https://ui-avatars.com/api/?name=${username}&background=random`,

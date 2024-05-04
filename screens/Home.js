@@ -11,7 +11,7 @@ import VeniceBeachCoffeeFinder from './travelNav/MapApp';
 const Stack = createNativeStackNavigator();
 
 function HomePage({ navigation }) {
-  const { setState } = useContext(AppContext);
+  const { setUser } = useContext(AppContext);
   const handleButtonPress = (buttonNumber) => {
     // define actions for each button press here
 
@@ -30,7 +30,7 @@ function HomePage({ navigation }) {
         break;
       case 5:
         useAuth().logout();
-        setState(null);
+        setUser(null);
         break;
       default:
         console.log('Button', buttonNumber, 'pressed');

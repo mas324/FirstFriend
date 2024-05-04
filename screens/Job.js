@@ -9,14 +9,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppContext from '../utils/AppContext';
-import { postJob } from '../utils/Firestore';
+import { getJob, postJob } from '../utils/Firestore';
 
 const Stack = createNativeStackNavigator();
 
-let definePosting = {
+const definePosting = {
     position: '',
     recruiter: '',
     description: '',
+    salary: '',
 }
 
 function DetailedListing({ route }) {
@@ -35,69 +36,87 @@ function DetailedListing({ route }) {
     )
 }
 
-function JobsApplication ({route, navigation}) {
-    const item = route.params;
-    const [position, setPosition] = useState("");
-    const [salary, setSalary] = useState("");
-    const [description, setDescription] = useState("");
+function JobsApplication({ route, navigation }) {
+    const user = route.params;
+    const [position, setPosition] = useState("Teacher Aid " + (Math.random() * 100).toFixed(0));
+    const [salary, setSalary] = useState("" + (Math.random() * 1000000).toFixed(2));
+    const [description, setDescription] = useState("sint praesentium neque in possimus fugiat placeat cumque aut unde sed perferendis dolores hic qui illum ducimus maxime qui voluptatem labore voluptate veritatis omnis iusto illum ut dicta aut modi animi sint ratione qui repellat eligendi inventore rem tempore quisquam voluptatem numquam laudantium explicabo reprehenderit beatae aut similique odit dolor repellendus repellendus aspernatur saepe aut explicabo laboriosam quod magnam error odio fugiat rem blanditiis atque omnis occaecati debitis maiores doloribus odit quidem possimus laudantium omnis voluptatem voluptatem autem aut architecto officia eius et doloribus ut quae sequi aut qui rerum totam est est labore qui ut aliquam iste enim provident ");
 
-    return(
-    <View style={{paddingTop: 25}}>
-            <TextInput 
-                placeholder='Position' 
+    return (
+        <View style={{ paddingTop: 25 }}>
+            <TextInput
+                placeholder='Position'
                 style={jobStyles.jobAppInput}
-                onChangeText={text => setPosition(text)}/>
-            <TextInput 
+                onChangeText={text => setPosition(text)}
+                defaultValue={position}
+            />
+            <TextInput
                 placeholder='Salary'
                 style={jobStyles.jobAppInput}
-                onChangeText={text => setSalary(text)}/>
-            <TextInput 
-                placeholder='Description' 
+                onChangeText={text => setSalary(text)}
+                defaultValue={salary}
+            />
+            <TextInput
+                placeholder='Description'
                 onChangeText={text => setDescription(text)}
                 style={jobStyles.inputDescription}
                 multiline={true}
                 numberOfLines={10}
+                defaultValue={description}
             />
-            <TouchableOpacity 
-                onPress = {() => {
-                    
-                    definePosting.recruiter = item.firstname + ' ' + item.lastname
-                    definePosting.position = position
-                    definePosting.description = description
-
-                    postJob(definePosting, item.id)
-                    navigation.popToTop()
+            <TouchableOpacity
+                onPress={() => {
+                    definePosting.recruiter = user.firstname + ' ' + user.lastname;
+                    definePosting.position = position;
+                    definePosting.description = description;
+                    definePosting.salary = salary;
+                    const postID = Date.now().toString() + '_' + user.id;
+                    postJob(definePosting, postID);
+                    navigation.popToTop();
                 }}
-            >    
+            >
                 <Text style={jobStyles.textButton}>Submit</Text>
             </TouchableOpacity>
-    </View>
+        </View>
     )
 }
+
 // search, setSearch Search should only show search array
 function JobMain({ navigation }) {
     const [data, setData] = useState([]);
-    const [search, setSearch] = useState([]);   
+    const [search, setSearch] = useState([]);
     const [searchWord, setSearchWord] = useState("");
-    const {state} = useContext(AppContext);
-
-    
-    if (state.type === 'student'){
-        // Hide button
-    }
-
-    const DATA = require('../assets/job_postings.json');
-    //const DATA_EXTRA = require('../assets/job_postings_extra.json');
-
-    //console.log(DATA);
-    //console.log(DATA_EXTRA);
+    const { user } = useContext(AppContext);
 
     useEffect(() => {
-        //console.log('running effect job');
-        getItem('@jobs').then(items => {
-            setData(items);
-        })
+        console.log('Job: effect start');
+        refreshListing();
     }, []);
+
+    const refreshListing = () => {
+        console.log('Job: loading data');
+        getItem('@jobs').then(items => {
+            if (items != null) {
+                setData(items);
+            } else {
+                const jobDataList = Array();
+                getJob().then(jobs => {
+                    jobs.forEach(item => {
+                        //console.log('Job: test', item.data(), 'from', item.id);
+                        jobDataList.push({
+                            description: item.data().description,
+                            position: item.data().position,
+                            recruiter: item.data().recruiter,
+                            salary: item.data().salary,
+                            id: item.id,
+                        });
+                    });
+                    setData(jobDataList);
+                    setItem('@jobs', jobDataList);
+                });
+            }
+        });
+    }
 
     const JobListing = ({ recruiter, desc, position, salary }) => {
         return (
@@ -105,9 +124,9 @@ function JobMain({ navigation }) {
                 onPress={() => {
                     navigation.navigate('JobsDetail', { recruiter: recruiter, desc: desc, position: position, salary: salary });
                 }}
-            > 
+            >
                 <View style={{ backgroundColor: 'lightgray', marginVertical: 4, paddingBottom: 10, paddingTop: 2, paddingHorizontal: 6 }}>
-                    <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 20 } , position == undefined ? { height: 0 } : {}]}>{position}</Text>
+                    <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 20 }, position == undefined ? { height: 0 } : {}]}>{position}</Text>
                     <Text style={jobStyles.jobTitle}>{recruiter}</Text>
                     <Text style={jobStyles.jobSection} numberOfLines={4}>{desc}</Text>
                     <Text style={[jobStyles.jobSection, { fontWeight: 'bold' }]}>Salary: {
@@ -119,43 +138,15 @@ function JobMain({ navigation }) {
         );
     }
 
-    
-
     const onClickHandler = () => {
-        if (searchWord.toLowerCase() === 'clear') {
-            console.log('Removing data');
-            deleteItem('@jobs');
-            setData([]);
-            return;
-        }
-
-        const searchRequest = {
-            "experience_title": searchWord,
-            "country": '(United States)',
-            "location": 'Carson, California',
-            "last_updated_gte": '2024-04-01 00:00:00'
-        };
-        getItem('@jobs').then(localJobs => {
-            if (localJobs === null) {
-                setItem('@jobs', DATA);
-                setData(DATA);
-            } else {
-                setData(localJobs);
-            }
-        });
+        console.log('Job: resetting state');
+        deleteItem('@jobs');
+        setData([])
+        refreshListing();
     };
 
-    // Make button work
-    const addOnClickHandler = () => {
-        if (state.type === 'staff'){
-            navigation.navigate('JobsApplication',state)
-            
-            console.log("DEMO")
-        }
-    }
-
     return (
-        <SafeAreaView style={{ flex: 1, justifyContent: 'top', paddingTop: 25}}>
+        <SafeAreaView style={{ flex: 1, justifyContent: 'top', paddingTop: 25, paddingBottom: 20 }}>
             <View style={[jobStyles.Main, { flexDirection: 'row', marginTop: -12, marginHorizontal: 5 }]}>
                 <TextInput
                     style={[jobStyles.input, { marginLeft: 10, marginRight: 10, width: '70%' }]}
@@ -167,44 +158,32 @@ function JobMain({ navigation }) {
                     style={[jobStyles.button, { margin: 7, minWidth: '20%' }]}
                     onPress={() => onClickHandler()}
                 >
-                    <Icon name="search" size={20} color="grey" style={{marginLeft: 38}}/>
+                    <Icon name="search" size={20} color="grey" style={{ marginLeft: 38 }} />
                     {/* <Text style={jobStyles.buttonLabel}>Search</Text> */}
                 </Pressable>
-                
+
             </View>
             <View style={{ height: '100%', paddingHorizontal: 7 }}>
                 <FlatList
-                    data={data != null ? data.slice(0,2):null}
-                    renderItem={({ item }) => <JobListing position={item.company_name} recruiter={item.title} desc={item.description} salary={item.salary} />}
+                    data={data}
+                    renderItem={({ item }) => <JobListing position={item.position} recruiter={item.recruiter} desc={item.description} salary={item.salary} />}
                     contentContainerStyle={{
                         flexGrow: 1,
                     }}
                 />
-                <TouchableOpacity onPress={() => addOnClickHandler()} style={jobStyles.fab}>
-                    <Icon name="plus" style={jobStyles.plusr} />
-                 </TouchableOpacity>
+                {user.type === 'staff' ?
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('JobsApplication', user)}
+                        style={jobStyles.fab}
+                    >
+                        <Icon name="plus" style={jobStyles.plusr} />
+                    </TouchableOpacity> : null
+                }
             </View>
         </SafeAreaView>
     );
 
 }
-
-
-// <TouchableOpacity onPress={() => {navigation.navigate('SendMessageScreen'); deleteItem('@messages')}} style={styles.fab}>
-//         <Text style={styles.fabIcon}>+</Text>
-//       </TouchableOpacity>
-
-
-// const instance = Axios.create({
-//     //baseURL: 'https://api.coresignal.com/cdapi/v1/linkedin/job/collect/',
-//     timeout: 1000,
-//     headers: {
-//         "Content-Type": 'application/json',
-//         Authorization: 'Bearer eyJhbGciOiJFZERTQSIsImtpZCI6IjY0NWVmNzg3LTZkNmMtZTQ2ZS1kNjRiLWQ0N2FkZWRkZGM4NSJ9.eyJhdWQiOiJ0b3JvbWFpbC5jc3VkaC5lZHUiLCJleHAiOjE3NDM2NDU5NjQsImlhdCI6MTcxMjA4OTAxMiwiaXNzIjoiaHR0cHM6Ly9vcHMuY29yZXNpZ25hbC5jb206ODMwMC92MS9pZGVudGl0eS9vaWRjIiwibmFtZXNwYWNlIjoicm9vdCIsInByZWZlcnJlZF91c2VybmFtZSI6InRvcm9tYWlsLmNzdWRoLmVkdSIsInN1YiI6ImZhMGM0YzljLWMyMWMtZmZkZi1jMGI5LTQ4YWVkNWFmOWMxNiIsInVzZXJpbmZvIjp7InNjb3BlcyI6ImNkYXBpIn19.npUu-sntifY5L1IdkUez1Lw_btDeSOoDyoFrJmZ0dYcK0jECdFa6RJrnHfp30WQVd36x02NTZtoJ59LMCHEUBg',
-//     }
-// })
-
-//const API_ENDPOINT = 'https://api.coresignal.com/cdapi/v1/linkedin/job/search/filter';
 
 export function Jobs() {
     return (

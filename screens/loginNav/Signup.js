@@ -24,7 +24,7 @@ const SignUpPage = ({ navigation }) => {
     const [placeColor, setPlaceColor] = useState(null)
 
     const { login } = useAuth()
-    const { setState } = useContext(AppContext);
+    const { setUser } = useContext(AppContext);
 
     const handleSignUp = () => {
         if (firstname == '' || lastname == '' || username == '' || SID == '' || password == '' || confPassword == '') {
@@ -80,7 +80,7 @@ const SignUpPage = ({ navigation }) => {
             if (resp.status === FireStatusCodes.SUCCESS) {
                 setRejection('');
                 login(user, resp.data);
-                setState(user);
+                setUser(user);
             } else {
                 setRejection('Error occured. Please check if all fields are correct');
             }

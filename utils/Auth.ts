@@ -21,6 +21,8 @@ export const useAuth = () => {
     const logout = () => {
         deleteItem('@user');
         deleteItem('@fireUser');
+        deleteItem('@messages');
+        deleteItem('@jobs');
         signOut();
     }
 

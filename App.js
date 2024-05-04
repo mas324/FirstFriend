@@ -39,19 +39,19 @@ const MainStack = () => {
 }
 
 const App = () => {
-  const [state, setState] = React.useState(null);
+  const [user, setUser] = React.useState(null);
 
   React.useEffect(() => {
     getItem('@user').then((val) => {
-      console.log("appstart", val);
-      setState(val);
+      console.log("Appstart:", val);
+      setUser(val);
       if (val == null) {
         return;
       }
       reauthenticate().then(loaded => {
         if (!loaded) {
-          console.log('App: token not set forcing logout');
-          setState(null);
+          console.log('App: token invalid forcing logout');
+          setUser(null);
           useAuth().logout();
         } else {
           console.log('App: user set successfully')
@@ -63,8 +63,8 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <AppContext.Provider value={{ state, setState }}>
-          {state === null ? <LoginStack /> : <MainStack />}
+        <AppContext.Provider value={{ user, setUser }}>
+          {user === null ? <LoginStack /> : <MainStack />}
         </AppContext.Provider>
       </NavigationContainer>
     </SafeAreaProvider>
