@@ -44,7 +44,7 @@ export default function LoginPage({ navigation }) {
     }
     // 
     return (
-    <SafeAreaView style={{ padding: 10, flex: 1, alignContent: 'center' }}>
+    <SafeAreaView style={{ flex:1 }}>
         <ImageBackground
                 source={image} 
                 style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}>
