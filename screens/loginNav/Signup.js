@@ -35,7 +35,7 @@ const SignUpPage = ({ navigation }) => {
                 }
             });
             setInputStyle([appStyles.input, newStyle.reject])
-            setRejection('Fill All Required Forms');
+            setRejection('Fill All Required Forms!');
             setPlaceColor('#860038');
             return;
         }
@@ -94,18 +94,18 @@ const SignUpPage = ({ navigation }) => {
             <ImageBackground
                 source={image} 
                 style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', opacity: 0.8}}>
-                    <Pressable
-            >
+                    <Text style={[appStyles.reject, { paddingTop: 0 }]}>
+                    {rejection}
+                </Text>
+                <Pressable>
                 <Text style={{fontSize: 24,
                     color: '#860038',
                     fontWeight: '900',
                     textAlign: 'center',
-                    top: 16
+                    top: 4
                     }}>Welcome to First Friend!</Text>
             </Pressable>
-                <Text style={[appStyles.reject, { paddingTop: 0 }]}>
-                    {rejection}
-                </Text>
+                
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
                     <TextInput
                         style={[inputStyle, { flex: 1}]}
