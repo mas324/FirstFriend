@@ -9,14 +9,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import AppContext from '../utils/AppContext';
+import { postJob } from '../utils/Firestore';
 
 const Stack = createNativeStackNavigator();
 
-let definePosting = {
-    position: '',
-    recruiter: '',
-    description: '',
-}
+
 
 function DetailedListing({ route }) {
     const item = route.params;
@@ -102,10 +99,17 @@ function JobMain({ navigation }) {
         });
     };
 
+    let definePosting = {
+        position: '',
+        recruiter: '',
+        description: '',
+    }
+
     // Make button work
     const addOnClickHandler = () => {
         if (state.type === 'staff'){
-
+            postJob(definePosting, state.id)
+            console.log("DEMO")
         }
     }
 
@@ -135,7 +139,7 @@ function JobMain({ navigation }) {
                         flexGrow: 1,
                     }}
                 />
-                <TouchableOpacity style={jobStyles.fab}>
+                <TouchableOpacity onPress={() => addOnClickHandler()} style={jobStyles.fab}>
                     <Text>+</Text>
                  </TouchableOpacity>
             </View>
