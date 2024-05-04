@@ -122,7 +122,8 @@ export async function confirmReset(code: string, password: string) {
 
 export async function postJob(jobDetail: any, postID: string) {
     try {
-        await setDoc(doc(db, "jobs", postID), jobDetail);
+        console.log('Firestore:', postID, jobDetail);
+        await setDoc(doc(db, "jobs", postID.toString()), jobDetail);
         return true;
     } catch (error) {
         console.error(error);
