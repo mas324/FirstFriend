@@ -40,8 +40,11 @@ const MessagePage = ({ navigation }) => {
       status: 'New'
     };
 
-    setMessages(messages.concat([messageData]));
-    setItem('@messages', messages);
+    setMessages(prevMessages => {
+      const updatedMessages = prevMessages.concat([messageData]);
+      setItem('@messages', updatedMessages);
+      return updatedMessages;
+    })
   };
 
 
@@ -50,7 +53,8 @@ const MessagePage = ({ navigation }) => {
   };
 
   const handleItemPress = (userID) => {
-    navigation.navigate('MessageDetails', { userID, onMessageSent: handleMessageSent });
+    console.log(handleMessageSent);
+    navigation.navigate('MessageDetails', { userID, onMessageSent: handleMessageSent});
   };
 
 
@@ -91,7 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
     padding: 16,
-    backgroundColor: '#800020'
+    backgroundColor: '#860038'
   },
   heading: {
     marginBottom: 8,
@@ -155,7 +159,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     right: 20,
     bottom: 20,
-    backgroundColor: '#800020',
+    backgroundColor: '#860038',
     borderRadius: 30,
     elevation: 8,
   },

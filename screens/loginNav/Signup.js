@@ -1,12 +1,13 @@
 import React, { useContext, useState } from 'react';
-import { TextInput, Pressable, View, KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import { Text, TextInput, Pressable, View, KeyboardAvoidingView, Platform, StyleSheet, ImageBackground} from 'react-native';
 import { appStyles } from '../../components/AppStyles';
-import { Text } from '../../components/TextFix';
 import { useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { convertToUserJSON } from '../../utils/LocalStore';
 import { FireStatusCodes, signUp } from '../../utils/Firestore';
+
+const image = {uri:'https://news.csudh.edu/wp-content/uploads/2017/04/JSF_8585.jpg'};
 
 const SignUpPage = ({ navigation }) => {
     const [firstname, setUserFirstName] = useState('');
@@ -89,7 +90,19 @@ const SignUpPage = ({ navigation }) => {
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} style={{ flex: 1 }}>
-            <SafeAreaView style={{ justifyContent: 'space-around' }}>
+            <SafeAreaView style={{flex: 1 }}>
+            <ImageBackground
+                source={image} 
+                style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}>
+                    <Pressable
+            >
+                <Text style={{fontSize: 24,
+                    color: '#860038',
+                    fontWeight: '900',
+                    textAlign: 'center',
+                    top: 16
+                    }}>Welcome to First Friend!</Text>
+            </Pressable>
                 <Text style={[appStyles.reject, { paddingTop: 0 }]}>
                     {rejection}
                 </Text>
@@ -201,6 +214,7 @@ const SignUpPage = ({ navigation }) => {
                 <Pressable style={appStyles.button} onPress={() => handleSignUp()}>
                     <Text style={appStyles.buttonLabel}>Sign up</Text>
                 </Pressable>
+                </ImageBackground>
             </SafeAreaView>
         </KeyboardAvoidingView>
     )

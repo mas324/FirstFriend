@@ -9,7 +9,12 @@ const MessageDetails = ({ route }) => {
 
   const handleSend = () => {
     console.log('Message sent:', message);
-    onMessageSent();
+    if (typeof onMessageSent === 'function') {
+      onMessageSent(); // Call onMessageSent only if it's a function
+    } else {
+      console.error('onMessageSent is not a function');
+    }
+    navigation.popToTop();
   };
 
   return (
@@ -24,7 +29,7 @@ const MessageDetails = ({ route }) => {
         value={message}
         onChangeText={setMessage}
       />
-      <Button title="Send" color="#e6bb23" onPress={handleSend} />
+      <Button title="Send" color="#e6bb23" onPress={handleSend}/>
     </View>
   );
 };
@@ -33,7 +38,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#800020',
+    backgroundColor: '#860038',
   },
   heading: {
     fontSize: 24,

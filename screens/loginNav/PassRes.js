@@ -1,22 +1,26 @@
 import { useState } from 'react';
-import { TextInput, Pressable } from 'react-native';
+import { TextInput, Pressable, Text, ImageBackground} from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Text } from '../../components/TextFix';
 import { appStyles } from '../../components/AppStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { confirmReset, sendPasswordReset } from '../../utils/Firestore';
 
 const Stack = createNativeStackNavigator();
 
+const image = { uri: 'https://news.csudh.edu/wp-content/uploads/2017/04/JSF_02771-1.jpg'};
+
 function FormPage({ navigation }) {
     const [email, setEmail] = useState('');
-    const [message, setMessage] = useState('Enter email, username, and student ID');
+    const [message, setMessage] = useState('Enter Email, Username, and Student ID');
     const [buttonMessage, setButtonMessage] = useState('Reset Password');
     const [color, setColor] = useState(null)
 
     return (
-        <SafeAreaView style={{ marginTop: '25%' }}>
-            <Text style={[{ textAlign: 'center' }, color]}>
+        <SafeAreaView style={{ flex: 1 }}>
+            <ImageBackground
+                source={image} 
+                style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center'}}>
+            <Text style={[{ textAlign: 'center', color: '#860038', fontWeight: '500'}]}>
                 {message}
             </Text>
             <TextInput
@@ -51,6 +55,7 @@ function FormPage({ navigation }) {
             >
                 <Text style={appStyles.buttonLabel}>{buttonMessage}</Text>
             </Pressable>
+            </ImageBackground>
         </SafeAreaView>
     )
 }

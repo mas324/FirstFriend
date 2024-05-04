@@ -1,11 +1,13 @@
 import React, { useContext, useState } from 'react';
-import { TextInput, Pressable, View } from 'react-native';
-import { Text } from '../../components/TextFix';
+import { TextInput, Pressable, View, ImageBackground, TouchableOpacity } from 'react-native';
+import { Text } from 'react-native';
 import { appStyles } from '../../components/AppStyles';
 import { useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FireStatusCodes, signIn } from '../../utils/Firestore';
+
+const image = {uri:'https://news.csudh.edu/wp-content/uploads/2017/04/JSF_7499.jpg'};
 
 export default function LoginPage({ navigation }) {
     const { setState } = useContext(AppContext);
@@ -40,9 +42,17 @@ export default function LoginPage({ navigation }) {
             }
         });
     }
-
+    // 
     return (
-        <SafeAreaView style={{ padding: 10, flex: 1, alignContent: 'center' }}>
+    <SafeAreaView style={{ padding: 10, flex: 1, alignContent: 'center' }}>
+        <ImageBackground
+                source={image} 
+                style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}>
+            <Pressable
+                  style={[appStyles.button2]}
+            >
+                <Text style={appStyles.headingText}>First Friend</Text>
+            </Pressable>
             <Text style={appStyles.reject}>
                 {rejectNotif}
             </Text>
@@ -52,6 +62,7 @@ export default function LoginPage({ navigation }) {
                 placeholder='Username'
                 onChangeText={newName => setName(newName)}
                 defaultValue={username}
+                
             />
             <TextInput
                 style={appStyles.input}
@@ -72,16 +83,17 @@ export default function LoginPage({ navigation }) {
                     flexDirection: 'row',
                     padding: 20,
                     justifyContent: 'space-evenly',
-                    color: '#EEE8AA'
+                    color: '#860038'
                 }}
             >
                 <Pressable onPress={() => { navigation.navigate('Signup') }}>
-                    <Text style={{ color: 'blue' }}>Signup</Text>
+                    <Text style={{color:'black', fontWeight: '800', fontSize: 14}}>Signup</Text>
                 </Pressable>
                 <Pressable onPress={() => { navigation.navigate('PassRes') }}>
-                    <Text style={{ color: 'blue' }}>Forgot password</Text>
+                    <Text style={{color:'black', fontWeight: '800', fontSize: 14}}>Forgot password</Text>
                 </Pressable>
             </View>
-        </SafeAreaView>
+        </ImageBackground>
+    </SafeAreaView>
     );
 };
