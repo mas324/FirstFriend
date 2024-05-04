@@ -37,7 +37,7 @@ function FormPage({ navigation }) {
                         navigation.goBack();
                     }
                     if (email === '') {
-                        setMessage('Fill all fields');
+                        setMessage('Fill all fields!');
                         setColor(appStyles.reject);
                         return;
                     }
