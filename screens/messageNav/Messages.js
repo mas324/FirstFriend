@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator();
 
 const Item = ({ name, photo, status }) => {
   return (
-    <View style={styles.item}>
+    <View style={[styles.item, { backgroundColor: '#f6e4a9' ? '#e6bb23' : '#f6e4a9'}]}>
       <TouchableOpacity>
         <Image source={{ uri: photo }} style={styles.contactPhoto} />
         <View style={styles.messageContent}>
@@ -29,6 +29,7 @@ const Item = ({ name, photo, status }) => {
 
 const MessagePage = ({ navigation }) => {
   const [messages, setMessages] = useState([]);
+  const [toggleColor, setToggleColor] = useState(false);
   const { state } = useContext(AppContext);
 
   useEffect(() => {
@@ -79,6 +80,9 @@ const MessagePage = ({ navigation }) => {
 
     setMessages(messages.concat([messageData]));
     setItem('@messages', messages);
+    
+    setToggleColor(prevState => !prevState);
+
     return;
 
     messageCreate(messageData).then(_resp => {
@@ -149,7 +153,7 @@ const styles = StyleSheet.create({
   },
   headingText: {
     fontSize: 24,
-    color: '#eee8aa',
+    color: '#e6bb23',
     fontWeight: 'bold',
   },
   item: {
@@ -158,7 +162,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 8,
     alignItems: 'center',
-    backgroundColor: '#eee8aa',
+    backgroundColor: '#e6bb23',
     marginBottom: 6,
     borderRadius: 8,
     shadowColor: '#000',
@@ -208,7 +212,7 @@ const styles = StyleSheet.create({
   },
   fabIcon: {
     fontSize: 40,
-    color: '#eee8aa',
+    color: '#e6bb23',
   },
 });
 

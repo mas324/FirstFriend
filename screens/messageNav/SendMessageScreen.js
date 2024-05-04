@@ -17,7 +17,7 @@ const SendMessageScreen = () => {
         <Text style={styles.headingText}>Add New Friend</Text>
         <TextInput
                 placeholder="Insert userID"
-                placeholderTextColor = "#eee8aa"
+                placeholderTextColor = "#e6bb23"
                 fontWeight = "bold"
                 value={userID}
                 onChangeText={(text) => setUserID(text)}
@@ -26,7 +26,7 @@ const SendMessageScreen = () => {
             />
             <Button 
             title="Submit" 
-            color= "#eee8aa"
+            color= "#e6bb23"
             marginTop = "20"
             onPress={handleSubmit} 
             />
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   headingText: {
     fontSize: 24,
-    color: '#eee8aa',
+    color: '#e6bb23',
     fontWeight: 'bold',
   },
    input: {
@@ -61,10 +61,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
     borderWidth: 2,
-    borderColor: "#eee8aa",
+    borderColor: "#e6bb23",
     width: 350 ,
     padding: 10,
-    color: "#eee8aa"
+    color: "#e6bb23"
   },
 });
 

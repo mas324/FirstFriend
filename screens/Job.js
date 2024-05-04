@@ -118,7 +118,7 @@ function JobMain({ navigation }) {
             </View>
             <View style={{ height: '100%', paddingHorizontal: 7 }}>
                 <FlatList
-                    data={data.slice(0,2)}
+                  data = { data != null ? data.slice(0,2): null}
                     renderItem={({ item }) => <JobListing position={item.company_name} recruiter={item.title} desc={item.description} salary={item.salary} />}
                     contentContainerStyle={{
                         flexGrow: 1,

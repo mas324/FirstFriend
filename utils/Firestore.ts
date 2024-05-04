@@ -137,3 +137,21 @@ export async function getJob() {
         console.error(error);
     }
 }
+
+export async function postMessage(messageDetail: any, postID: string) {
+    try {
+        await setDoc(doc(db, "messages", postID), messageDetail);
+        return true;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+export async function getMessage() {
+    try {
+        return await getDocs(collection(db, "messages"));
+    } catch (error) {
+        console.error(error);
+    }
+}

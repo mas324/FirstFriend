@@ -26,3 +26,10 @@ export type User = {
     major?: string,
     type: string,
 }
+
+export type Messages = {
+    userIdSender: number,
+    userIDReceiver: number,
+    message: string,
+    read: boolean,
+}
