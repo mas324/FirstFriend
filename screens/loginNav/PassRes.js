@@ -19,7 +19,7 @@ function FormPage({ navigation }) {
         <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground
                 source={image} 
-                style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center'}}>
+                style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', opacity: 0.9}}>
             <Text style={[{ textAlign: 'center', color: '#860038', fontWeight: '500'}]}>
                 {message}
             </Text>

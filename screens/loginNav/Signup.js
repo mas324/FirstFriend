@@ -93,7 +93,7 @@ const SignUpPage = ({ navigation }) => {
             <SafeAreaView style={{flex: 1 }}>
             <ImageBackground
                 source={image} 
-                style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', opacity: 0.8 }}>
+                style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', opacity: 0.8}}>
                     <Pressable
             >
                 <Text style={{fontSize: 24,
