@@ -31,12 +31,12 @@ const SignUpPage = ({ navigation }) => {
         if (firstname == '' || lastname == '' || username == '' || SID == '' || password == '' || confPassword == '') {
             const newStyle = StyleSheet.create({
                 reject: {
-                    borderColor: 'red'
+                    borderColor: '#860038'
                 }
             });
             setInputStyle([appStyles.input, newStyle.reject])
-            setRejection('Fill all required forms');
-            setPlaceColor('red');
+            setRejection('Fill All Required Forms');
+            setPlaceColor('#860038');
             return;
         }
 
@@ -93,7 +93,7 @@ const SignUpPage = ({ navigation }) => {
             <SafeAreaView style={{flex: 1 }}>
             <ImageBackground
                 source={image} 
-                style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}>
+                style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', opacity: 0.8 }}>
                     <Pressable
             >
                 <Text style={{fontSize: 24,
@@ -108,7 +108,7 @@ const SignUpPage = ({ navigation }) => {
                 </Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
                     <TextInput
-                        style={[inputStyle, { flex: 1 }]}
+                        style={[inputStyle, { flex: 1}]}
                         placeholder="First Name"
                         placeholderTextColor={placeColor}
                         value={firstname}

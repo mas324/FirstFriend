@@ -44,10 +44,10 @@ export default function LoginPage({ navigation }) {
     }
     // 
     return (
-    <SafeAreaView style={{ flex:1 }}>
+    <SafeAreaView style={{ flex:1}}>
         <ImageBackground
                 source={image} 
-                style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center' }}>
+                style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', opacity: 0.8}}>
             <Pressable
                   style={[appStyles.button2]}
             >
