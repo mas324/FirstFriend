@@ -12,6 +12,12 @@ import AppContext from '../utils/AppContext';
 
 const Stack = createNativeStackNavigator();
 
+let definePosting = {
+    position: '',
+    recruiter: '',
+    description: '',
+}
+
 function DetailedListing({ route }) {
     const item = route.params;
     return (
@@ -34,11 +40,9 @@ function JobMain({ navigation }) {
     const [searchWord, setSearchWord] = useState("");
     const {state} = useContext(AppContext);
 
-    if (state.type === 'staff'){
-
-    }
-    if (state.type === 'staff'){
-
+    
+    if (state.type === 'student'){
+        // Hide button
     }
 
     const DATA = require('../assets/job_postings.json');
@@ -98,6 +102,13 @@ function JobMain({ navigation }) {
         });
     };
 
+    // Make button work
+    const addOnClickHandler = () => {
+        if (state.type === 'staff'){
+
+        }
+    }
+
     return (
         <SafeAreaView style={{ flex: 1, justifyContent: 'top' }}>
             <View style={[jobStyles.Main, { flexDirection: 'row', marginTop: -12, marginHorizontal: 5 }]}>
@@ -118,7 +129,7 @@ function JobMain({ navigation }) {
             </View>
             <View style={{ height: '100%', paddingHorizontal: 7 }}>
                 <FlatList
-                    data={data.slice(0,2)}
+                    data={data != null ? data.slice(0,2):null}
                     renderItem={({ item }) => <JobListing position={item.company_name} recruiter={item.title} desc={item.description} salary={item.salary} />}
                     contentContainerStyle={{
                         flexGrow: 1,
