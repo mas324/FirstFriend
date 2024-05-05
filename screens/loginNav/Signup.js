@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Text, TextInput, Pressable, View, KeyboardAvoidingView, Platform, StyleSheet, ImageBackground} from 'react-native';
+import { Text, TextInput, Pressable, View, KeyboardAvoidingView, Platform, StyleSheet, ImageBackground } from 'react-native';
 import { appStyles } from '../../components/AppStyles';
 import { useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { convertToUserJSON } from '../../utils/LocalStore';
 import { FireStatusCodes, signUp } from '../../utils/Firestore';
 
-const image = {uri:'https://news.csudh.edu/wp-content/uploads/2017/04/JSF_8585.jpg'};
+const image = { uri: 'https://news.csudh.edu/wp-content/uploads/2017/04/JSF_8585.jpg' };
 
 const SignUpPage = ({ navigation }) => {
     const [firstname, setUserFirstName] = useState('');
@@ -90,130 +90,134 @@ const SignUpPage = ({ navigation }) => {
 
     return (
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'} style={{ flex: 1 }}>
-            <SafeAreaView style={{flex: 1 }}>
-            <ImageBackground
-                source={image} 
-                style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', opacity: 0.8}}>
-                    <Text style={[appStyles.reject, { paddingTop: 0 }]}>
-                    {rejection}
-                </Text>
-                <Pressable>
-                <Text style={{fontSize: 24,
-                    color: '#860038',
-                    fontWeight: '900',
-                    textAlign: 'center',
-                    top: 4
-                    }}>Welcome to First Friend!</Text>
-            </Pressable>
-                
-                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                    <TextInput
-                        style={[inputStyle, { flex: 1}]}
-                        placeholder="First Name"
-                        placeholderTextColor={placeColor}
-                        value={firstname}
-                        onChangeText={text => setUserFirstName(text)}
-                        enterKeyHint='next'
-                        onSubmitEditing={() => { this.ln.focus() }}
-                        blurOnSubmit={false}
-                    />
-                    <TextInput
-                        style={[inputStyle, { flex: 1 }]}
-                        placeholder="Last Name"
-                        placeholderTextColor={placeColor}
-                        value={lastname}
-                        onChangeText={text => setUserLastName(text)}
-                        enterKeyHint='next'
-                        ref={(input) => { this.ln = input }}
-                        onSubmitEditing={() => { this.un.focus() }}
-                        blurOnSubmit={false}
-                    />
-                </View>
-                <TextInput
-                    style={inputStyle}
-                    placeholder="Username"
-                    placeholderTextColor={placeColor}
-                    autoComplete='username-new'
-                    value={username}
-                    onChangeText={text => setUsername(text)}
-                    enterKeyHint='next'
-                    ref={(input) => { this.un = input; }}
-                    onSubmitEditing={() => { this.em.focus() }}
-                    blurOnSubmit={false}
-                />
-                <TextInput
-                    style={inputStyle}
-                    placeholder='Email'
-                    placeholderTextColor={placeColor}
-                    value={email}
-                    onChangeText={text => setEmail(text)}
-                    enterKeyHint='next'
-                    inputMode='email'
-                    ref={(input) => { this.em = input }}
-                    onSubmitEditing={() => { this.con.focus() }}
-                    blurOnSubmit={false}
-                />
-                <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
-                    <TextInput
-                        style={[appStyles.input, { flex: 1 }]}
-                        placeholder="Country of Origin"
-                        value={Country_of_Origin}
-                        onChangeText={text => setUserCoO(text)}
-                        enterKeyHint='next'
-                        ref={(input) => { this.con = input }}
-                        onSubmitEditing={() => { this.sid.focus() }}
-                        blurOnSubmit={false}
-                    />
-                    <TextInput
-                        style={[inputStyle, { flex: 1 }]}
-                        placeholder="Student ID"
-                        placeholderTextColor={placeColor}
-                        value={SID}
-                        onChangeText={text => setSID(text)}
-                        enterKeyHint='next'
-                        inputMode='numeric'
-                        ref={(input) => { this.sid = input }}
-                        onSubmitEditing={() => { this.mj.focus() }}
-                        blurOnSubmit={false}
-                    />
-                </View>
-                <TextInput
-                    style={appStyles.input}
-                    placeholder="Major"
-                    enterKeyHint='next'
-                    value={Major}
-                    onChangeText={text => setUserMajor(text)}
-                    ref={(input) => { this.mj = input }}
-                    onSubmitEditing={() => { this.pass.focus() }}
-                    blurOnSubmit={false}
-                />
-                <TextInput
-                    style={inputStyle}
-                    placeholder="Password"
-                    placeholderTextColor={placeColor}
-                    enterKeyHint='next'
-                    autoComplete='new-password'
-                    secureTextEntry={true}
-                    value={password}
-                    onChangeText={text => setPassword(text)}
-                    ref={(input) => { this.pass = input }}
-                    onSubmitEditing={() => { this.newp.focus() }}
-                    blurOnSubmit={false}
-                />
-                <TextInput
-                    style={inputStyle}
-                    placeholder='Confirm Password'
-                    placeholderTextColor={placeColor}
-                    autoComplete='new-password'
-                    secureTextEntry={true}
-                    value={confPassword}
-                    onChangeText={text => setConfPassword(text)}
-                    ref={(input) => { this.newp = input }}
-                    blurOnSubmit={true}
-                />
-                <Pressable style={appStyles.button} onPress={() => handleSignUp()}>
-                    <Text style={appStyles.buttonLabel}>Sign up</Text>
-                </Pressable>
+            <SafeAreaView style={{ flex: 1 }}>
+                <ImageBackground
+                    source={image}
+                    blurRadius={2}
+                    style={{ flex: 1, resizeMode: 'cover' }}>
+                    <View style={{ flex: 1, justifyContent: 'center', backgroundColor: 'rgba(255,255,255,0.65)' }}>
+                        <Text style={[appStyles.reject, { paddingTop: 0 }]}>
+                            {rejection}
+                        </Text>
+                        <Pressable>
+                            <Text style={{
+                                fontSize: 24,
+                                color: '#860038',
+                                fontWeight: '900',
+                                textAlign: 'center',
+                                top: 4
+                            }}>Welcome to First Friend!</Text>
+                        </Pressable>
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                            <TextInput
+                                style={[inputStyle, { flex: 1 }]}
+                                placeholder="First Name"
+                                placeholderTextColor={placeColor}
+                                value={firstname}
+                                onChangeText={text => setUserFirstName(text)}
+                                enterKeyHint='next'
+                                onSubmitEditing={() => { this.ln.focus() }}
+                                blurOnSubmit={false}
+                            />
+                            <TextInput
+                                style={[inputStyle, { flex: 1 }]}
+                                placeholder="Last Name"
+                                placeholderTextColor={placeColor}
+                                value={lastname}
+                                onChangeText={text => setUserLastName(text)}
+                                enterKeyHint='next'
+                                ref={(input) => { this.ln = input }}
+                                onSubmitEditing={() => { this.un.focus() }}
+                                blurOnSubmit={false}
+                            />
+                        </View>
+                        <TextInput
+                            style={inputStyle}
+                            placeholder="Username"
+                            placeholderTextColor={placeColor}
+                            autoComplete='username-new'
+                            value={username}
+                            onChangeText={text => setUsername(text)}
+                            enterKeyHint='next'
+                            ref={(input) => { this.un = input; }}
+                            onSubmitEditing={() => { this.em.focus() }}
+                            blurOnSubmit={false}
+                        />
+                        <TextInput
+                            style={inputStyle}
+                            placeholder='Email'
+                            placeholderTextColor={placeColor}
+                            value={email}
+                            onChangeText={text => setEmail(text)}
+                            enterKeyHint='next'
+                            inputMode='email'
+                            ref={(input) => { this.em = input }}
+                            onSubmitEditing={() => { this.con.focus() }}
+                            blurOnSubmit={false}
+                        />
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
+                            <TextInput
+                                style={[appStyles.input, { flex: 1 }]}
+                                placeholder="Country of Origin"
+                                value={Country_of_Origin}
+                                onChangeText={text => setUserCoO(text)}
+                                enterKeyHint='next'
+                                ref={(input) => { this.con = input }}
+                                onSubmitEditing={() => { this.sid.focus() }}
+                                blurOnSubmit={false}
+                            />
+                            <TextInput
+                                style={[inputStyle, { flex: 1 }]}
+                                placeholder="Student ID"
+                                placeholderTextColor={placeColor}
+                                value={SID}
+                                onChangeText={text => setSID(text)}
+                                enterKeyHint='next'
+                                inputMode='numeric'
+                                ref={(input) => { this.sid = input }}
+                                onSubmitEditing={() => { this.mj.focus() }}
+                                blurOnSubmit={false}
+                            />
+                        </View>
+                        <TextInput
+                            style={appStyles.input}
+                            placeholder="Major"
+                            enterKeyHint='next'
+                            value={Major}
+                            onChangeText={text => setUserMajor(text)}
+                            ref={(input) => { this.mj = input }}
+                            onSubmitEditing={() => { this.pass.focus() }}
+                            blurOnSubmit={false}
+                        />
+                        <TextInput
+                            style={inputStyle}
+                            placeholder="Password"
+                            placeholderTextColor={placeColor}
+                            enterKeyHint='next'
+                            autoComplete='new-password'
+                            secureTextEntry={true}
+                            value={password}
+                            onChangeText={text => setPassword(text)}
+                            ref={(input) => { this.pass = input }}
+                            onSubmitEditing={() => { this.newp.focus() }}
+                            blurOnSubmit={false}
+                        />
+                        <TextInput
+                            style={inputStyle}
+                            placeholder='Confirm Password'
+                            placeholderTextColor={placeColor}
+                            autoComplete='new-password'
+                            secureTextEntry={true}
+                            value={confPassword}
+                            onChangeText={text => setConfPassword(text)}
+                            ref={(input) => { this.newp = input }}
+                            blurOnSubmit={true}
+                        />
+                        <Pressable style={appStyles.button} onPress={() => handleSignUp()}>
+                            <Text style={appStyles.buttonLabel}>Sign up</Text>
+                        </Pressable>
+                    </View>
                 </ImageBackground>
             </SafeAreaView>
         </KeyboardAvoidingView>

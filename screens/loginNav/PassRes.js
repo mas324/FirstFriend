@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TextInput, Pressable, Text, ImageBackground} from 'react-native';
+import { TextInput, Pressable, Text, ImageBackground, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { appStyles } from '../../components/AppStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -7,7 +7,7 @@ import { confirmReset, sendPasswordReset } from '../../utils/Firestore';
 
 const Stack = createNativeStackNavigator();
 
-const image = { uri: 'https://news.csudh.edu/wp-content/uploads/2017/04/JSF_02771-1.jpg'};
+const image = { uri: 'https://news.csudh.edu/wp-content/uploads/2017/04/JSF_02771-1.jpg' };
 
 function FormPage({ navigation }) {
     const [email, setEmail] = useState('');
@@ -18,43 +18,45 @@ function FormPage({ navigation }) {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ImageBackground
-                source={image} 
-                style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', opacity: 0.9}}>
-            <Text style={[{ textAlign: 'center', color: '#860038', fontWeight: '500'}]}>
-                {message}
-            </Text>
-            <TextInput
-                style={appStyles.input}
-                placeholder='Email'
-                onChangeText={newmail => setEmail(newmail)}
-                defaultValue={email}
-                inputMode='email'
-            />
-            <Pressable
-                style={appStyles.button}
-                onPress={() => {
-                    if (buttonMessage === 'Go back') {
-                        navigation.goBack();
-                    }
-                    if (email === '') {
-                        setMessage('Fill all fields!');
-                        setColor(appStyles.reject);
-                        return;
-                    }
+                source={image}
+                style={{ flex: 1, resizeMode: 'cover' }}>
+                <View style={{ flex: 1, backgroundColor: 'rgba(200,200,200,0.7)', justifyContent: 'center' }}>
+                    <Text style={[{ textAlign: 'center', color: '#860038', fontWeight: '500' }]}>
+                        {message}
+                    </Text>
+                    <TextInput
+                        style={appStyles.input}
+                        placeholder='Email'
+                        onChangeText={newmail => setEmail(newmail)}
+                        defaultValue={email}
+                        inputMode='email'
+                    />
+                    <Pressable
+                        style={appStyles.button}
+                        onPress={() => {
+                            if (buttonMessage === 'Go back') {
+                                navigation.goBack();
+                            }
+                            if (email === '') {
+                                setMessage('Fill all fields!');
+                                setColor(appStyles.reject);
+                                return;
+                            }
 
-                    sendPasswordReset(email).then(() => {
-                        setMessage('Link has been sent to the specified email\nFollow the instructions and return to the login page.');
-                        setButtonMessage('Go back');
-                        setColor({ color: 'black' })
-                        //navigation.replace('ResetPassword')
-                    }).catch((_err) => {
-                        setMessage('Failed to verify user');
-                        setColor(appStyles.reject);
-                    })
-                }}
-            >
-                <Text style={appStyles.buttonLabel}>{buttonMessage}</Text>
-            </Pressable>
+                            sendPasswordReset(email).then(() => {
+                                setMessage('Link has been sent to the specified email\nFollow the instructions and return to the login page.');
+                                setButtonMessage('Go back');
+                                setColor({ color: 'black' })
+                                //navigation.replace('ResetPassword')
+                            }).catch((_err) => {
+                                setMessage('Failed to verify user');
+                                setColor(appStyles.reject);
+                            })
+                        }}
+                    >
+                        <Text style={appStyles.buttonLabel}>{buttonMessage}</Text>
+                    </Pressable>
+                </View>
             </ImageBackground>
         </SafeAreaView>
     )

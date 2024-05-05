@@ -7,7 +7,7 @@ import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FireStatusCodes, signIn } from '../../utils/Firestore';
 
-const image = {uri:'https://news.csudh.edu/wp-content/uploads/2017/04/JSF_7499.jpg'};
+const image = { uri: 'https://news.csudh.edu/wp-content/uploads/2017/04/JSF_7499.jpg' };
 
 export default function LoginPage({ navigation }) {
     const { setState } = useContext(AppContext);
@@ -44,56 +44,58 @@ export default function LoginPage({ navigation }) {
     }
     // 
     return (
-    <SafeAreaView style={{ flex:1}}>
-        <ImageBackground
-                source={image} 
-                style={{ flex: 1, resizeMode: 'cover', justifyContent: 'center', opacity: 0.9}}>
-            <Pressable
-                  style={[appStyles.button2]}
-            >
-                <Text style={appStyles.headingText}>First Friend</Text>
-            </Pressable>
-            <Text style={appStyles.reject}>
-                {rejectNotif}
-            </Text>
-            <TextInput
-                style={appStyles.input}
-                autoComplete='username'
-                placeholder='Username'
-                onChangeText={newName => setName(newName)}
-                defaultValue={username}
-                
-            />
-            <TextInput
-                style={appStyles.input}
-                autoComplete='current-password'
-                secureTextEntry={true}
-                placeholder='Password'
-                onChangeText={newPass => setPass(newPass)}
-                defaultValue={password}
-            />
-            <Pressable
-                style={appStyles.button}
-                onPress={handleLogin}
-            >
-                <Text style={appStyles.buttonLabel}>Login</Text>
-            </Pressable>
-            <View
-                style={{
-                    flexDirection: 'row',
-                    padding: 20,
-                    justifyContent: 'space-evenly',
-                    color: '#860038'
-                }}
-            >
-                <Pressable onPress={() => { navigation.navigate('Signup') }}>
-                    <Text style={{color:'black', fontWeight: '800', fontSize: 14}}>Signup</Text>
-                </Pressable>
-                <Pressable onPress={() => { navigation.navigate('PassRes') }}>
-                    <Text style={{color:'black', fontWeight: '800', fontSize: 14}}>Forgot password</Text>
-                </Pressable>
-            </View>
-        </ImageBackground>
-    </SafeAreaView>
+        <SafeAreaView style={{ flex: 1 }}>
+            <ImageBackground
+                source={image}
+                blurRadius={0}
+                style={{ flex: 1, resizeMode: 'cover' }}>
+                <View style={{ flex: 1, backgroundColor: 'rgba(255,255,255,0.6)', justifyContent: 'center' }}>
+                    <Pressable
+                        style={[appStyles.button2]}
+                    >
+                        <Text style={appStyles.headingText}>First Friend</Text>
+                    </Pressable>
+                    <Text style={appStyles.reject}>
+                        {rejectNotif}
+                    </Text>
+                    <TextInput
+                        style={appStyles.input}
+                        autoComplete='username'
+                        placeholder='Username'
+                        onChangeText={newName => setName(newName)}
+                        defaultValue={username}
+                    />
+                    <TextInput
+                        style={appStyles.input}
+                        autoComplete='current-password'
+                        secureTextEntry={true}
+                        placeholder='Password'
+                        onChangeText={newPass => setPass(newPass)}
+                        defaultValue={password}
+                    />
+                    <Pressable
+                        style={appStyles.button}
+                        onPress={handleLogin}
+                    >
+                        <Text style={appStyles.buttonLabel}>Login</Text>
+                    </Pressable>
+                    <View
+                        style={{
+                            flexDirection: 'row',
+                            padding: 20,
+                            justifyContent: 'space-evenly',
+                            color: '#860038'
+                        }}
+                    >
+                        <Pressable onPress={() => { navigation.navigate('Signup') }}>
+                            <Text style={{ color: 'black', fontWeight: '800', fontSize: 14 }}>Signup</Text>
+                        </Pressable>
+                        <Pressable onPress={() => { navigation.navigate('PassRes') }}>
+                            <Text style={{ color: 'black', fontWeight: '800', fontSize: 14 }}>Forgot password</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </ImageBackground>
+        </SafeAreaView>
     );
 };
