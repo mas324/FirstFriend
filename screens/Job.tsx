@@ -114,6 +114,7 @@ function JobMain({ navigation }) {
     // }, []);
 
     function searching() {
+        console.log('Job: search for', searchWord);
         if (searchWord.length === 0) {
             setSearch([]);
             onClickHandler();
