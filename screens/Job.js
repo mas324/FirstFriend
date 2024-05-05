@@ -99,20 +99,9 @@ function JobMain({ navigation }) {
             if (items != null) {
                 setData(items);
             } else {
-                const jobDataList = Array();
                 getJob().then(jobs => {
-                    jobs.forEach(item => {
-                        //console.log('Job: test', item.data(), 'from', item.id);
-                        jobDataList.push({
-                            description: item.data().description,
-                            position: item.data().position,
-                            recruiter: item.data().recruiter,
-                            salary: item.data().salary,
-                            id: item.id,
-                        });
-                    });
-                    setData(jobDataList);
-                    setItem('@jobs', jobDataList);
+                    setData(jobs);
+                    setItem('@jobs', jobs);
                 });
             }
         });

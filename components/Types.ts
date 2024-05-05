@@ -10,9 +10,17 @@ export type User = {
     type: string,
 }
 
-export type Messages = {
-    userIdSender: number,
+export type Message = {
+    userIDSender: number,
     userIDReceiver: number,
     message: string,
     read: boolean,
+}
+
+export type Job = {
+    position: string,
+    recruiter: string,
+    description: string,
+    salary: string,
+    postID?: string,
 }

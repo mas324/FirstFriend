@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { User } from "../components/Types";
+import { Job, User } from "../components/Types";
 
 type Weather = {
     current: {
@@ -19,13 +19,6 @@ type Weather = {
         windMax: number,
         windFrom: number,
     }],
-}
-
-type Job = {
-    position: string,
-    recruiter: string,
-    description: string,
-    salary: string,
 }
 
 type AppState = {

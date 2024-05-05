@@ -2,7 +2,7 @@ import * as Firebase from 'firebase/app';
 import { collection, doc, getDoc, getDocs, getFirestore, setDoc } from 'firebase/firestore'
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, getReactNativePersistence, initializeAuth, confirmPasswordReset, AuthErrorCodes, signOut as fireOut } from 'firebase/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { User } from '../components/Types';
+import { Job, Message, User } from '../components/Types';
 import { getItem } from './LocalStore';
 
 export const FireStatusCodes = {
@@ -85,10 +85,10 @@ export async function signUp(newUser: User, password: string) {
         return { status: FireStatusCodes.SUCCESS, data: user };
     } catch (error) {
         if (error.code === AuthErrorCodes.EMAIL_EXISTS) {
-            return { status: FireStatusCodes.EMAIL_INVALID };
+            return { status: FireStatusCodes.EMAIL_INVALID, data: null };
         } else {
             console.log("Firestore: returning unknown error:", error.code);
-            return { status: FireStatusCodes.ERROR_BAD };
+            return { status: FireStatusCodes.ERROR_BAD, data: null };
         }
     }
 }
@@ -120,7 +120,7 @@ export async function confirmReset(code: string, password: string) {
     }
 }
 
-export async function postJob(jobDetail: any, postID: string) {
+export async function postJob(jobDetail: Job, postID: string) {
     try {
         //console.log('Firestore:', postID, jobDetail);
         await setDoc(doc(db, "jobs", postID.toString()), jobDetail);
@@ -133,15 +133,28 @@ export async function postJob(jobDetail: any, postID: string) {
 
 export async function getJob() {
     try {
-        return await getDocs(collection(db, "jobs"));
+        const documents = await getDocs(collection(db, "jobs"));
+        const filed = Array<Job>();
+        documents.forEach(result => {
+            const data = result.data();
+            filed.push({
+                description: data.description,
+                position: data.position,
+                recruiter: data.position,
+                salary: data.salary,
+                postID: result.id,
+            })
+        });
+        return filed;
     } catch (error) {
         console.error(error);
+        return null;
     }
 }
 
-export async function postMessage(messageDetail: any, postID: string) {
+export async function postMessage(messageDetail: Message, postID: string) {
     try {
-        await setDoc(doc(db, "messages", postID), messageDetail);
+        await setDoc(doc(db, "messages", postID.toString()), messageDetail);
         return true;
     } catch (error) {
         console.error(error);
@@ -151,8 +164,20 @@ export async function postMessage(messageDetail: any, postID: string) {
 
 export async function getMessage() {
     try {
-        return await getDocs(collection(db, "messages"));
+        const documents = await getDocs(collection(db, "messages"));
+        const file = Array<Message>();
+        documents.forEach(result => {
+            const data = result.data();
+            file.push({
+                message: data.message,
+                read: data.read,
+                userIDReceiver: data.userIDReceiver,
+                userIDSender: data.userIDSender,
+            })
+        });
+        return file;
     } catch (error) {
         console.error(error);
+        return null;
     }
 }
