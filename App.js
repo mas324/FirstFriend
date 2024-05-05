@@ -40,6 +40,9 @@ const MainStack = () => {
 
 const App = () => {
   const [state, setState] = React.useState(null);
+  const [weather, setWeather] = React.useState(null);
+  const [jobs, setJobs] = React.useState(null);
+  const [message, setMessage] = React.useState(null);
 
   React.useEffect(() => {
     getItem('@user').then((val) => {
@@ -63,7 +66,12 @@ const App = () => {
   return (
     <SafeAreaProvider>
       <NavigationContainer>
-        <AppContext.Provider value={{ state, setState }}>
+        <AppContext.Provider value={{
+          state, setState,
+          weather, setWeather,
+          jobs, setJobs,
+          message, setMessage
+        }}>
           {state === null ? <LoginStack /> : <MainStack />}
         </AppContext.Provider>
       </NavigationContainer>
