@@ -7,7 +7,7 @@ export const appStyles = StyleSheet.create({
   },
   input: {
     height: 40,
-    margin: 10,
+    margin: 8,
     borderWidth: 2,
     padding: 10,
     borderColor: 'black'

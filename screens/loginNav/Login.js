@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { TextInput, Pressable, View, ImageBackground, TouchableOpacity } from 'react-native';
+import { TextInput, Pressable, View, ImageBackground, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Text } from 'react-native';
 import { appStyles } from '../../components/AppStyles';
 import { useAuth } from '../../utils/Auth';
@@ -7,7 +7,7 @@ import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FireStatusCodes, signIn } from '../../utils/Firestore';
 
-const image = { uri: 'https://news.csudh.edu/wp-content/uploads/2017/04/JSF_7499.jpg' };
+const image = require('../../assets/loginBG/Stairs.jpg');
 
 export default function LoginPage({ navigation }) {
     const { setState } = useContext(AppContext);
@@ -15,6 +15,7 @@ export default function LoginPage({ navigation }) {
     const [password, setPass] = useState('123456');
     const [rejectNotif, setRejection] = useState('');
     const { login } = useAuth();
+    const [loading, setLoading] = useState(false);
 
     const handleLogin = () => {
         if (username === '' || password === '') {
@@ -22,6 +23,7 @@ export default function LoginPage({ navigation }) {
             return;
         }
 
+        setLoading(true);
         signIn(username, password).then(({ status, data, user }) => {
             console.log("login:", data.data());
             switch (status) {
@@ -40,7 +42,7 @@ export default function LoginPage({ navigation }) {
                         console.log("No data exists. Reason:", status);
                     }
             }
-        });
+        }).finally(() => setLoading(false));
     }
     // 
     return (
@@ -77,7 +79,11 @@ export default function LoginPage({ navigation }) {
                         style={appStyles.button}
                         onPress={handleLogin}
                     >
-                        <Text style={appStyles.buttonLabel}>Login</Text>
+                        {loading ?
+                            <ActivityIndicator size='large' color={appStyles.buttonLabel.color} />
+                            :
+                            <Text style={appStyles.buttonLabel}>Login</Text>
+                        }
                     </Pressable>
                     <View
                         style={{

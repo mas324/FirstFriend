@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Text, TextInput, Pressable, View, KeyboardAvoidingView, Platform, StyleSheet, ImageBackground } from 'react-native';
+import { Text, TextInput, Pressable, View, KeyboardAvoidingView, Platform, StyleSheet, ImageBackground, ActivityIndicator } from 'react-native';
 import { appStyles } from '../../components/AppStyles';
 import { useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
@@ -7,7 +7,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { convertToUserJSON } from '../../utils/LocalStore';
 import { FireStatusCodes, signUp } from '../../utils/Firestore';
 
-const image = { uri: 'https://news.csudh.edu/wp-content/uploads/2017/04/JSF_8585.jpg' };
+const image = require('../../assets/loginBG/Students.jpg');
 
 const SignUpPage = ({ navigation }) => {
     const [firstname, setUserFirstName] = useState('');
@@ -22,9 +22,10 @@ const SignUpPage = ({ navigation }) => {
 
     const [rejection, setRejection] = useState('');
     const [inputStyle, setInputStyle] = useState([appStyles.input]);
-    const [placeColor, setPlaceColor] = useState(null)
+    const [placeColor, setPlaceColor] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-    const { login } = useAuth()
+    const { login } = useAuth();
     const { setState } = useContext(AppContext);
 
     const handleSignUp = () => {
@@ -34,7 +35,7 @@ const SignUpPage = ({ navigation }) => {
                     borderColor: '#860038'
                 }
             });
-            setInputStyle([appStyles.input, newStyle.reject])
+            setInputStyle([appStyles.input, newStyle.reject]);
             setRejection('Fill All Required Forms!');
             setPlaceColor('#860038');
             return;
@@ -77,6 +78,7 @@ const SignUpPage = ({ navigation }) => {
             type: userType,
         });
 
+        setLoading(true);
         signUp(user, password).then((resp) => {
             if (resp.status === FireStatusCodes.SUCCESS) {
                 setRejection('');
@@ -85,7 +87,7 @@ const SignUpPage = ({ navigation }) => {
             } else {
                 setRejection('Error occured. Please check if all fields are correct');
             }
-        })
+        }).finally(() => setLoading(false));
     };
 
     return (
@@ -108,7 +110,6 @@ const SignUpPage = ({ navigation }) => {
                                 top: 4
                             }}>Welcome to First Friend!</Text>
                         </Pressable>
-
                         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly' }}>
                             <TextInput
                                 style={[inputStyle, { flex: 1 }]}
@@ -215,7 +216,11 @@ const SignUpPage = ({ navigation }) => {
                             blurOnSubmit={true}
                         />
                         <Pressable style={appStyles.button} onPress={() => handleSignUp()}>
-                            <Text style={appStyles.buttonLabel}>Sign up</Text>
+                            {loading ?
+                                <ActivityIndicator size='large' color={appStyles.buttonLabel.color} />
+                                :
+                                <Text style={appStyles.buttonLabel}>Sign up</Text>
+                            }
                         </Pressable>
                     </View>
                 </ImageBackground>

@@ -7,11 +7,11 @@ import { confirmReset, sendPasswordReset } from '../../utils/Firestore';
 
 const Stack = createNativeStackNavigator();
 
-const image = { uri: 'https://news.csudh.edu/wp-content/uploads/2017/04/JSF_02771-1.jpg' };
+const image = require('../../assets/loginBG/CampusLawn.jpg');
 
 function FormPage({ navigation }) {
     const [email, setEmail] = useState('');
-    const [message, setMessage] = useState('Enter Email, Username, and Student ID');
+    const [message, setMessage] = useState('Enter Email for reset link');
     const [buttonMessage, setButtonMessage] = useState('Reset Password');
     const [color, setColor] = useState(null)
 
