@@ -1,7 +1,7 @@
 // https://www.youtube.com/watch?v=c_X-rBBiidQ
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { PROVIDER_DEFAULT } from 'react-native-maps';
+import { Marker, MarkerAnimated, PROVIDER_DEFAULT } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { AnimatedMapView } from 'react-native-maps/lib/MapView';
 
@@ -20,6 +20,44 @@ const VeniceBeachCoffeeFinder = () => {
         })();
     }, []);
 
+    const schoolPOI = [
+        {
+            name: 'Student Health Center',
+            coords: {
+                latitude: 33.86580147361135,
+                longitude: -118.25666703266454,
+            }
+        },
+        {
+            name: 'Parking Lot',
+            coords: {
+                latitude: 33.86581952457541,
+                longitude: -118.25156198442869,
+            }
+        },
+        {
+            name: 'Library Addition',
+            coords: {
+                latitude: 33.86328817219626,
+                longitude: -118.25609920567202,
+            }
+        },
+        {
+            name: 'Book Store',
+            coords: {
+                latitude: 33.86483049311999,
+                longitude: -118.25591618324796,
+            }
+        },
+        {
+            name: 'Small College Complex',
+            coords: {
+                latitude: 33.865890700227474,
+                longitude: -118.25478770669034,
+            }
+        }
+    ]
+
     return (
         <View style={styles.container}>
             <View style={styles.mapContainer}>
@@ -35,6 +73,15 @@ const VeniceBeachCoffeeFinder = () => {
                         showsUserLocation={true}
                         provider={PROVIDER_DEFAULT}
                     >
+                        {schoolPOI.map((value, index) => {
+                            return (
+                                <MarkerAnimated
+                                    coordinate={value.coords}
+                                    title={value.name}
+                                    key={index}
+                                />
+                            )
+                        })}
                     </AnimatedMapView>
                 )}
             </View>
