@@ -6,14 +6,14 @@ import SendMessageScreen from './SendMessageScreen';
 import { deleteItem, getItem, setItem } from '../../utils/LocalStore';
 import { appStyles } from '../../components/AppStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { messageCreate, messageGet } from '../../utils/Database';
 import AppContext from '../../utils/AppContext';
 
 const Stack = createNativeStackNavigator();
 
-const Item = ({ name, photo, status }) => {
+const Item = ({ name, photo, status, index }) => {
+  const altColor = index % 2 === 0 ? '#e6bb23' : '#f6e4a9'
   return (
-    <View style={styles.item}>
+    <View style={[styles.item, { backgroundColor: altColor }]}>
       <TouchableOpacity>
         <Image source={{ uri: photo }} style={styles.contactPhoto} />
         <View style={styles.messageContent}>
@@ -31,43 +31,6 @@ const MessagePage = ({ navigation }) => {
   const [messages, setMessages] = useState([]);
   const { user } = useContext(AppContext);
 
-  useEffect(() => {
-    return;
-    let local = null;
-    let remote = null;
-    getItem('@messages').then(val => {
-      if (val !== null && Array.isArray(val.data) && val.data.length) {
-        local = val;
-      }
-    }).catch(err => {
-      console.error(err)
-    }).finally(() => {
-      messageGet(user).then(val => {
-        if (val !== null && Array.isArray(val.data) && val.data.length) {
-          remote = val.data;
-        }
-      }).catch(err => {
-        console.error(err);
-      }).finally(() => {
-        if (local !== null && remote !== null) {
-          console.log('Comparison state');
-          /*
-          * Code here to compare timestamps to see what is outdated
-          * The internal storage should be outdated
-          * If not then something is wrong with processing
-          * This is here to fix any problem that may occur with that situation
-          * When in doubt just use remote database, as both users will be synced with that
-          */
-        } else if (local !== null) {
-          setMessages(local);
-        } else if (remote !== null) {
-          setMessages(remote);
-        }
-
-        //console.log(messages);
-      });
-    });
-  }, []);
 
   const handleMessageSent = () => {
     const username = user.username;
@@ -77,18 +40,11 @@ const MessagePage = ({ navigation }) => {
       status: 'New'
     };
 
-    setMessages(messages.concat([messageData]));
-    setItem('@messages', messages);
-    return;
-
-    messageCreate(messageData).then(_resp => {
-      setMessages(messages.concat([messageData]));
-      //setItem('@messages', messages);
-    }).catch(rej => {
-      console.error(rej);
-      // Notify user of message failed to send
-      // Do not put message into array
-    });
+    setMessages(prevMessages => {
+      const updatedMessages = prevMessages.concat([messageData]);
+      setItem('@messages', updatedMessages);
+      return updatedMessages;
+    })
   };
 
 
@@ -97,7 +53,8 @@ const MessagePage = ({ navigation }) => {
   };
 
   const handleItemPress = (userID) => {
-    navigation.navigate('MessageDetails', { userID, onMessageSent: handleMessageSent });
+    console.log(handleMessageSent);
+    navigation.navigate('MessageDetails', { userID, onMessageSent: handleMessageSent});
   };
 
 
@@ -114,9 +71,9 @@ const MessagePage = ({ navigation }) => {
       </Pressable>
       <FlatList
         data={messages}
-        renderItem={({ item }) => <Item name={item.name} photo={item.photo} status={item.status} />}
+        renderItem={({ item, index }) => <Item name={item.name} photo={item.photo} status={item.status} index={index} />}
       />
-      <TouchableOpacity onPress={() => {navigation.navigate('SendMessageScreen'); deleteItem('@messages')}} style={styles.fab}>
+      <TouchableOpacity onPress={() => { navigation.navigate('SendMessageScreen'); deleteItem('@messages') }} style={styles.fab}>
         <Text style={styles.fabIcon}>+</Text>
       </TouchableOpacity>
     </SafeAreaView>
@@ -138,7 +95,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
     padding: 16,
-    backgroundColor: '#800020'
+    backgroundColor: '#860038'
   },
   heading: {
     marginBottom: 8,
@@ -149,7 +106,7 @@ const styles = StyleSheet.create({
   },
   headingText: {
     fontSize: 24,
-    color: '#eee8aa',
+    color: '#e6bb23',
     fontWeight: 'bold',
   },
   item: {
@@ -158,7 +115,7 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 8,
     alignItems: 'center',
-    backgroundColor: '#eee8aa',
+    backgroundColor: '#e6bb23',
     marginBottom: 6,
     borderRadius: 8,
     shadowColor: '#000',
@@ -202,13 +159,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     right: 20,
     bottom: 20,
-    backgroundColor: '#800020',
+    backgroundColor: '#860038',
     borderRadius: 30,
     elevation: 8,
   },
   fabIcon: {
     fontSize: 40,
-    color: '#eee8aa',
+    color: '#e6bb23',
   },
 });
 

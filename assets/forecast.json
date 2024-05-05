@@ -1,0 +1,93 @@
+{
+    "latitude": 33.83251,
+    "longitude": -118.271164,
+    "generationtime_ms": 0.14197826385498047,
+    "utc_offset_seconds": -25200,
+    "timezone": "America/Los_Angeles",
+    "timezone_abbreviation": "PDT",
+    "elevation": 13.0,
+    "current_units": {
+        "time": "unixtime",
+        "interval": "seconds",
+        "temperature_2m": "°F",
+        "relative_humidity_2m": "%",
+        "precipitation": "inch",
+        "cloud_cover": "%",
+        "wind_speed_10m": "mp/h",
+        "wind_direction_10m": "°"
+    },
+    "current": {
+        "time": 1714790700,
+        "interval": 900,
+        "temperature_2m": 60.7,
+        "relative_humidity_2m": 82,
+        "precipitation": 0.000,
+        "cloud_cover": 10,
+        "wind_speed_10m": 6.4,
+        "wind_direction_10m": 290
+    },
+    "daily_units": {
+        "time": "unixtime",
+        "temperature_2m_max": "°F",
+        "temperature_2m_min": "°F",
+        "precipitation_probability_max": "%",
+        "wind_speed_10m_max": "mp/h",
+        "wind_direction_10m_dominant": "°"
+    },
+    "daily": {
+        "time": [
+            1714719600,
+            1714806000,
+            1714892400,
+            1714978800,
+            1715065200,
+            1715151600,
+            1715238000
+        ],
+        "temperature_2m_max": [
+            69.3,
+            65.5,
+            63.7,
+            68.3,
+            68.3,
+            72.6,
+            71.4
+        ],
+        "temperature_2m_min": [
+            56.5,
+            54.6,
+            51.8,
+            57.0,
+            58.1,
+            59.3,
+            60.6
+        ],
+        "precipitation_probability_max": [
+            13,
+            10,
+            68,
+            0,
+            0,
+            0,
+            0
+        ],
+        "wind_speed_10m_max": [
+            11.6,
+            9.6,
+            15.4,
+            14.4,
+            10.6,
+            10.1,
+            10.8
+        ],
+        "wind_direction_10m_dominant": [
+            233,
+            252,
+            275,
+            183,
+            165,
+            190,
+            170
+        ]
+    }
+}

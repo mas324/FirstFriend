@@ -1,5 +1,11 @@
 {
   "expo": {
+    "name": "First Friend",
+    "description": "Used to connect the students from all the lands together",
+    "slug": "first-friend",
+    "plugins": [
+      "./plugins/manifest-plugin.js"
+    ],
     "extra": {
       "eas": {
         "projectId": "456fd9b6-4e14-46c8-af72-388827778d3a"

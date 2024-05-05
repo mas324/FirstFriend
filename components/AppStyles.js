@@ -7,9 +7,10 @@ export const appStyles = StyleSheet.create({
   },
   input: {
     height: 40,
-    margin: 10,
-    borderWidth: 1,
+    margin: 8,
+    borderWidth: 2,
     padding: 10,
+    borderColor: 'black'
   },
   container: {
     flex: 1,
@@ -29,12 +30,24 @@ export const appStyles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingVertical: 8,
     borderRadius: 8,
-    backgroundColor: 'maroon',
+    backgroundColor: '#860038',
     alignSelf: 'center',
     marginHorizontal: '1%',
     marginBottom: 6,
     minWidth: '48%',
     textAlign: 'center',
+  },
+  button2: {
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 8,
+    backgroundColor: '#860038',
+    alignSelf: 'top',
+    marginHorizontal: '1%',
+    marginBottom: 2,
+    minWidth: '48%',
+    textAlign: 'center',
+    
   },
   buttonLabel: {
     fontSize: 20,
@@ -46,5 +59,11 @@ export const appStyles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 10,
     fontSize: 20,
+  },
+  headingText: {
+    fontSize: 24,
+    color: '#e6bb23',
+    fontWeight: '500',
+    textAlign: 'center',
   },
 });

@@ -9,7 +9,12 @@ const MessageDetails = ({ route }) => {
 
   const handleSend = () => {
     console.log('Message sent:', message);
-    onMessageSent();
+    if (typeof onMessageSent === 'function') {
+      onMessageSent(); // Call onMessageSent only if it's a function
+    } else {
+      console.error('onMessageSent is not a function');
+    }
+    navigation.popToTop();
   };
 
   return (
@@ -18,13 +23,13 @@ const MessageDetails = ({ route }) => {
       <Text style={styles.userInfo}> {userID}</Text>
       <TextInput
         placeholder="Type your message here..."
-        placeholderTextColor="#eee8aa"
+        placeholderTextColor="#e6bb23"
         multiline
         style={styles.input}
         value={message}
         onChangeText={setMessage}
       />
-      <Button title="Send" color="#eee8aa" onPress={handleSend} />
+      <Button title="Send" color="#e6bb23" onPress={handleSend}/>
     </View>
   );
 };
@@ -33,26 +38,26 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#800020',
+    backgroundColor: '#860038',
   },
   heading: {
     fontSize: 24,
-    color: '#eee8aa',
+    color: '#e6bb23',
     fontWeight: 'bold',
     marginBottom: 20,
   },
   userInfo: {
     fontSize: 18,
-    color: '#eee8aa',
+    color: '#e6bb23',
     marginBottom: 20,
   },
   input: {
     height: 75,
     borderWidth: 2,
-    borderColor: '##eee8aa',
+    borderColor: '##e6bb23',
     borderRadius: 10,
     padding: 10,
-    color: '#eee8aa',
+    color: '#e6bb23',
     marginBottom: 20,
   },
 });
