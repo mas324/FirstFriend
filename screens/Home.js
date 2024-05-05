@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { BackHandler, Image, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, BackHandler, Image, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text } from '../components/TextFix';
 import AppContext from '../utils/AppContext';
 import { useAuth } from '../utils/Auth';
@@ -99,7 +99,7 @@ function HomePage({ navigation }) {
       </Modal>
       <TouchableOpacity style={[styles.button, { backgroundColor: 'rgba(90, 210, 255, 0.9)' }]} onPress={() => handleButtonPress(1)}>
         {
-          weather != null ? <CurrentCard current={weather.current} /> : null
+          weather !== null ? <CurrentCard current={weather.current} /> : <ActivityIndicator size={50} color='gray' />
         }
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => handleButtonPress(2)}>
@@ -152,6 +152,15 @@ function CurrentCard({ current }) {
   } else {
     return (null);
   }
+}
+
+function JobCard({}){
+
+  return (
+    <View>
+      
+    </View>
+  )
 }
 
 const Home = () => {

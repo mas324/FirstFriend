@@ -15,6 +15,7 @@ export type Message = {
     userIDReceiver: number,
     message: string,
     read: boolean,
+    time: number,
 }
 
 export type Job = {

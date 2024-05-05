@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Job, User } from "../components/Types";
+import { Job, Message, User } from "../components/Types";
 
 type Weather = {
     current: {
@@ -27,7 +27,9 @@ type AppState = {
     weather: Weather,
     setWeather: (newWeather: Weather) => void,
     jobs: Job[],
-    setJobs: (newJobs: Job) => void,
+    setJobs: (newJobs: Job[]) => void,
+    message: Message[],
+    setMessage: (newMessages: Message[]) => void,
 }
 
 const AppContext = createContext<AppState>({
@@ -37,6 +39,8 @@ const AppContext = createContext<AppState>({
     setWeather: () => { },
     jobs: null,
     setJobs: () => { },
+    message: null,
+    setMessage: () => { },
 });
 
 export default AppContext;

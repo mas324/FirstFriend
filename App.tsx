@@ -60,7 +60,7 @@ const App = () => {
           console.log('App: user set successfully')
         }
       })
-    })
+    });
   }, []);
 
   return (

@@ -136,16 +136,25 @@ export async function getJob() {
         const documents = await getDocs(collection(db, "jobs"));
         const filed = Array<Job>();
         documents.forEach(result => {
-            const data = result.data();
+            const data = (result.data() as Job);
             filed.push({
+                postID: result.id,
                 description: data.description,
                 position: data.position,
-                recruiter: data.position,
-                salary: data.salary,
-                postID: result.id,
+                recruiter: data.recruiter,
+                salary: data.salary
             })
         });
-        return filed;
+        //console.log('Firestore: array unsort', filed);
+        return filed.sort((a, b) => {
+            if (a.postID > b.postID) {
+                return -1;
+            }
+            if (a.postID < b.postID) {
+                return 1;
+            }
+            return 0;
+        })
     } catch (error) {
         console.error(error);
         return null;
@@ -167,15 +176,16 @@ export async function getMessage() {
         const documents = await getDocs(collection(db, "messages"));
         const file = Array<Message>();
         documents.forEach(result => {
-            const data = result.data();
+            const data = result.data() as Message;
             file.push({
                 message: data.message,
                 read: data.read,
                 userIDReceiver: data.userIDReceiver,
                 userIDSender: data.userIDSender,
+                time: data.time,
             })
         });
-        return file;
+        return file.sort((a, b) => b.time - a.time);
     } catch (error) {
         console.error(error);
         return null;
