@@ -1,5 +1,5 @@
-import { useContext } from "react";
-import { FlatList, Image, Pressable, StyleSheet, View } from "react-native";
+import { useContext, useState } from "react";
+import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Text } from "../components/TextFix";
 import { appStyles } from "../components/AppStyles";
@@ -62,11 +62,13 @@ export default function WeatherPage() {
     // const [currentWeather, setCurrentWeather] = useState(null);
     // const [dailyWeather, setDailyWeather] = useState([]);
     const { weather, setWeather } = useContext(AppContext);
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('Refresh');
 
     //console.log('Weather:', weather);
 
     const refreshWeather = async () => {
-        console.log('WeatherPage: refreshing weather');
+        console.log('Weather: refreshing weather');
         const newWeather = await weatherCall();
         setItem('@weather', newWeather);
         setWeather(newWeather);
@@ -74,13 +76,18 @@ export default function WeatherPage() {
     }
 
     const handleWeather = () => {
-        if ((Date.now() - weather.current.time) > (1000 * 60 * 15) || 1 == 1) {
+        if ((Date.now() - weather.current.time) > (1000 * 60 * 15)) {
+            setLoading(true);
             console.log('Weather: button weather outdated')
             //console.log('Weather: current time', new Date(Date.now()).toTimeString());
             //console.log('Weather: old time', new Date(currentWeather.time).toTimeString());
-            refreshWeather().catch(err => console.error('Weather: button error', err));
+            refreshWeather().catch(err => console.error('Weather: button error', err)
+            ).finally(() => setLoading(false));
         } else {
-            // put something here to tell the user to calm down with updates
+            setMessage('Update cooldown of 15 minutes retry later');
+            setTimeout(() => {
+                setMessage('Refresh')
+            }, 5000);
         }
     }
 
@@ -102,7 +109,7 @@ export default function WeatherPage() {
     // }, []);
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, marginTop: '7.5%' }}>
             <Image
                 source={require('../assets/images/bg.png')}
                 blurRadius={40}
@@ -111,9 +118,13 @@ export default function WeatherPage() {
             <View>
                 <Pressable
                     style={appStyles.button}
-                    onPress={() => handleWeather()}
+                    onPress={handleWeather}
                 >
-                    <Text style={appStyles.buttonLabel}>Refresh</Text>
+                    {loading ?
+                        <ActivityIndicator size='large' color={appStyles.buttonLabel.color} />
+                        :
+                        <Text style={appStyles.buttonLabel}>{message}</Text>
+                    }
                 </Pressable>
                 {weather != null ?
                     <>

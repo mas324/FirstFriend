@@ -1,11 +1,12 @@
 import React, { useContext, useState } from 'react';
-import { Text, TextInput, Pressable, View, KeyboardAvoidingView, Platform, StyleSheet, ImageBackground, ActivityIndicator } from 'react-native';
+import { TextInput, Pressable, View, KeyboardAvoidingView, Platform, StyleSheet, ImageBackground, ActivityIndicator } from 'react-native';
 import { appStyles } from '../../components/AppStyles';
 import { useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { convertToUserJSON } from '../../utils/LocalStore';
 import { FireStatusCodes, signUp } from '../../utils/Firestore';
+import { Text } from '../../components/TextFix';
 
 const image = require('../../assets/loginBG/Students.jpg');
 

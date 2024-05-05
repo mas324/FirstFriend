@@ -4,7 +4,7 @@ const METEO_URL = 'https://api.open-meteo.com/v1/forecast?latitude=33.8314&longi
 
 const weatherCall = async () => {
 
-    console.log('WeatherAPI: updating');
+    console.log('WeatherAPI: recieved call to update');
 
     const response = (await axios.get(METEO_URL)).data;
     //const response = require('../../assets/forecast.json');

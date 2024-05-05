@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import { TextInput, Pressable, Text, ImageBackground, View } from 'react-native';
+import { TextInput, Pressable, ImageBackground, View } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { appStyles } from '../../components/AppStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { confirmReset, sendPasswordReset } from '../../utils/Firestore';
+import { Text } from '../../components/TextFix';
 
 const Stack = createNativeStackNavigator();
 

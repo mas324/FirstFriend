@@ -1,11 +1,11 @@
 import React, { useContext, useState } from 'react';
 import { TextInput, Pressable, View, ImageBackground, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Text } from 'react-native';
 import { appStyles } from '../../components/AppStyles';
 import { useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { FireStatusCodes, signIn } from '../../utils/Firestore';
+import { Text } from '../../components/TextFix';
 
 const image = require('../../assets/loginBG/Stairs.jpg');
 
