@@ -1,10 +1,8 @@
 // import * as React from 'react';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, FlatList, TextInput, Pressable, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { Text } from '../components/TextFix';
 import { jobStyles } from '../components/JobStyles';
-import { appStyles } from '../components/AppStyles';
-import { deleteItem, getItem, setItem } from '../utils/LocalStore';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from '@expo/vector-icons/FontAwesome'
@@ -24,6 +22,7 @@ const definePosting = {
 
 function DetailedListing({ route }) {
     const item = route.params as Job;
+    //console.log(item);
     return (
         <SafeAreaView style={{ marginTop: 8, marginBottom: 6, paddingHorizontal: 8 }}>
             <ScrollView>
@@ -153,7 +152,7 @@ function JobMain({ navigation }) {
         return (
             <TouchableOpacity
                 onPress={() => {
-                    navigation.navigate('JobsDetail', { recruiter: recruiter, desc: desc, position: position, salary: salary });
+                    navigation.navigate('JobsDetail', listing);
                 }}
             >
                 <View style={{ backgroundColor: 'lightgray', marginVertical: 4, paddingBottom: 10, paddingTop: 2, paddingHorizontal: 6 }}>
