@@ -27,14 +27,12 @@ const MessageDetails = ({ navigation, route }) => {
         if (refresh !== undefined && refresh !== null && refresh.history.length > 0) {
           if (refresh.history.length !== history.length) {
             console.log('MessageDetail: sync messages');
-            const combine = history.concat(refresh.history);
-            combine.filter((value, index, self) => {
-              index === self.findIndex((t) => {
-                return t.message === value.message && t.time === value.time && t.userIDSender === value.userIDSender
-              });
-            });
-            sendPacket(combine);
-            setHistory(combine);
+            const remoteString = refresh.history.map((value) => JSON.stringify(value));
+            const localString = history.map((value) => JSON.stringify(value));
+            const merged = [...new Set([...remoteString, ...localString])];
+            const mergedConverter = merged.map((value) => JSON.parse(value));
+            setHistory(mergedConverter);
+            sendPacket(mergedConverter);
           }
         }
       }).finally(() => console.log('Message: timer finish'));
