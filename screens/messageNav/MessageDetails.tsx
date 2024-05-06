@@ -21,17 +21,15 @@ const MessageDetails = ({ navigation, route }) => {
     }
   });
 
-  useEffect(() => {
-    setHistory(userHistory.history);
-  }, []);
-
   useFocusEffect(useCallback(() => {
-    setInterval(async () => {
-      const refresh = await getSingleMessage(userHistory.user[0].id, userHistory.user[1].id)
-      if (refresh.history.length > 0) {
-        setHistory(refresh.history);
-      }
-    }, 1000)
+    setInterval(() => {
+      getSingleMessage(userHistory.user[0].id, userHistory.user[1].id).then((refresh) => {
+        if (refresh !== undefined && refresh !== null && refresh.history.length > 0) {
+          setHistory(refresh.history);
+        }
+      }).finally(() => console.log('Message: timer finish'));
+    }, 10000);
+    setHistory(userHistory.history);
   }, [route]));
 
 
