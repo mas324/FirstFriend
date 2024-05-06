@@ -5,17 +5,12 @@ import { useNavigation } from '@react-navigation/native';
 const MessageDetails = ({ route }) => {
   const navigation = useNavigation();
   const [message, setMessage] = useState('');
-  const { userID, onMessageSent } = route.params;
-
+  const { userID } = route.params;
+  
   const handleSend = () => {
-    console.log('Message sent:', message);
-    if (typeof onMessageSent === 'function') {
-      onMessageSent(); // Call onMessageSent only if it's a function
-    } else {
-      console.error('onMessageSent is not a function');
-    }
-    navigation.popToTop();
-  };
+    navigation.navigate('MessagePage', {userID, message});
+};
+  
 
   return (
     <View style={styles.container}>
@@ -29,7 +24,11 @@ const MessageDetails = ({ route }) => {
         value={message}
         onChangeText={setMessage}
       />
-      <Button title="Send" color="#e6bb23" onPress={handleSend}/>
+      <Button 
+          title="Send" 
+          color="#e6bb23" 
+          onPress={handleSend}
+      />
     </View>
   );
 };
@@ -54,7 +53,7 @@ const styles = StyleSheet.create({
   input: {
     height: 75,
     borderWidth: 2,
-    borderColor: '##e6bb23',
+    borderColor: '#e6bb23',
     borderRadius: 10,
     padding: 10,
     color: '#e6bb23',

@@ -8,7 +8,7 @@ const SendMessageScreen = () => {
 
   const handleSubmit = () => {
     
-    navigation.navigate('MessageDetails', { userID });
+  navigation.navigate('MessageDetails', { userID });
   };
 
   return (

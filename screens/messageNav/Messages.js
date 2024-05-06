@@ -11,8 +11,10 @@ import AppContext from '../../utils/AppContext';
 const Stack = createNativeStackNavigator();
 
 const Item = ({ name, photo, status, index }) => {
-  const altColor = index % 2 === 0 ? '#e6bb23' : '#f6e4a9'
+  const altColor = index % 2 === 0 ? '#e6bb23' : '#f6e4a9';
+
   return (
+    <TouchableOpacity onPress={null}>
     <View style={[styles.item, { backgroundColor: altColor }]}>
       <TouchableOpacity>
         <Image source={{ uri: photo }} style={styles.contactPhoto} />
@@ -24,6 +26,7 @@ const Item = ({ name, photo, status, index }) => {
         </View>
       </TouchableOpacity>
     </View>
+    </TouchableOpacity>
   )
 };
 
@@ -52,11 +55,6 @@ const MessagePage = ({ navigation }) => {
     setMessages(prevMessages => [...prevMessages, message]);
   };
 
-  const handleItemPress = (userID) => {
-    console.log(handleMessageSent);
-    navigation.navigate('MessageDetails', { userID, onMessageSent: handleMessageSent});
-  };
-
 
   return (
     <SafeAreaView style={styles.container}>
@@ -83,7 +81,7 @@ const MessagePage = ({ navigation }) => {
 const Messages = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name='MessageMain' component={MessagePage} />
+      <Stack.Screen name='MessagePage' component={MessagePage} />
       <Stack.Screen name='SendMessageScreen' component={SendMessageScreen} />
       <Stack.Screen name='MessageDetails' component={MessageDetails} />
     </Stack.Navigator>
