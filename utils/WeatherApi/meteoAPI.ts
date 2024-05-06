@@ -49,7 +49,6 @@ const weatherCall = async () => {
             windMax: daily.wind_speed_10m_max,
             windFrom: daily.wind_direction_10m_dominant,
         },
-
     };
 
     // `weatherData` now contains a simple structure with arrays for datetime and weather data

@@ -1,76 +1,74 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { Text, View, StyleSheet, TouchableOpacity, FlatList, Image, Pressable, StatusBar } from 'react-native';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, FlatList, Image, Pressable, StatusBar, KeyboardAvoidingView, Platform } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MessageDetails from './MessageDetails';
 import SendMessageScreen from './SendMessageScreen';
-import MessageChannel from './MessageChannel';
 import { deleteItem, getItem, setItem } from '../../utils/LocalStore';
 import { appStyles } from '../../components/AppStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppContext from '../../utils/AppContext';
+import { Text } from '../../components/TextFix';
+import { Message, MessageStore, User } from '../../components/Types';
+import { useFocusEffect, useRoute } from '@react-navigation/native';
+import { getMessage } from '../../utils/Firestore';
 
 const Stack = createNativeStackNavigator();
 
-const Item = ({ name, photo, status, index }) => {
-  const altColor = index % 2 === 0 ? '#e6bb23' : '#f6e4a9';
-
-  return (
-    <TouchableOpacity onPress={MessageChannel}>
-    <View style={[styles.item, { backgroundColor: altColor }]}>
-      <TouchableOpacity>
-        <Image source={{ uri: photo }} style={styles.contactPhoto} />
-        <View style={styles.messageContent}>
-          <Text style={styles.name}>{name}</Text>
-          <View style={styles.statusContainer}>
-            <Text style={status === 'New' ? styles.newMessage : styles.readMessage}>{status} Message</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    </View>
-    </TouchableOpacity>
-  )
-};
-
 const MessagePage = ({ navigation }) => {
-  const [messages, setMessages] = useState([]);
-  const { state } = useContext(AppContext);
+  const [contacts, setContacts] = useState(Array<MessageStore>());
+  const { user, message, setMessage } = useContext(AppContext);
+  const route = useRoute();
 
+  // there should be an array of all contacts that have the user gotten from the document id
+  // each item in that array should be in the style of {user, history}
+  // the history is an array of messages
 
-  const handleMessageSent = () => {
-    const username = state.username;
-    const messageData = {
-      name: username,
-      photo: `https://ui-avatars.com/api/?name=${username}&background=random`,
-      status: 'New'
-    };
+  useFocusEffect(useCallback(() => {
+    handleUpdates();
+  }, [route]));
 
-    setMessages(prevMessages => {
-      const updatedMessages = prevMessages.concat([messageData]);
-      setItem('@messages', updatedMessages);
-      return updatedMessages;
+  const handleUpdates = () => {
+    console.log('Messages: contact get');
+    getMessage(user.id).then((contactArray) => {
+      setContacts(contactArray);
     })
+  }
+
+  const handleItemPress = (messageHistory) => {
+    navigation.navigate('MessageDetails', messageHistory);
   };
 
+  const Item = ({ store, index }) => {
+    const usersToDisplay = (store as MessageStore).user;
+    const userDisplay = usersToDisplay[0].id !== user.id ? usersToDisplay[0] : usersToDisplay[1];
+    const photo = `https://ui-avatars.com/api/?name=${userDisplay.firstname}&background=random`;
+    const name = userDisplay.firstname + ' ' + userDisplay.lastname;
+    const status = 'New';
 
-  const handleAddMessage = (message) => {
-    setMessages(prevMessages => [...prevMessages, message]);
+    const altColor = index % 2 === 0 ? '#e6bb23' : '#f6e4a9'
+    return (
+      <View style={[styles.item, { backgroundColor: altColor }]}>
+        <TouchableOpacity onPress={() => handleItemPress(store)}>
+          <Image source={{ uri: photo }} style={styles.contactPhoto} />
+          <View style={styles.messageContent}>
+            <Text style={styles.name}>{name}</Text>
+            <View style={styles.statusContainer}>
+              <Text style={status === 'New' ? styles.newMessage : styles.readMessage}>{status} Message</Text>
+            </View>
+          </View>
+        </TouchableOpacity>
+      </View>
+    )
   };
-
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.heading}>
         <Text style={styles.headingText}>First Friend</Text>
       </View>
-      <Pressable // Remove this as soon as possible when the messaging works
-        style={appStyles.button}
-        onPress={() => handleMessageSent()}
-      >
-        <Text style={appStyles.buttonLabel}> Test button </Text>
-      </Pressable>
       <FlatList
-        data={messages}
-        renderItem={({ item, index }) => <Item name={item.name} photo={item.photo} status={item.status} index={index} />}
+        data={contacts}
+        renderItem={({ item, index }) => <Item store={item} index={index} />}
       />
       <TouchableOpacity onPress={() => { navigation.navigate('SendMessageScreen'); deleteItem('@messages') }} style={styles.fab}>
         <Text style={styles.fabIcon}>+</Text>
@@ -82,10 +80,9 @@ const MessagePage = ({ navigation }) => {
 const Messages = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name='MessagePage' component={MessagePage} />
+      <Stack.Screen name='MessageMain' component={MessagePage} />
       <Stack.Screen name='SendMessageScreen' component={SendMessageScreen} />
       <Stack.Screen name='MessageDetails' component={MessageDetails} />
-      <Stack.Screen name='MessageChannel' component={MessageChannel} />
     </Stack.Navigator>
   );
 };

@@ -1,9 +1,10 @@
 import * as Firebase from 'firebase/app';
-import { collection, doc, getDoc, getDocs, getFirestore, setDoc } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, getFirestore, query, setDoc, where } from 'firebase/firestore'
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, getReactNativePersistence, initializeAuth, confirmPasswordReset, AuthErrorCodes, signOut as fireOut } from 'firebase/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { User } from '../components/Types';
+import { Job, Message, MessageStore, User } from '../components/Types';
 import { getItem } from './LocalStore';
+import { pull } from 'lodash';
 
 export const FireStatusCodes = {
     SUCCESS: 10,
@@ -85,10 +86,10 @@ export async function signUp(newUser: User, password: string) {
         return { status: FireStatusCodes.SUCCESS, data: user };
     } catch (error) {
         if (error.code === AuthErrorCodes.EMAIL_EXISTS) {
-            return { status: FireStatusCodes.EMAIL_INVALID };
+            return { status: FireStatusCodes.EMAIL_INVALID, data: null };
         } else {
             console.log("Firestore: returning unknown error:", error.code);
-            return { status: FireStatusCodes.ERROR_BAD };
+            return { status: FireStatusCodes.ERROR_BAD, data: null };
         }
     }
 }
@@ -120,9 +121,10 @@ export async function confirmReset(code: string, password: string) {
     }
 }
 
-export async function postJob(jobDetail: any, postID: string) {
+export async function postJob(jobDetail: Job, postID: string) {
     try {
-        await setDoc(doc(db, "jobs", postID), jobDetail);
+        //console.log('Firestore:', postID, jobDetail);
+        await setDoc(doc(db, "jobs", postID.toString()), jobDetail);
         return true;
     } catch (error) {
         console.error(error);
@@ -132,13 +134,35 @@ export async function postJob(jobDetail: any, postID: string) {
 
 export async function getJob() {
     try {
-        return await getDocs(collection(db, "jobs"));
+        const documents = await getDocs(collection(db, "jobs"));
+        const filed = Array<Job>();
+        documents.forEach(result => {
+            const data = (result.data() as Job);
+            filed.push({
+                postID: result.id,
+                description: data.description,
+                position: data.position,
+                recruiter: data.recruiter,
+                salary: data.salary
+            })
+        });
+        //console.log('Firestore: array unsort', filed);
+        return filed.sort((a, b) => {
+            if (a.postID > b.postID) {
+                return -1;
+            }
+            if (a.postID < b.postID) {
+                return 1;
+            }
+            return 0;
+        })
     } catch (error) {
         console.error(error);
+        return null;
     }
 }
 
-export async function postMessage(messageDetail: any, postID: string) {
+export async function sendMessage(messageDetail: MessageStore, postID: string) {
     try {
         await setDoc(doc(db, "messages", postID), messageDetail);
         return true;
@@ -148,10 +172,56 @@ export async function postMessage(messageDetail: any, postID: string) {
     }
 }
 
-export async function getMessage() {
+export async function getMessage(id: number) {
     try {
-        return await getDocs(collection(db, "messages"));
+        const documents = await getDocs(collection(db, "messages"));
+        const file = Array<MessageStore>();
+        documents.forEach(result => {
+            if (!result.id.includes(id.toString())) {
+                return;
+            }
+            const data = result.data() as MessageStore;
+            data.history.sort((a, b) => a.time - b.time);
+            file.push(data);
+        });
+
+        return file.sort((a, b) => {
+            return (a.history[a.history.length - 1].time - b.history[a.history.length - 1].time);
+        });
     } catch (error) {
         console.error(error);
+        return null;
+    }
+}
+
+export async function getSingleMessage(idA: number, idB: number) {
+    try {
+        const docID = idA.toString() + '_' + idB.toString();
+        const mesRef = await getDoc(doc(db, 'messages', docID));
+        if (mesRef.exists()) {
+            return mesRef.data() as MessageStore;
+        } else {
+            return null;
+        }
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+export async function findUser(id: number) {
+    try {
+        const userRef = collection(db, "users");
+        const q = query(userRef, where('id', '==', id));
+
+        const qGet = await getDocs(q);
+        if (qGet.size > 1) {
+            console.error('Firestore: more than one user has that ID idk how');
+            return null;
+        }
+        return qGet.docs[0].data() as User;
+    } catch (error) {
+        console.error('Firestore: user not found', error);
+        return null;
     }
 }
