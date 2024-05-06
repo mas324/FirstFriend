@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import Messages from './Messages';
 
 const MessageDetails = ({ route }) => {
   const navigation = useNavigation();
@@ -9,6 +10,7 @@ const MessageDetails = ({ route }) => {
   
   const handleSend = () => {
     navigation.navigate('MessagePage', {userID, message});
+    
 };
   
 

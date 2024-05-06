@@ -3,6 +3,7 @@ import { Text, View, StyleSheet, TouchableOpacity, FlatList, Image, Pressable, S
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MessageDetails from './MessageDetails';
 import SendMessageScreen from './SendMessageScreen';
+import MessageChannel from './MessageChannel';
 import { deleteItem, getItem, setItem } from '../../utils/LocalStore';
 import { appStyles } from '../../components/AppStyles';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,7 +15,7 @@ const Item = ({ name, photo, status, index }) => {
   const altColor = index % 2 === 0 ? '#e6bb23' : '#f6e4a9';
 
   return (
-    <TouchableOpacity onPress={null}>
+    <TouchableOpacity onPress={MessageChannel}>
     <View style={[styles.item, { backgroundColor: altColor }]}>
       <TouchableOpacity>
         <Image source={{ uri: photo }} style={styles.contactPhoto} />
@@ -84,6 +85,7 @@ const Messages = () => {
       <Stack.Screen name='MessagePage' component={MessagePage} />
       <Stack.Screen name='SendMessageScreen' component={SendMessageScreen} />
       <Stack.Screen name='MessageDetails' component={MessageDetails} />
+      <Stack.Screen name='MessageChannel' component={MessageChannel} />
     </Stack.Navigator>
   );
 };
