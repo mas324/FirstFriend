@@ -186,7 +186,7 @@ export async function getMessage(id: number) {
         });
 
         return file.sort((a, b) => {
-            return (a.history[a.history.length - 1].time - b.history[a.history.length - 1].time);
+            return (a.history[a.history.length - 1].time - b.history[b.history.length - 1].time);
         });
     } catch (error) {
         console.error(error);
