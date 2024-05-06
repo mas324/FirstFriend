@@ -1,14 +1,13 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { View, StyleSheet, TouchableOpacity, FlatList, Image, Pressable, StatusBar, KeyboardAvoidingView, Platform } from 'react-native';
+import React, { useCallback, useContext, useState } from 'react';
+import { View, StyleSheet, TouchableOpacity, FlatList, Image, StatusBar } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import MessageDetails from './MessageDetails';
 import SendMessageScreen from './SendMessageScreen';
-import { deleteItem, getItem, setItem } from '../../utils/LocalStore';
-import { appStyles } from '../../components/AppStyles';
+import { deleteItem } from '../../utils/LocalStore';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AppContext from '../../utils/AppContext';
 import { Text } from '../../components/TextFix';
-import { Message, MessageStore, User } from '../../components/Types';
+import { MessageStore } from '../../components/Types';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 import { getMessage } from '../../utils/Firestore';
 

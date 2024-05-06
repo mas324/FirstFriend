@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { TextInput, Pressable, View, ImageBackground, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { TextInput, Pressable, View, ImageBackground, ActivityIndicator } from 'react-native';
 import { appStyles } from '../../components/AppStyles';
 import { useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';

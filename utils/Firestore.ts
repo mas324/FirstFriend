@@ -2,9 +2,8 @@ import * as Firebase from 'firebase/app';
 import { collection, doc, getDoc, getDocs, getFirestore, query, setDoc, where } from 'firebase/firestore'
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, getReactNativePersistence, initializeAuth, confirmPasswordReset, AuthErrorCodes, signOut as fireOut } from 'firebase/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Job, Message, MessageStore, User } from '../components/Types';
+import { Job, MessageStore, User } from '../components/Types';
 import { getItem } from './LocalStore';
-import { pull } from 'lodash';
 
 export const FireStatusCodes = {
     SUCCESS: 10,

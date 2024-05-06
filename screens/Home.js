@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, BackHandler, Button, Image, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, BackHandler, Image, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text } from '../components/TextFix';
 import AppContext from '../utils/AppContext';
 import { useAuth } from '../utils/Auth';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import WeatherPage, { weatherStyles } from './WeatherPageAdapt';
+import WeatherPage from './WeatherPageAdapt';
 import VeniceBeachCoffeeFinder from './travelNav/MapApp';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { getItem, setItem } from '../utils/LocalStore';
@@ -13,7 +13,6 @@ import { weatherImages } from '../utils/WeatherApi';
 import { degrees } from '../utils/Helper';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 import { getJob } from '../utils/Firestore';
-import { set } from 'lodash';
 
 
 const Stack = createNativeStackNavigator();

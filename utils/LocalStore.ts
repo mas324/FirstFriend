@@ -2,7 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { User } from "../components/Types";
 
 export function convertToUserJSON(data: User) {
-    const out : User = {
+    const out: User = {
         id: data.id,
         firstname: data.firstname,
         lastname: data.lastname,

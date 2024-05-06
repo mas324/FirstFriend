@@ -28,31 +28,31 @@ export default function Map() {
         _getLocation()
     }, [])
 
-    const _getLocation =async() => {
-        try{
+    const _getLocation = async () => {
+        try {
             let { status } = await Location.requestForegroundPermissionsAsync()
 
-            if(status !== 'granted') {
+            if (status !== 'granted') {
                 console.warn('Permission to access location has not been granted')
                 return
             }
             let location = await Location.getCurrentPositionAsync({})
             setMyLocation(location.coords)
         }
-        catch(err) {
+        catch (err) {
             console.warn(err);
         }
     }
 
-    const focusOnLocation = () => { 
-        if(pin.latitude && pin.longitude) {
+    const focusOnLocation = () => {
+        if (pin.latitude && pin.longitude) {
             const region = {
                 latitude: parseFloat(pin.latitude),
                 longitude: parseFloat(pin.longitude),
                 latitudeDelta: 0.0922,
                 longitudeDelta: 0.0421
             }
-            if(mapRef.current) {
+            if (mapRef.current) {
                 mapRef.current.animateToRegion(region, 1000)
             }
         }
@@ -61,11 +61,11 @@ export default function Map() {
     return (
         <View style={styles.container}>
             <MapView
-              style={styles.map}
-              region={region}
-              onRegionChangeComplete={setRegion}
-              ref={mapRef}
-            provider='google'
+                style={styles.map}
+                region={region}
+                onRegionChangeComplete={setRegion}
+                ref={mapRef}
+                provider='google'
             >
 
                 {/*{ myLocation.latitude && pin.longitude &&
@@ -79,32 +79,32 @@ export default function Map() {
                   />
                 } */}
 
-                { myLocation.latitude && pin.longitude &&
-                  <CustomMarker
-                    coordinate ={{
-                      latitude:myLocation.latitude,
-                      longitude: myLocation.longitude
-                    }}
-                    title='Current Location'
-                    // need an image of a place, like CSUDH
-                    image={require('./assets/favicon.png')}
-                  />
-                } 
+                {myLocation.latitude && pin.longitude &&
+                    <CustomMarker
+                        coordinate={{
+                            latitude: myLocation.latitude,
+                            longitude: myLocation.longitude
+                        }}
+                        title='Current Location'
+                        // need an image of a place, like CSUDH
+                        image={require('./assets/favicon.png')}
+                    />
+                }
 
-                { pin.latitude && pin.longitude &&
-                  <Marker
-                    coordinate = {{
-                      latitude: parseFloat(pin.latitude),
-                      longitude: parseFloat(pin.longitude)
-                    }}
-                    title='Default location'
-                    description='I am here'
-                  />
+                {pin.latitude && pin.longitude &&
+                    <Marker
+                        coordinate={{
+                            latitude: parseFloat(pin.latitude),
+                            longitude: parseFloat(pin.longitude)
+                        }}
+                        title='Default location'
+                        description='I am here'
+                    />
                 }
 
             </MapView>
-            <View style = { styles.buttonContainer}>
-                <Button title='Get Location' onPress= { focusOnLocation } />
+            <View style={styles.buttonContainer}>
+                <Button title='Get Location' onPress={focusOnLocation} />
             </View>
         </View>
     )
@@ -118,7 +118,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     map: {
-        width:  Dimensions.get('window').width,
+        width: Dimensions.get('window').width,
         height: Dimensions.get('window').height,
     },
     buttonContainer: {

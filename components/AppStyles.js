@@ -47,7 +47,7 @@ export const appStyles = StyleSheet.create({
     marginBottom: 2,
     minWidth: '48%',
     textAlign: 'center',
-    
+
   },
   buttonLabel: {
     fontSize: 20,

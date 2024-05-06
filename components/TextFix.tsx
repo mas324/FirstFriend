@@ -10,7 +10,9 @@ export class Text extends React.Component<Native.TextProps> {
         {
           ...Native.Platform.select({
             android: {
-              fontFamily: 'monospace',
+              // fontFamily: 'monospace',
+              alignSelf: 'stretch',
+              textAlign: 'center',
             },
           })
         }]} {...rest}>

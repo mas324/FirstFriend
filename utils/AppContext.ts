@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Job, Message, MessageStore, User } from "../components/Types";
+import { Job, MessageStore, User } from "../components/Types";
 
 type Weather = {
     current: {

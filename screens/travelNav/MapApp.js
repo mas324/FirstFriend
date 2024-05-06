@@ -1,7 +1,7 @@
 // https://www.youtube.com/watch?v=c_X-rBBiidQ
 import React, { useState, useEffect } from 'react';
 import { View, StyleSheet } from 'react-native';
-import { Marker, MarkerAnimated, PROVIDER_DEFAULT } from 'react-native-maps';
+import { MarkerAnimated, PROVIDER_DEFAULT } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { AnimatedMapView } from 'react-native-maps/lib/MapView';
 
