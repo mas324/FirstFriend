@@ -5,7 +5,7 @@ import { Text } from '../components/TextFix';
 import { jobStyles } from '../components/JobStyles';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import FontAwesome from '@expo/vector-icons/FontAwesome'
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import AppContext from '../utils/AppContext';
 import { getJob, postJob } from '../utils/Firestore';
 import { Job } from '../components/Types';
@@ -24,7 +24,7 @@ function DetailedListing({ route }) {
     const item = route.params as Job;
     //console.log(item);
     return (
-        <SafeAreaView style={{ marginTop: 8, marginBottom: 6, paddingHorizontal: 8 }}>
+        <SafeAreaView style={{ marginTop: 24, marginBottom: 6, paddingHorizontal: 8, flex: 1, backgroundColor: '#FFFFE9'}}>
             <ScrollView>
                 <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 24 }]}>{item.position}</Text>
                 <Text style={[jobStyles.jobTitle, { fontSize: 20 }]}>{item.recruiter}</Text>
@@ -47,48 +47,52 @@ function JobsApplication({ route, navigation }) {
     const [error, setError] = useState('');
 
     return (
-        <View style={{ paddingTop: 25 }}>
-            <TextInput
-                placeholder='Position'
-                style={jobStyles.jobAppInput}
-                onChangeText={text => setPosition(text)}
-                defaultValue={position}
-            />
-            <TextInput
-                placeholder='Salary'
-                style={jobStyles.jobAppInput}
-                onChangeText={text => setSalary(text)}
-                defaultValue={salary}
-            />
-            <TextInput
-                placeholder='Description'
-                onChangeText={text => setDescription(text)}
-                style={jobStyles.inputDescription}
-                multiline={true}
-                numberOfLines={10}
-                defaultValue={description}
-            />
-            <TouchableOpacity
-                onPress={() => {
-                    definePosting.recruiter = user.firstname + ' ' + user.lastname;
-                    definePosting.position = position;
-                    definePosting.description = description;
-                    definePosting.salary = salary;
-                    const postID = Date.now().toString() + '_' + user.id;
-                    postJob(definePosting, postID).then(posted => {
-                        if (posted) {
-                            navigation.popToTop();
-                        } else {
-                            setError('Error in application submittion');
-                        }
-                    })
+        <SafeAreaView style={{marginTop: 24, flex:1, backgroundColor: '#860038'}}>
+            <View style={{ paddingTop: 25, backgroundColor:'#860038'}}>
+                <TextInput
+                    placeholder='Position'
+                    style={jobStyles.jobAppInput}
+                    onChangeText={text => setPosition(text)}
+                    defaultValue={position}
+                />
+                <TextInput
+                    placeholder='Salary'
+                    style={jobStyles.jobAppInput}
+                    onChangeText={text => setSalary(text)}
+                    defaultValue={salary}
+                />
+                <TextInput
+                    placeholder='Description'
+                    onChangeText={text => setDescription(text)}
+                    style={jobStyles.inputDescription}
+                    multiline={true}
+                    numberOfLines={10}
+                    defaultValue={description}
+                />
+                <TouchableOpacity
+                    onPress={() => {
+                        definePosting.recruiter = user.firstname + ' ' + user.lastname;
+                        definePosting.position = position;
+                        definePosting.description = description;
+                        definePosting.salary = salary;
+                        const postID = Date.now().toString() + '_' + user.id;
+                        postJob(definePosting, postID).then(posted => {
+                            if (posted) {
+                                navigation.popToTop();
+                            } else {
+                                setError('Error in application submittion');
+                            }
+                        })
 
-                }}
-            >
-                <Text style={jobStyles.textButton}>Submit</Text>
-            </TouchableOpacity>
+                    }}
+                >
+                    <Text style={jobStyles.textButton}>Submit</Text>
+                </TouchableOpacity>
             <Text>{error}</Text>
         </View>
+
+        </SafeAreaView>
+        
     )
 }
 
@@ -97,7 +101,7 @@ function JobMain({ navigation }) {
     const [data, setData] = useState(Array<Job>());
     const [search, setSearch] = useState([]);
     const [searchWord, setSearchWord] = useState("");
-    const { user } = useContext(AppContext);
+    const { user, setJobs } = useContext(AppContext);
 
     const route = useRoute()
     const [loading, setLoading] = useState(false);
@@ -130,6 +134,7 @@ function JobMain({ navigation }) {
         setLoading(true)
         getJob().then(jobs => {
             console.log('Job: data got');
+            setJobs(jobs);
             setData(jobs);
             setLoading(false);
         });
@@ -155,9 +160,9 @@ function JobMain({ navigation }) {
                     navigation.navigate('JobsDetail', listing);
                 }}
             >
-                <View style={{ backgroundColor: 'lightgray', marginVertical: 4, paddingBottom: 10, paddingTop: 2, paddingHorizontal: 6 }}>
+                <View style={{ backgroundColor: '#FFFFE9', marginVertical: 4, paddingBottom: 10, paddingTop: 2, paddingHorizontal: 6 }}>
                     <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 20 }]}>{position}</Text>
-                    <Text style={jobStyles.jobTitle}>{recruiter}</Text>
+                    <Text style={jobStyles.jobTitle}>Posted by: {recruiter}</Text>
                     <Text style={jobStyles.jobSection} numberOfLines={4}>{desc}</Text>
                     <Text style={[jobStyles.jobSection, { fontWeight: 'bold' }]}>Salary: {
                         <Text style={jobStyles.jobSection}>{salary}</Text>
@@ -169,7 +174,7 @@ function JobMain({ navigation }) {
     }
 
     return (
-        <SafeAreaView style={{ flex: 1, justifyContent: 'flex-start', paddingTop: 25, paddingBottom: 20 }}>
+        <SafeAreaView style={{ marginTop: 24, flex: 1, justifyContent: 'flex-start', paddingTop: 25, paddingBottom: 20, backgroundColor: '#860038' }}>
             {loading ?
                 <View style={{ position: 'absolute', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
                     <ActivityIndicator size={80} color='blue' />
@@ -177,7 +182,7 @@ function JobMain({ navigation }) {
                 :
                 null
             }
-            <View style={[jobStyles.Main, { flexDirection: 'row', marginTop: -12, marginHorizontal: 5 }]}>
+            <View style={[jobStyles.Main, { flexDirection: 'row', marginTop: -40, marginHorizontal: 5 }]}>
                 <TextInput
                     style={[jobStyles.input, { marginLeft: 10, marginRight: 10, width: '70%' }]}
                     placeholder="Search"
@@ -193,7 +198,7 @@ function JobMain({ navigation }) {
                 </Pressable>
 
             </View>
-            <View style={{ height: '100%', paddingHorizontal: 7 }}>
+            <View style={{ height: '100%', paddingHorizontal: 7}}>
                 <FlatList
                     data={search.length > 0 ? search : data}
                     renderItem={({ item }) => <JobListing listing={item} />}

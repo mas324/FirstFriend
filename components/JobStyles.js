@@ -49,11 +49,15 @@ export const jobStyles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 16,
         paddingBottom: 4,
+        marginHorizontal: 5,
+        marginTop: 10
     },
 
     jobSection: {
         paddingTop: 6,
         fontSize: 12,
+        marginHorizontal: 5,
+        marginBottom: 5,
     },
     fab: {
         position: 'absolute',
@@ -86,6 +90,7 @@ export const jobStyles = StyleSheet.create({
       borderRadius: 16, // This will make the button rounded
       color: 'white',
       fontSize: 15,
+      marginTop: 10
     },
 
     jobAppInput:{
@@ -93,13 +98,17 @@ export const jobStyles = StyleSheet.create({
       margin: 10,
       borderWidth: 1,
       padding: 10,
+      backgroundColor: 'white'
     },
 
     inputDescription: {
-      height: 'auto',
-      maxHeight: 400,
+      textAlignVertical: 'top',
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
+      height: 450,
       margin: 10,
       borderWidth: 1,
       padding: 10,
+      backgroundColor: 'white'
     },
 });
