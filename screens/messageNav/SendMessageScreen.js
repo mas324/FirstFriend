@@ -21,6 +21,9 @@ const SendMessageScreen = () => {
       if (user.id < userB.id) {
         userArray.push(user);
         userArray.push(userB);
+      } else {
+        userArray.push(userB);
+        userArray.push(user);
       }
       const params = {
         user: userArray,

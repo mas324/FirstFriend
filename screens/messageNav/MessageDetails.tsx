@@ -23,19 +23,7 @@ const MessageDetails = ({ navigation, route }) => {
 
   useFocusEffect(useCallback(() => {
     const timerID = setInterval(() => {
-      getSingleMessage(userHistory.user[0].id, userHistory.user[1].id).then((refresh) => {
-        if (refresh !== undefined && refresh !== null && refresh.history.length > 0) {
-          if (refresh.history.length !== history.length) {
-            console.log('MessageDetail: sync messages');
-            const remoteString = refresh.history.map((value) => JSON.stringify(value));
-            const localString = history.map((value) => JSON.stringify(value));
-            const merged = [...new Set([...remoteString, ...localString])];
-            const mergedConverter = merged.map((value) => JSON.parse(value));
-            setHistory(mergedConverter);
-            sendPacket(mergedConverter);
-          }
-        }
-      }).finally(() => console.log('Message: timer finish'));
+      //syncMessages();
     }, 10000);
     setHistory(userHistory.history);
     navigation.addListener('blur', () => {
@@ -46,7 +34,6 @@ const MessageDetails = ({ navigation, route }) => {
 
   const handleSend = () => {
     console.log('MessageDetails:', messageBody);
-
     const toSend: Message = {
       userIDSender: sender.id,
       userIDReceiver: otherUser.id,
@@ -56,9 +43,28 @@ const MessageDetails = ({ navigation, route }) => {
     }
     const newHistory = history.slice();
     newHistory.push(toSend);
-    setHistory(newHistory);
+    // setHistory(newHistory);
+    // syncMessages();
+    sendPacket(newHistory);
     setMessageBody('');
   };
+
+  function syncMessages() {
+    getSingleMessage(userHistory.user[0].id, userHistory.user[0].id).then((value) => {
+      if (value === null) {
+        console.log('MessageDetails: new contact');
+        sendPacket(history);
+        return;
+      } else {
+        console.log('MessageDetails: sync starting');
+        const remoteString = value.history.map((value) => JSON.stringify(value));
+        const localString = history.map((value) => JSON.stringify(value));
+        const mergedString = [...new Set(remoteString.concat(localString))];
+        const mergedHistory: Message[] = mergedString.map((value) => JSON.parse(value));
+        sendPacket(mergedHistory);
+      }
+    })
+  }
 
   function sendPacket(newHistory: Message[]) {
     const docID = userHistory.user[0].id.toString() + '_' + userHistory.user[1].id.toString();
@@ -66,13 +72,13 @@ const MessageDetails = ({ navigation, route }) => {
       user: userHistory.user,
       history: newHistory,
     }
-
     sendMessage(sendPacket, docID).then((value) => {
       if (!value) {
         setMessageBody('Message failed to send');
         return;
+      } else {
+        console.log('MessageDetail: message sent');
       }
-      setHistory(newHistory);
     });
   }
 

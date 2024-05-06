@@ -200,6 +200,8 @@ export async function getSingleMessage(idA: number, idB: number) {
         const mesRef = await getDoc(doc(db, 'messages', docID));
         if (mesRef.exists()) {
             return mesRef.data() as MessageStore;
+        } else {
+            return null;
         }
     } catch (error) {
         console.error(error);
