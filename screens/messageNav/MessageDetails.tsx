@@ -78,6 +78,7 @@ const MessageDetails = ({ navigation, route }) => {
         return;
       } else {
         console.log('MessageDetail: message sent');
+        setHistory(newHistory);
       }
     });
   }
