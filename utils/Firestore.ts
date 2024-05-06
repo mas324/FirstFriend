@@ -1,9 +1,10 @@
 import * as Firebase from 'firebase/app';
-import { collection, doc, getDoc, getDocs, getFirestore, setDoc } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, getFirestore, query, setDoc, where } from 'firebase/firestore'
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, getReactNativePersistence, initializeAuth, confirmPasswordReset, AuthErrorCodes, signOut as fireOut } from 'firebase/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Job, Message, User } from '../components/Types';
+import { Job, Message, MessageStore, User } from '../components/Types';
 import { getItem } from './LocalStore';
+import { pull } from 'lodash';
 
 export const FireStatusCodes = {
     SUCCESS: 10,
@@ -161,9 +162,9 @@ export async function getJob() {
     }
 }
 
-export async function postMessage(messageDetail: Message, postID: string) {
+export async function sendMessage(messageDetail: MessageStore, postID: string) {
     try {
-        await setDoc(doc(db, "messages", postID.toString()), messageDetail);
+        await setDoc(doc(db, "messages", postID), messageDetail);
         return true;
     } catch (error) {
         console.error(error);
@@ -171,23 +172,54 @@ export async function postMessage(messageDetail: Message, postID: string) {
     }
 }
 
-export async function getMessage() {
+export async function getMessage(id: number) {
     try {
         const documents = await getDocs(collection(db, "messages"));
-        const file = Array<Message>();
+        const file = Array<MessageStore>();
         documents.forEach(result => {
-            const data = result.data() as Message;
-            file.push({
-                message: data.message,
-                read: data.read,
-                userIDReceiver: data.userIDReceiver,
-                userIDSender: data.userIDSender,
-                time: data.time,
-            })
+            if (!result.id.includes(id.toString())) {
+                return;
+            }
+            const data = result.data() as MessageStore;
+            data.history.sort((a, b) => a.time - b.time);
+            file.push(data);
         });
-        return file.sort((a, b) => b.time - a.time);
+
+        return file.sort((a, b) => {
+            return (a.history[a.history.length - 1].time - b.history[a.history.length - 1].time);
+        });
     } catch (error) {
         console.error(error);
+        return null;
+    }
+}
+
+export async function getSingleMessage(idA: number, idB: number) {
+    try {
+        const docID = idA.toString() + idB.toString();
+        const mesRef = await getDoc(doc(db, 'messages', docID));
+        if (mesRef.exists()){
+            return mesRef.data() as MessageStore;
+        }
+    } catch (error) {
+        console.error(error);
+        return null;
+    }
+}
+
+export async function findUser(id: number) {
+    try {
+        const userRef = collection(db, "users");
+        const q = query(userRef, where('id', '==', id));
+
+        const qGet = await getDocs(q);
+        if (qGet.size > 1) {
+            console.error('Firestore: more than one user has that ID idk how');
+            return null;
+        }
+        return qGet.docs[0].data() as User;
+    } catch (error) {
+        console.error('Firestore: user not found', error);
         return null;
     }
 }

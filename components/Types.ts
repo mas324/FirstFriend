@@ -25,3 +25,8 @@ export type Job = {
     salary: string,
     postID?: string,
 }
+
+export type MessageStore = {
+    user: User[],
+    history: Message[],
+}
