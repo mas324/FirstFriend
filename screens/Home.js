@@ -114,10 +114,10 @@ function HomePage({ navigation }) {
           weather !== null ? <CurrentCard current={weather.current} /> : <ActivityIndicator size={50} color='gray' />
         }
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, {backgroundColor: 'rgba(255, 253, 208, 0.5)' }]} onPress={() => handleButtonPress(2)}>
-      {
+      <TouchableOpacity style={[styles.button, { backgroundColor: 'rgba(255, 253, 208, 0.5)' }]} onPress={() => handleButtonPress(2)}>
+        {
           jobs !== null ? <JobCard firstListing={jobs[0]} /> : <ActivityIndicator size={50} color='gray' />
-      }
+        }
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => handleButtonPress(3)}>
         <Text>Travel</Text>
@@ -168,14 +168,14 @@ function CurrentCard({ current }) {
   }
 }
 
-function JobCard({firstListing}){
+function JobCard({ firstListing }) {
 
   return (
     <View>
-      <Text style={{fontSize:30, alignSelf:'center', marginBottom: 10}}>Jobs</Text>
-      <Text style={{fontSize:18, fontWeight: 'bold', alignSelf:'center', marginHorizontal: 10, marginBottom: 5, textAlign:'center'}}>{firstListing.position}</Text>
-      <Text style={{fontSize:12, marginHorizontal: 10, marginTop: 10}}>({firstListing.recruiter})</Text>
-      <Text style={{fontSize:11, marginHorizontal: 10, marginTop: 5}} numberOfLines={10}>Description:{firstListing.description}</Text>
+      <Text style={{ fontSize: 30, alignSelf: 'center', marginBottom: 10 }}>Jobs</Text>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', alignSelf: 'center', marginHorizontal: 10, marginBottom: 5, textAlign: 'center' }}>{firstListing.position}</Text>
+      <Text style={{ fontSize: 12, marginHorizontal: 10, marginTop: 10 }}>({firstListing.recruiter})</Text>
+      <Text style={{ fontSize: 11, marginHorizontal: 10, marginTop: 5 }} numberOfLines={10}>Description:{firstListing.description}</Text>
     </View>
   )
 }
@@ -184,6 +184,7 @@ const Home = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name='HomePage' component={HomePage} />
+      <Stack.Screen name='Weather' component={WeatherPage} />
       <Stack.Screen name='Travels' component={VeniceBeachCoffeeFinder} />
     </Stack.Navigator>
   )
