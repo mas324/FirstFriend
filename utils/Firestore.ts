@@ -1,8 +1,8 @@
 import * as Firebase from 'firebase/app';
-import { collection, doc, getDoc, getDocs, getFirestore, query, setDoc, where } from 'firebase/firestore'
+import { addDoc, collection, doc, getDoc, getDocs, getFirestore, query, setDoc, where } from 'firebase/firestore'
 import { createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithEmailAndPassword, getReactNativePersistence, initializeAuth, confirmPasswordReset, AuthErrorCodes, signOut as fireOut } from 'firebase/auth'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Job, MessageStore, User } from '../components/Types';
+import { Job, Message, MessageStore, User } from '../components/Types';
 import { getItem } from './LocalStore';
 
 export const FireStatusCodes = {
@@ -161,9 +161,25 @@ export async function getJob() {
     }
 }
 
-export async function sendMessage(messageDetail: MessageStore, postID: string) {
+export async function initializeMessages(users: User[]) {
     try {
-        await setDoc(doc(db, "messages", postID), messageDetail);
+        const userIDs = users[0].id + '_' + users[1].id;
+        const checkDoc = await getDoc(doc(db, 'messages', userIDs));
+        if (checkDoc.exists()) {
+            return false;
+        }
+        await setDoc(doc(db, 'messages', userIDs), { user: users });
+        return true;
+    } catch (error) {
+        console.error(error);
+        return false;
+    }
+}
+
+export async function sendMessage(messageDetail: Message, postID: string) {
+    try {
+        const userCol = collection(db, 'messages', postID + '/history');
+        await addDoc(userCol, messageDetail);
         return true;
     } catch (error) {
         console.error(error);
@@ -174,21 +190,38 @@ export async function sendMessage(messageDetail: MessageStore, postID: string) {
 export async function getMessage(id: number) {
     try {
         const documents = await getDocs(collection(db, "messages"));
-        const file = Array<MessageStore>();
+        if (documents.empty) {
+            return null;
+        }
+        //console.log('Firestore: getting contacts');
+        const filteredUsers = Array<Array<User>>()
         documents.forEach(result => {
-            if (!result.id.includes(id.toString())) {
+            if (!result.exists()) {
                 return;
             }
-            const data = result.data() as MessageStore;
-            data.history.sort((a, b) => a.time - b.time);
-            file.push(data);
+            const userResult = result.data().user as User[];
+            if (userResult[0].id !== id && userResult[1].id !== id) {
+                return;
+            }
+            console.log('Firestore: data add');
+            filteredUsers.push(userResult);
         });
 
-        return file.sort((a, b) => {
-            return (a.history[a.history.length - 1].time - b.history[b.history.length - 1].time);
-        });
+        if (filteredUsers.length === 0) {
+            return null;
+        }
+
+        const filteredDocs = Array<MessageStore>();
+        for (let i = 0; i < filteredUsers.length; i++) {
+            filteredDocs.push({
+                user: filteredUsers[i],
+                history: await getSingleMessage(filteredUsers[i][0].id, filteredUsers[i][1].id),
+            });
+        }
+        //console.log('Firestore: returning contacts', filteredDocs);
+        return filteredDocs;
     } catch (error) {
-        console.error(error);
+        console.error('Firestore: getmessage:', error);
         return null;
     }
 }
@@ -196,11 +229,16 @@ export async function getMessage(id: number) {
 export async function getSingleMessage(idA: number, idB: number) {
     try {
         const docID = idA.toString() + '_' + idB.toString();
-        const mesRef = await getDoc(doc(db, 'messages', docID));
-        if (mesRef.exists()) {
-            return mesRef.data() as MessageStore;
-        } else {
-            return null;
+        const messageRef = doc(db, 'messages', docID);
+        const messageDoc = await getDoc(messageRef);
+        if (messageDoc.exists()) {
+            const historyDoc = await getDocs(collection(messageRef, 'history'));
+            const history = Array<Message>();
+            historyDoc.forEach((post) => {
+                history.push(post.data() as Message);
+            });
+            history.sort((a, b) => a.time - b.time);
+            return history;
         }
     } catch (error) {
         console.error(error);

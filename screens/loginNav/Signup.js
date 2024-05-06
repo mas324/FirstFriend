@@ -30,6 +30,9 @@ const SignUpPage = ({ navigation }) => {
     const { setUser } = useContext(AppContext);
 
     const handleSignUp = () => {
+        if (loading) {
+            return;
+        }
         if (firstname == '' || lastname == '' || username == '' || SID == '' || password == '' || confPassword == '') {
             const newStyle = StyleSheet.create({
                 reject: {
@@ -50,6 +53,11 @@ const SignUpPage = ({ navigation }) => {
             parseSID = Number.parseInt(SID, 10);
         } catch (e) {
             setRejection('Student ID is not a number');
+            return;
+        }
+
+        if (password.length < 6) {
+            setRejection('Password must be at least 6 characters long');
             return;
         }
 

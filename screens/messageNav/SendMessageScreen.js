@@ -3,7 +3,7 @@ import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Text } from '../../components/TextFix';
 import { appStyles } from '../../components/AppStyles';
-import { findUser } from '../../utils/Firestore';
+import { findUser, initializeMessages } from '../../utils/Firestore';
 import AppContext from '../../utils/AppContext';
 
 const SendMessageScreen = () => {
@@ -12,8 +12,14 @@ const SendMessageScreen = () => {
   const { user } = useContext(AppContext);
 
   const handleSubmit = () => {
-    if (user.id === Number.parseInt(userID)) {
-      console.log('Cant send to yourself');
+    try {
+      if (user.id === Number.parseInt(userID)) {
+        console.log('Cant send to yourself');
+        setUserID('Cant sent messages to yourself');
+        return;
+      }
+    } catch (_err) {
+      setUserID('ID must be a number');
       return;
     }
     findUser(Number.parseInt(userID)).then(userB => {
@@ -29,7 +35,15 @@ const SendMessageScreen = () => {
         user: userArray,
         history: [],
       }
-      navigation.navigate('MessageDetails', params);
+      initializeMessages(userArray).then(value => {
+        if (value) {
+          navigation.replace('MessageDetails', params);
+        } else {
+          setUserID('User already in contact list');
+        }
+      })
+    }).catch(_err => {
+      setUserID('User does not exist');
     })
   };
 

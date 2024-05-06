@@ -24,7 +24,7 @@ function DetailedListing({ route }) {
     const item = route.params as Job;
     //console.log(item);
     return (
-        <SafeAreaView style={{ marginTop: 24, marginBottom: 6, paddingHorizontal: 8, flex: 1, backgroundColor: '#FFFFE9'}}>
+        <SafeAreaView style={{ marginTop: 24, marginBottom: 6, paddingHorizontal: 8, flex: 1, backgroundColor: '#FFFFE9' }}>
             <ScrollView>
                 <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 24 }]}>{item.position}</Text>
                 <Text style={[jobStyles.jobTitle, { fontSize: 20 }]}>{item.recruiter}</Text>
@@ -47,8 +47,8 @@ function JobsApplication({ route, navigation }) {
     const [error, setError] = useState('');
 
     return (
-        <SafeAreaView style={{marginTop: 24, flex:1, backgroundColor: '#860038'}}>
-            <View style={{ paddingTop: 25, backgroundColor:'#860038'}}>
+        <SafeAreaView style={{ marginTop: 24, flex: 1, backgroundColor: '#860038' }}>
+            <View style={{ paddingTop: 25, backgroundColor: '#860038' }}>
                 <TextInput
                     placeholder='Position'
                     style={jobStyles.jobAppInput}
@@ -88,11 +88,11 @@ function JobsApplication({ route, navigation }) {
                 >
                     <Text style={jobStyles.textButton}>Submit</Text>
                 </TouchableOpacity>
-            <Text>{error}</Text>
-        </View>
+                <Text>{error}</Text>
+            </View>
 
         </SafeAreaView>
-        
+
     )
 }
 
@@ -124,8 +124,8 @@ function JobMain({ navigation }) {
             return;
         }
         const searchArray = data.filter(post => {
-            return post.position.includes(searchWord);
-        })
+            return post.position.toLowerCase().includes(searchWord.toLowerCase());
+        });
         setSearch(searchArray);
     }
 
@@ -198,7 +198,7 @@ function JobMain({ navigation }) {
                 </Pressable>
 
             </View>
-            <View style={{ height: '100%', paddingHorizontal: 7}}>
+            <View style={{ height: '100%', paddingHorizontal: 7 }}>
                 <FlatList
                     data={search.length > 0 ? search : data}
                     renderItem={({ item }) => <JobListing listing={item} />}

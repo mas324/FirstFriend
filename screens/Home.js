@@ -95,13 +95,13 @@ function HomePage({ navigation }) {
     <SafeAreaView style={styles.container}>
       <Modal visible={showLogout} transparent={true} animationType='fade'>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.5)' }}>
-          <View style={{ backgroundColor: '#eee', borderWidth: 1, padding: 30, borderRadius: 5 }}>
-            <Text style={{ fontSize: 32, fontWeight: 'bold' }}>Logout?</Text>
-            <View style={{ flexDirection: 'row', alignContent: 'space-between', justifyContent: 'center', alignItems: 'center', marginTop: 10 }}>
-              <TouchableOpacity style={{ flex: 1, borderWidth: 2, borderColor: 'black', backgroundColor: '#f0f0f0' }} onPress={() => handleButtonPress(5)}>
+          <View style={{ backgroundColor: '#eee', borderWidth: 2, paddingVertical: 15, paddingHorizontal: 30, borderRadius: 10, maxHeight: '20%' }}>
+            <Text style={{ flex: 3, fontSize: 32, fontWeight: 'bold' }}>Logout?</Text>
+            <View style={{ flex: 2, flexDirection: 'row', alignContent: 'space-between', justifyContent: 'center', alignItems: 'center' }}>
+              <TouchableOpacity style={{ flex: 1, borderWidth: 1, borderColor: 'black', backgroundColor: '#f0f0f0' }} onPress={() => handleButtonPress(5)}>
                 <Text style={{ fontSize: 20, alignSelf: 'center' }}>Yes</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={{ flex: 1, borderWidth: 2, borderColor: 'black', backgroundColor: '#09d0ff80' }} onPress={() => setShowLogout(false)}>
+              <TouchableOpacity style={{ flex: 1, borderWidth: 1, borderColor: 'black', backgroundColor: '#09d0ffff' }} onPress={() => setShowLogout(false)}>
                 <Text style={{ fontSize: 20, fontWeight: 'bold', alignSelf: 'center' }}>No</Text>
               </TouchableOpacity>
             </View>

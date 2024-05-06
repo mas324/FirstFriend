@@ -11,13 +11,16 @@ const image = require('../../assets/loginBG/Stairs.jpg');
 
 export default function LoginPage({ navigation }) {
     const { setUser } = useContext(AppContext);
-    const [username, setName] = useState('dev@firstfriend.com');
-    const [password, setPass] = useState('123456');
+    const [username, setName] = useState('');
+    const [password, setPass] = useState('');
     const [rejectNotif, setRejection] = useState('');
     const { login } = useAuth();
     const [loading, setLoading] = useState(false);
 
     const handleLogin = () => {
+        if (loading) {
+            return;
+        }
         if (username === '' || password === '') {
             setRejection('Fill out all forms');
             return;
@@ -63,7 +66,7 @@ export default function LoginPage({ navigation }) {
                     <TextInput
                         style={appStyles.input}
                         autoComplete='username'
-                        placeholder='Username'
+                        placeholder='School Email'
                         onChangeText={newName => setName(newName)}
                         defaultValue={username}
                     />

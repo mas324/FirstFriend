@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { useCallback, useContext, useRef, useState } from 'react';
 import { View, TextInput, StyleSheet, KeyboardAvoidingView, FlatList, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import { Text } from '../../components/TextFix';
@@ -22,17 +22,21 @@ const MessageDetails = ({ navigation, route }) => {
   });
 
   useFocusEffect(useCallback(() => {
-    const timerID = setInterval(() => {
-      //syncMessages();
-    }, 10000);
     setHistory(userHistory.history);
+
+    const timerID = setInterval(() => {
+      syncMessages();
+    }, 1000);
     navigation.addListener('blur', () => {
       console.log('MessageDetail: unfocused');
       clearInterval(timerID);
-    })
+    });
   }, [route]));
 
   const handleSend = () => {
+    if (messageBody.trim().length === 0) {
+      return;
+    }
     console.log('MessageDetails:', messageBody);
     const toSend: Message = {
       userIDSender: sender.id,
@@ -41,45 +45,21 @@ const MessageDetails = ({ navigation, route }) => {
       read: false,
       time: Date.now(),
     }
-    const newHistory = history.slice();
-    newHistory.push(toSend);
-    // setHistory(newHistory);
-    // syncMessages();
-    sendPacket(newHistory);
-    setMessageBody('');
+
+    const docID = userHistory.user[0].id.toString() + '_' + userHistory.user[1].id.toString();
+    sendMessage(toSend, docID).then(value => {
+      if (value) {
+        setMessageBody('');
+        syncMessages();
+      } else {
+        setMessageBody('Message not sent');
+      }
+    });
   };
 
   function syncMessages() {
-    getSingleMessage(userHistory.user[0].id, userHistory.user[0].id).then((value) => {
-      if (value === null) {
-        console.log('MessageDetails: new contact');
-        sendPacket(history);
-        return;
-      } else {
-        console.log('MessageDetails: sync starting');
-        const remoteString = value.history.map((value) => JSON.stringify(value));
-        const localString = history.map((value) => JSON.stringify(value));
-        const mergedString = [...new Set(remoteString.concat(localString))];
-        const mergedHistory: Message[] = mergedString.map((value) => JSON.parse(value));
-        sendPacket(mergedHistory);
-      }
-    })
-  }
-
-  function sendPacket(newHistory: Message[]) {
-    const docID = userHistory.user[0].id.toString() + '_' + userHistory.user[1].id.toString();
-    const sendPacket: MessageStore = {
-      user: userHistory.user,
-      history: newHistory,
-    }
-    sendMessage(sendPacket, docID).then((value) => {
-      if (!value) {
-        setMessageBody('Message failed to send');
-        return;
-      } else {
-        console.log('MessageDetail: message sent');
-        setHistory(newHistory);
-      }
+    getSingleMessage(userHistory.user[0].id, userHistory.user[1].id).then(newData => {
+      setHistory(newData);
     });
   }
 
@@ -97,6 +77,8 @@ const MessageDetails = ({ navigation, route }) => {
     }
   })
 
+  const listRef = useRef(null);
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ backgroundColor: 'purple' }}>
@@ -104,6 +86,9 @@ const MessageDetails = ({ navigation, route }) => {
       </View>
       <KeyboardAvoidingView behavior='padding' style={[styles.container, {}]}>
         <FlatList
+          ref={listRef}
+          onContentSizeChange={() => listRef.current.scrollToEnd({ animated: true })}
+          onLayout={() => listRef.current.scrollToEnd({ animated: true })}
           data={history}
           renderItem={({ item }) => {
             const message = item as Message;

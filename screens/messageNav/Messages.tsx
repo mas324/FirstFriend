@@ -24,16 +24,25 @@ const MessagePage = ({ navigation }) => {
 
   useFocusEffect(useCallback(() => {
     handleUpdates();
+    const timerID = setInterval(() => {
+      handleUpdates();
+    }, 2000);
+    navigation.addListener('blur', () => {
+      console.log('Messages: unfocus');
+      clearInterval(timerID);
+    });
   }, [route]));
 
   const handleUpdates = () => {
     console.log('Messages: contact get');
     getMessage(user.id).then((contactArray) => {
-      setContacts(contactArray);
+      if (contactArray !== undefined && contactArray !== null) {
+        setContacts(contactArray);
+      }
     })
   }
 
-  const handleItemPress = (messageHistory) => {
+  const handleItemPress = (messageHistory: MessageStore) => {
     navigation.navigate('MessageDetails', messageHistory);
   };
 
