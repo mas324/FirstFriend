@@ -55,10 +55,20 @@ const MessageDetails = ({ navigation, route }) => {
       read: false,
       time: Date.now(),
     }
-    userHistory.history.push(toSend);
-    sendMessage(userHistory, docID);
-    setHistory(userHistory.history);
-    setMessageBody('');
+    const newHistory = history.slice();
+    newHistory.push(toSend);
+    const sendPacket: MessageStore = {
+      user: userHistory.user,
+      history: newHistory,
+    }
+    sendMessage(sendPacket, docID).then((value) => {
+      if (!value) {
+        console.error('MessageSent: fail');
+        return;
+      }
+      setHistory(newHistory);
+      setMessageBody('');
+    });
   };
 
   const messageStyle = StyleSheet.create({
@@ -85,7 +95,7 @@ const MessageDetails = ({ navigation, route }) => {
           data={history}
           renderItem={({ item }) => {
             const message = item as Message;
-            console.log('MessageTest:', message);
+            //console.log('MessageTest:', message);
             if (message.userIDSender === sender.id) {
               return (
                 <View style={[messageStyle.box, {}]}>
