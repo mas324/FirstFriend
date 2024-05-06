@@ -196,9 +196,9 @@ export async function getMessage(id: number) {
 
 export async function getSingleMessage(idA: number, idB: number) {
     try {
-        const docID = idA.toString() + idB.toString();
+        const docID = idA.toString() + '_' + idB.toString();
         const mesRef = await getDoc(doc(db, 'messages', docID));
-        if (mesRef.exists()){
+        if (mesRef.exists()) {
             return mesRef.data() as MessageStore;
         }
     } catch (error) {
