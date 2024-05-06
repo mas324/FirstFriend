@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import { Job, Message, User } from "../components/Types";
+import { Job, Message, MessageStore, User } from "../components/Types";
 
 type Weather = {
     current: {
@@ -28,8 +28,8 @@ type AppState = {
     setWeather: (newWeather: Weather) => void,
     jobs: Job[],
     setJobs: (newJobs: Job[]) => void,
-    message: Message[],
-    setMessage: (newMessages: Message[]) => void,
+    message: MessageStore[],
+    setMessage: (newMessages: MessageStore[]) => void,
 }
 
 const AppContext = createContext<AppState>({
