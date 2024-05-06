@@ -34,6 +34,7 @@ const MessageDetails = ({ navigation, route }) => {
               });
             });
             sendPacket(combine);
+            setHistory(combine);
           }
         }
       }).finally(() => console.log('Message: timer finish'));
@@ -57,7 +58,8 @@ const MessageDetails = ({ navigation, route }) => {
     }
     const newHistory = history.slice();
     newHistory.push(toSend);
-    sendPacket(newHistory);
+    setHistory(newHistory);
+    setMessageBody('');
   };
 
   function sendPacket(newHistory: Message[]) {
@@ -69,11 +71,10 @@ const MessageDetails = ({ navigation, route }) => {
 
     sendMessage(sendPacket, docID).then((value) => {
       if (!value) {
-        console.error('MessageSent: fail');
+        setMessageBody('Message failed to send');
         return;
       }
       setHistory(newHistory);
-      setMessageBody('');
     });
   }
 
