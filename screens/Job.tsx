@@ -160,7 +160,7 @@ function JobMain({ navigation }) {
                     navigation.navigate('JobsDetail', listing);
                 }}
             >
-                <View style={{ backgroundColor: '#FFFFE9', marginVertical: 4, paddingBottom: 10, paddingTop: 2, paddingHorizontal: 6 }}>
+                <View style={{ backgroundColor: '#FFFFE9', marginVertical: 4, paddingBottom: 10, paddingTop: 2, paddingHorizontal: 6, borderRadius: 10 }}>
                     <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 20 }]}>{position}</Text>
                     <Text style={jobStyles.jobTitle}>Posted by: {recruiter}</Text>
                     <Text style={jobStyles.jobSection} numberOfLines={4}>{desc}</Text>
