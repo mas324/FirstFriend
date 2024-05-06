@@ -1,11 +1,11 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { View, TextInput, Button, StyleSheet, KeyboardAvoidingView, FlatList, TouchableOpacity } from 'react-native';
-import { useFocusEffect, useNavigation, useNavigationState, useRoute } from '@react-navigation/native';
+import React, { useCallback, useContext, useState } from 'react';
+import { View, TextInput, StyleSheet, KeyboardAvoidingView, FlatList, TouchableOpacity } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { Text } from '../../components/TextFix';
 import AppContext from '../../utils/AppContext';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Message, MessageStore, User } from '../../components/Types';
-import { getMessage, getSingleMessage, sendMessage } from '../../utils/Firestore';
+import { getSingleMessage, sendMessage } from '../../utils/Firestore';
 import { appStyles } from '../../components/AppStyles';
 
 const MessageDetails = ({ navigation, route }) => {
@@ -22,16 +22,28 @@ const MessageDetails = ({ navigation, route }) => {
   });
 
   useFocusEffect(useCallback(() => {
-    setInterval(() => {
+    const timerID = setInterval(() => {
       getSingleMessage(userHistory.user[0].id, userHistory.user[1].id).then((refresh) => {
         if (refresh !== undefined && refresh !== null && refresh.history.length > 0) {
-          setHistory(refresh.history);
+          if (refresh.history.length !== history.length) {
+            console.log('MessageDetail: sync messages');
+            const combine = history.concat(refresh.history);
+            combine.filter((value, index, self) => {
+              index === self.findIndex((t) => {
+                return t.message === value.message && t.time === value.time && t.userIDSender === value.userIDSender
+              });
+            });
+            setHistory(combine);
+          }
         }
       }).finally(() => console.log('Message: timer finish'));
     }, 10000);
     setHistory(userHistory.history);
+    navigation.addListener('blur', () => {
+      console.log('MessageDetail: unfocused');
+      clearInterval(timerID);
+    })
   }, [route]));
-
 
   const handleSend = () => {
     console.log('MessageDetails:', messageBody);
