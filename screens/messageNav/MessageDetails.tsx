@@ -33,7 +33,7 @@ const MessageDetails = ({ navigation, route }) => {
                 return t.message === value.message && t.time === value.time && t.userIDSender === value.userIDSender
               });
             });
-            setHistory(combine);
+            sendPacket(combine);
           }
         }
       }).finally(() => console.log('Message: timer finish'));
@@ -47,7 +47,7 @@ const MessageDetails = ({ navigation, route }) => {
 
   const handleSend = () => {
     console.log('MessageDetails:', messageBody);
-    const docID = userHistory.user[0].id.toString() + '_' + userHistory.user[1].id.toString();
+
     const toSend: Message = {
       userIDSender: sender.id,
       userIDReceiver: otherUser.id,
@@ -57,10 +57,16 @@ const MessageDetails = ({ navigation, route }) => {
     }
     const newHistory = history.slice();
     newHistory.push(toSend);
+    sendPacket(newHistory);
+  };
+
+  function sendPacket(newHistory: Message[]) {
+    const docID = userHistory.user[0].id.toString() + '_' + userHistory.user[1].id.toString();
     const sendPacket: MessageStore = {
       user: userHistory.user,
       history: newHistory,
     }
+
     sendMessage(sendPacket, docID).then((value) => {
       if (!value) {
         console.error('MessageSent: fail');
@@ -69,7 +75,7 @@ const MessageDetails = ({ navigation, route }) => {
       setHistory(newHistory);
       setMessageBody('');
     });
-  };
+  }
 
   const messageStyle = StyleSheet.create({
     box: {
