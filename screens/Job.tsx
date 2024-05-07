@@ -42,7 +42,7 @@ function JobsApplication({ route, navigation }) {
     const applyPositions = ['Teacher Aid', 'Research Aid', 'Cashier', 'Librarian', 'IT Intern', 'Accountant', 'Tutor'];
     const [position, setPosition] = useState(applyPositions[Math.floor(Math.random() * applyPositions.length)]);
     const [salary, setSalary] = useState("$" + (Math.random() * 10000).toFixed(2));
-    const [description, setDescription] = useState("sint praesentium neque in possimus fugiat placeat cumque aut unde sed perferendis dolores hic qui illum ducimus maxime qui voluptatem labore voluptate veritatis omnis iusto illum ut dicta aut modi animi sint ratione qui repellat eligendi inventore rem tempore quisquam voluptatem numquam laudantium explicabo reprehenderit beatae aut similique odit dolor repellendus repellendus aspernatur saepe aut explicabo laboriosam quod magnam error odio fugiat rem blanditiis atque omnis occaecati debitis maiores doloribus odit quidem possimus laudantium omnis voluptatem voluptatem autem aut architecto officia eius et doloribus ut quae sequi aut qui rerum totam est est labore qui ut aliquam iste enim provident ");
+    const [description, setDescription] = useState('');
 
     const [error, setError] = useState('');
 
