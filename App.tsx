@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Home from './screens/Home';
-import { Jobs } from './screens/Job';
+import Home from './screens/homeNav/Home';
+import { Jobs } from './screens/homeNav/Job';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import AppContext from './utils/AppContext';
 import { getItem } from './utils/LocalStore';

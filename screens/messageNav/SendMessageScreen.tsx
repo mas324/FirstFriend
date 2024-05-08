@@ -1,64 +1,74 @@
-import { React, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Text } from '../../components/TextFix';
 import { appStyles } from '../../components/AppStyles';
 import { findUser, initializeMessages } from '../../utils/Firestore';
 import AppContext from '../../utils/AppContext';
+import { MessageStore, User } from '../../components/Types';
+
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList { }
+  }
+}
 
 const SendMessageScreen = () => {
   const navigation = useNavigation();
-  const [userID, setUserID] = useState("");
+  const [userID, setUserID] = useState('');
   const { user } = useContext(AppContext);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    const group = userID.split(',');
+    console.log('Messages: split', group);
+    const groupID = Array<number>();
     try {
-      if (user.id === Number.parseInt(userID)) {
-        console.log('Cant send to yourself');
-        setUserID('Cant sent messages to yourself');
-        return;
+      for (let i = 0; i < group.length; i++) {
+        const id = Number.parseInt(group[i].trim());
+        if (user.id === id) {
+          console.log('Cant send to yourself');
+          setUserID('Cant sent messages to yourself');
+          return;
+        } else {
+          groupID.push(id);
+        }
       }
     } catch (_err) {
       setUserID('ID must be a number');
       return;
     }
-    findUser(Number.parseInt(userID)).then(userB => {
-      const userArray = [];
-      if (user.id < userB.id) {
-        userArray.push(user);
-        userArray.push(userB);
-      } else {
-        userArray.push(userB);
-        userArray.push(user);
+
+    console.log(groupID);
+    const userArray = [user];
+    try {
+      for (let u = 0; u < groupID.length; u++) {
+        userArray.push(await findUser(groupID[u]));
       }
-      const params = {
+      userArray.sort((a, b) => a.id - b.id);
+      //console.log(userArray);
+
+      const params: MessageStore = {
         user: userArray,
-        history: [],
-      }
-      initializeMessages(userArray).then(value => {
-        if (value) {
-          navigation.replace('MessageDetails', params);
-        } else {
-          setUserID('User already in contact list');
-        }
-      })
-    }).catch(_err => {
-      setUserID('User does not exist');
-    })
+        history: []
+      };
+
+      await initializeMessages(userArray) ? navigation.replace('MessageDetails', params) : setUserID('User already in contacts');
+    } catch (err) {
+      setUserID('A user does not exist');
+    }
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
         <Text style={styles.headingText}>Add New Friend</Text>
+        <Text style={styles.headingText}>Add comma for group message</Text>
         <TextInput
           placeholder="Insert userID"
           placeholderTextColor="#e6bb23"
-          fontWeight="bold"
           value={userID}
           onChangeText={(text) => setUserID(text)}
-          keyboardType='number-pad'
-          style={styles.input}
+          style={[styles.input, { fontWeight: 'bold' }]}
         />
         <TouchableOpacity
           style={[appStyles.button, {

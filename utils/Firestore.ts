@@ -163,12 +163,22 @@ export async function getJob() {
 
 export async function initializeMessages(users: User[]) {
     try {
-        const userIDs = users[0].id + '_' + users[1].id;
+        let userIDs = '';
+        for (let i = 0; i < users.length; i++) {
+            if (i === users.length - 1) {
+                userIDs += users[i].id.toString();
+            } else {
+                userIDs += users[i].id.toString() + 'U';
+            }
+        }
+        //console.log('check 1', userIDs, users);
         const checkDoc = await getDoc(doc(db, 'messages', userIDs));
         if (checkDoc.exists()) {
             return false;
         }
-        await setDoc(doc(db, 'messages', userIDs), { user: users });
+        //console.log('check 2');
+        const docRef = doc(db, 'messages', userIDs);
+        await setDoc(docRef, { users: users });
         return true;
     } catch (error) {
         console.error(error);
@@ -180,6 +190,7 @@ export async function sendMessage(messageDetail: Message, postID: string) {
     try {
         const userCol = collection(db, 'messages', postID + '/history');
         await addDoc(userCol, messageDetail);
+
         return true;
     } catch (error) {
         console.error(error);
@@ -193,18 +204,19 @@ export async function getMessage(id: number) {
         if (documents.empty) {
             return null;
         }
-        //console.log('Firestore: getting contacts');
+        console.log('Firestore: getting contacts');
         const filteredUsers = Array<Array<User>>()
         documents.forEach(result => {
             if (!result.exists()) {
                 return;
             }
-            const userResult = result.data().user as User[];
-            if (userResult[0].id !== id && userResult[1].id !== id) {
-                return;
+            //console.log('Firestore:', result.data());
+            const userResult = result.data().users as User[];
+            const finder = userResult.find((value) => value.id === id);
+            if (finder !== undefined) {
+                console.log('Firestore: data add');
+                filteredUsers.push(userResult);
             }
-            console.log('Firestore: data add');
-            filteredUsers.push(userResult);
         });
 
         if (filteredUsers.length === 0) {
@@ -213,9 +225,19 @@ export async function getMessage(id: number) {
 
         const filteredDocs = Array<MessageStore>();
         for (let i = 0; i < filteredUsers.length; i++) {
+            let docID = '';
+            for (let j = 0; j < filteredUsers[i].length; j++) {
+                const ru = filteredUsers[i];
+                if (j === ru.length - 1) {
+                    docID += ru[j].id.toString();
+                } else {
+                    docID += ru[j].id.toString() + 'U';
+                }
+            }
+
             filteredDocs.push({
                 user: filteredUsers[i],
-                history: await getSingleMessage(filteredUsers[i][0].id, filteredUsers[i][1].id),
+                history: await getSingleMessage(docID),
             });
         }
         //console.log('Firestore: returning contacts', filteredDocs);
@@ -226,9 +248,9 @@ export async function getMessage(id: number) {
     }
 }
 
-export async function getSingleMessage(idA: number, idB: number) {
+export async function getSingleMessage(docID: string) {
+    console.log('Firestore: getting history for ', docID);
     try {
-        const docID = idA.toString() + '_' + idB.toString();
         const messageRef = doc(db, 'messages', docID);
         const messageDoc = await getDoc(messageRef);
         if (messageDoc.exists()) {
@@ -238,12 +260,17 @@ export async function getSingleMessage(idA: number, idB: number) {
                 history.push(post.data() as Message);
             });
             history.sort((a, b) => a.time - b.time);
+            console.log('Firestore: history', history);
             return history;
         }
     } catch (error) {
         console.error(error);
         return null;
     }
+}
+
+export async function getReadHistory(id:number) {
+    
 }
 
 export async function findUser(id: number) {
@@ -256,9 +283,20 @@ export async function findUser(id: number) {
             console.error('Firestore: more than one user has that ID idk how');
             return null;
         }
+        console.log('Firestore: user got', qGet.docs[0].data());
         return qGet.docs[0].data() as User;
     } catch (error) {
         console.error('Firestore: user not found', error);
         return null;
+    }
+}
+
+export async function updateProfile(user: User) {
+    try {
+        const userDoc = doc(db, 'users', auth.currentUser.uid);
+        await setDoc(userDoc, user);
+        console.log('Firestore: updated user');
+    } catch (err) {
+        console.error('Firestore: error user data', err);
     }
 }

@@ -1,6 +1,9 @@
 import { Image, TouchableOpacity, View } from "react-native";
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Text } from "./TextFix";
+import { useContext, useState } from "react";
+import AppContext from "../utils/AppContext";
+import TabNotif from "./TabBarNotif";
 
 function BottomTab({ state, descriptors, navigation }) {
     return (
@@ -58,14 +61,7 @@ function BottomTab({ state, descriptors, navigation }) {
                         style={{ flex: 1 }}
                         key={index}
                     >
-                        <Ionicons
-                            style={{
-                                alignSelf: 'center'
-                            }}
-                            name={resource[0]}
-                            color={resource[1]}
-                            size={20}
-                        />
+                        <TabNotif resource={resource} />
                         <Text style={{
                             color: isFocused ? '#50a0ff' : 'black',
                             textAlign: 'center'

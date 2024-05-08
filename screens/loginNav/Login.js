@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { TextInput, Pressable, View, ImageBackground, ActivityIndicator } from 'react-native';
+import { TextInput, Pressable, View, ImageBackground, ActivityIndicator, Image } from 'react-native';
 import { appStyles } from '../../components/AppStyles';
 import { useAuth } from '../../utils/Auth';
 import AppContext from '../../utils/AppContext';
@@ -55,11 +55,15 @@ export default function LoginPage({ navigation }) {
                 blurRadius={0}
                 style={{ flex: 1, resizeMode: 'cover' }}>
                 <View style={{ flex: 1, backgroundColor: 'rgba(255,255,255,0.6)', justifyContent: 'center' }}>
-                    <Pressable
+                    {/* <Pressable
                         style={[appStyles.button2]}
                     >
                         <Text style={appStyles.headingText}>First Friend</Text>
-                    </Pressable>
+                    </Pressable> */}
+                    <Image
+                        source={require('../../assets/images/ff_logo.png')}
+                        style={{width: 200, height: 200, alignSelf: 'center'}}
+                    />
                     <Text style={appStyles.reject}>
                         {rejectNotif}
                     </Text>
@@ -79,7 +83,7 @@ export default function LoginPage({ navigation }) {
                         defaultValue={password}
                     />
                     <Pressable
-                        style={appStyles.button}
+                        style={[appStyles.button, {marginTop: 20}]}
                         onPress={handleLogin}
                     >
                         {loading ?
@@ -105,6 +109,7 @@ export default function LoginPage({ navigation }) {
                     </View>
                 </View>
             </ImageBackground>
+            
         </SafeAreaView>
     );
 };

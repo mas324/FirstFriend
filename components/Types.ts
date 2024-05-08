@@ -12,7 +12,7 @@ export type User = {
 
 export type Message = {
     userIDSender: number,
-    userIDReceiver: number,
+    userIDReceiver: number | number[],
     message: string,
     read: boolean,
     time: number,

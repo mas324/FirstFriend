@@ -14,7 +14,6 @@ import { getMessage } from '../../utils/Firestore';
 const Stack = createNativeStackNavigator();
 
 const MessagePage = ({ navigation }) => {
-  const [contacts, setContacts] = useState(Array<MessageStore>());
   const { user, message, setMessage } = useContext(AppContext);
   const route = useRoute();
 
@@ -23,10 +22,12 @@ const MessagePage = ({ navigation }) => {
   // the history is an array of messages
 
   useFocusEffect(useCallback(() => {
-    handleUpdates();
+    if (message === null || message.length === 0) {
+      handleUpdates();
+    }
     const timerID = setInterval(() => {
       handleUpdates();
-    }, 2000);
+    }, 5000);
     navigation.addListener('blur', () => {
       console.log('Messages: unfocus');
       clearInterval(timerID);
@@ -37,7 +38,7 @@ const MessagePage = ({ navigation }) => {
     console.log('Messages: contact get');
     getMessage(user.id).then((contactArray) => {
       if (contactArray !== undefined && contactArray !== null) {
-        setContacts(contactArray);
+        setMessage(contactArray);
       }
     })
   }
@@ -50,7 +51,21 @@ const MessagePage = ({ navigation }) => {
     const usersToDisplay = (store as MessageStore).user;
     const userDisplay = usersToDisplay[0].id !== user.id ? usersToDisplay[0] : usersToDisplay[1];
     const photo = `https://ui-avatars.com/api/?name=${userDisplay.firstname}&background=random`;
-    const name = userDisplay.firstname + ' ' + userDisplay.lastname;
+    let name = '';
+    for (let i = 0; i < usersToDisplay.length; i++) {
+      if (user.id === usersToDisplay[i].id) {
+        continue;
+      }
+      if (i === usersToDisplay.length - 1) {
+        name += usersToDisplay[i].firstname;
+      } else {
+        name += usersToDisplay[i].firstname + ', ';
+      }
+    }
+    name = name.trimEnd();
+    if (name.lastIndexOf(',') === name.length - 1) {
+      name = name.slice(0, name.length - 1);
+    }
     const status = 'New';
 
     const altColor = index % 2 === 0 ? '#e6bb23' : '#f6e4a9'
@@ -75,7 +90,7 @@ const MessagePage = ({ navigation }) => {
         <Text style={styles.headingText}>First Friend</Text>
       </View>
       <FlatList
-        data={contacts}
+        data={message}
         renderItem={({ item, index }) => <Item store={item} index={index} />}
       />
       <TouchableOpacity onPress={() => { navigation.navigate('SendMessageScreen'); deleteItem('@messages') }} style={styles.fab}>
@@ -134,6 +149,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 25,
     marginRight: 10,
+    objectFit: 'contain',
   },
   messageContent: {
     flex: 1,

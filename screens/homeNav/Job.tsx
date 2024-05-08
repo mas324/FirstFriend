@@ -1,14 +1,14 @@
 // import * as React from 'react';
 import React, { useContext, useState } from 'react';
 import { View, FlatList, TextInput, Pressable, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import { Text } from '../components/TextFix';
-import { jobStyles } from '../components/JobStyles';
+import { Text } from '../../components/TextFix';
+import { jobStyles } from '../../components/JobStyles';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import AppContext from '../utils/AppContext';
-import { getJob, postJob } from '../utils/Firestore';
-import { Job } from '../components/Types';
+import AppContext from '../../utils/AppContext';
+import { getJob, postJob } from '../../utils/Firestore';
+import { Job } from '../../components/Types';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
@@ -42,7 +42,7 @@ function JobsApplication({ route, navigation }) {
     const applyPositions = ['Teacher Aid', 'Research Aid', 'Cashier', 'Librarian', 'IT Intern', 'Accountant', 'Tutor'];
     const [position, setPosition] = useState(applyPositions[Math.floor(Math.random() * applyPositions.length)]);
     const [salary, setSalary] = useState("$" + (Math.random() * 10000).toFixed(2));
-    const [description, setDescription] = useState("sint praesentium neque in possimus fugiat placeat cumque aut unde sed perferendis dolores hic qui illum ducimus maxime qui voluptatem labore voluptate veritatis omnis iusto illum ut dicta aut modi animi sint ratione qui repellat eligendi inventore rem tempore quisquam voluptatem numquam laudantium explicabo reprehenderit beatae aut similique odit dolor repellendus repellendus aspernatur saepe aut explicabo laboriosam quod magnam error odio fugiat rem blanditiis atque omnis occaecati debitis maiores doloribus odit quidem possimus laudantium omnis voluptatem voluptatem autem aut architecto officia eius et doloribus ut quae sequi aut qui rerum totam est est labore qui ut aliquam iste enim provident ");
+    const [description, setDescription] = useState('');
 
     const [error, setError] = useState('');
 
@@ -174,7 +174,7 @@ function JobMain({ navigation }) {
     }
 
     return (
-        <SafeAreaView style={{ marginTop: 24, flex: 1, justifyContent: 'flex-start', paddingTop: 25, paddingBottom: 20, backgroundColor: '#860038' }}>
+        <SafeAreaView style={{ marginTop: 24, flex: 1, justifyContent: 'flex-start', paddingBottom: 20, backgroundColor: '#860038' }}>
             {loading ?
                 <View style={{ position: 'absolute', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
                     <ActivityIndicator size={80} color='blue' />
@@ -182,7 +182,7 @@ function JobMain({ navigation }) {
                 :
                 null
             }
-            <View style={[jobStyles.Main, { flexDirection: 'row', marginTop: -40, marginHorizontal: 5 }]}>
+            <View style={[jobStyles.Main, { flexDirection: 'row', marginHorizontal: 4 }]}>
                 <TextInput
                     style={[jobStyles.input, { marginLeft: 10, marginRight: 10, width: '70%' }]}
                     placeholder="Search"
@@ -190,7 +190,7 @@ function JobMain({ navigation }) {
                     onChangeText={(value) => setSearchWord(value)}
                 />
                 <Pressable
-                    style={[jobStyles.button, { margin: 7, minWidth: '20%' }]}
+                    style={[jobStyles.button, { margin: 6, minWidth: '20%' }]}
                     onPress={() => searching()}
                 >
                     {/* <Icon name="search" size={20} color="grey" style={{ marginLeft: 38 }} /> */}
