@@ -17,7 +17,7 @@ function TabNotif({ resource }: { resource: Array<any> }) {
         setLoading(true)
         console.log('TabBar: effect');
         let count = 0;
-        if (message !== null && message.length > 0) {
+        if (message !== undefined && message !== null && message.length > 0) {
             message.forEach(contact => {
                 if (contact.history.length > 0) {
                     contact.history.forEach(chat => {

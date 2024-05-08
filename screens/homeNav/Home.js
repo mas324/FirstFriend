@@ -12,7 +12,7 @@ import weatherCall from '../../utils/WeatherApi/meteoAPI';
 import { weatherImages } from '../../utils/WeatherApi';
 import { degrees } from '../../utils/Helper';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
-import { getJob } from '../../utils/Firestore';
+import { getJob, getMessage } from '../../utils/Firestore';
 import Profile from './Profile';
 
 
@@ -21,7 +21,7 @@ const Stack = createNativeStackNavigator();
 const image = require('../../assets/images/pathway.jpeg');
 
 function HomePage({ navigation }) {
-  const { setUser, weather, setWeather, jobs, setJobs } = useContext(AppContext);
+  const { setUser, weather, setWeather, jobs, setJobs, setMessage, user } = useContext(AppContext);
   const [showLogout, setShowLogout] = useState(false);
   const route = useRoute();
 
@@ -46,7 +46,8 @@ function HomePage({ navigation }) {
           setWeather(weatherData);
         }
       }
-    })
+    });
+
     getJob().then((jobData) => {
       console.log('Home: checking job');
       if (jobData == null) {
@@ -56,6 +57,13 @@ function HomePage({ navigation }) {
         setJobs(jobData);
       }
     });
+
+    getMessage(user.id).then((contactArray) => {
+      console.log('Messages: contact get');
+      if (contactArray !== undefined && contactArray !== null) {
+        setMessage(contactArray);
+      }
+    })
   }, []);
 
   useFocusEffect(React.useCallback(() => {

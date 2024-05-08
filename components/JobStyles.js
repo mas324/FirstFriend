@@ -15,7 +15,7 @@ export const jobStyles = StyleSheet.create({
     height: 40,
     margin: 10,
     // borderWidth: 1,
-    padding: 10,
+    padding: 6,
     fontSize: 20,
   },
 

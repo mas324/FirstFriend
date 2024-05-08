@@ -174,7 +174,7 @@ function JobMain({ navigation }) {
     }
 
     return (
-        <SafeAreaView style={{ marginTop: 24, flex: 1, justifyContent: 'flex-start', paddingTop: 25, paddingBottom: 20, backgroundColor: '#860038' }}>
+        <SafeAreaView style={{ marginTop: 24, flex: 1, justifyContent: 'flex-start', paddingBottom: 20, backgroundColor: '#860038' }}>
             {loading ?
                 <View style={{ position: 'absolute', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
                     <ActivityIndicator size={80} color='blue' />
@@ -182,7 +182,7 @@ function JobMain({ navigation }) {
                 :
                 null
             }
-            <View style={[jobStyles.Main, { flexDirection: 'row', marginTop: -40, marginHorizontal: 5 }]}>
+            <View style={[jobStyles.Main, { flexDirection: 'row', marginHorizontal: 4 }]}>
                 <TextInput
                     style={[jobStyles.input, { marginLeft: 10, marginRight: 10, width: '70%' }]}
                     placeholder="Search"
@@ -190,7 +190,7 @@ function JobMain({ navigation }) {
                     onChangeText={(value) => setSearchWord(value)}
                 />
                 <Pressable
-                    style={[jobStyles.button, { margin: 7, minWidth: '20%' }]}
+                    style={[jobStyles.button, { margin: 6, minWidth: '20%' }]}
                     onPress={() => searching()}
                 >
                     {/* <Icon name="search" size={20} color="grey" style={{ marginLeft: 38 }} /> */}

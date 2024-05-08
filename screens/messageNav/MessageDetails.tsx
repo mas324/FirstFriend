@@ -14,12 +14,38 @@ const MessageDetails = ({ navigation, route }) => {
   const { user: sender, } = useContext(AppContext);
   const userHistory = route.params as MessageStore;
 
-  let otherUser: User;
-  userHistory.user.forEach(item => {
-    if (item.id !== sender.id) {
-      otherUser = item;
+  let allUsers = userHistory.user;
+  let otherID = Array<number>();
+  let docID = '';
+  let names = '';
+
+  for (let i = 0; i < allUsers.length; i++) {
+    const ru = allUsers[i];
+    if (sender.id === ru.id) {
+      continue;
     }
-  });
+    otherID.push(ru.id);
+    if (i === allUsers.length - 1) {
+      names += ru.firstname + ' ' + ru.lastname;
+    } else {
+      names += ru.firstname + ' ' + ru.lastname + ', ';
+    }
+  }
+
+  for (let i = 0; i < allUsers.length; i++) {
+    const ru = allUsers[i];
+    if (i === allUsers.length - 1) {
+      docID += ru.id.toString();
+    } else {
+      docID += ru.id.toString() + 'U';
+    }
+  }
+
+  names = names.trimEnd();
+  if (names.endsWith(',')) {
+    names = names.slice(0, names.length - 1);
+  }
+
 
   useFocusEffect(useCallback(() => {
     setHistory(userHistory.history);
@@ -38,15 +64,15 @@ const MessageDetails = ({ navigation, route }) => {
       return;
     }
     console.log('MessageDetails:', messageBody);
+
     const toSend: Message = {
       userIDSender: sender.id,
-      userIDReceiver: otherUser.id,
+      userIDReceiver: otherID,
       message: messageBody,
       read: false,
       time: Date.now(),
     }
 
-    const docID = userHistory.user[0].id.toString() + '_' + userHistory.user[1].id.toString();
     sendMessage(toSend, docID).then(value => {
       if (value) {
         setMessageBody('');
@@ -58,7 +84,7 @@ const MessageDetails = ({ navigation, route }) => {
   };
 
   function syncMessages() {
-    getSingleMessage(userHistory.user[0].id, userHistory.user[1].id).then(newData => {
+    getSingleMessage(docID).then(newData => {
       setHistory(newData);
     });
   }
@@ -82,7 +108,7 @@ const MessageDetails = ({ navigation, route }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={{ backgroundColor: 'purple' }}>
-        <Text style={styles.heading}>{otherUser.firstname} {otherUser.lastname}</Text>
+        <Text style={styles.heading}>{names}</Text>
       </View>
       <KeyboardAvoidingView behavior='padding' style={[styles.container, {}]}>
         <FlatList
