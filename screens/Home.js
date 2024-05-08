@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, BackHandler, Image, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, BackHandler, Image, Modal, StyleSheet, TouchableOpacity, View, ImageBackground } from 'react-native';
 import { Text } from '../components/TextFix';
 import AppContext from '../utils/AppContext';
 import { useAuth } from '../utils/Auth';
@@ -13,9 +13,12 @@ import { weatherImages } from '../utils/WeatherApi';
 import { degrees } from '../utils/Helper';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 import { getJob } from '../utils/Firestore';
+import Profile from './homeNav/Profile';
 
 
 const Stack = createNativeStackNavigator();
+
+const image = require('../assets/images/pathway.jpeg');
 
 function HomePage({ navigation }) {
   const { setUser, weather, setWeather, jobs, setJobs } = useContext(AppContext);
@@ -73,10 +76,10 @@ function HomePage({ navigation }) {
         navigation.navigate('Weather');
         break;
       case 2:
-        navigation.navigate('Jobs');
+        navigation.navigate('Travels');
         break;
       case 3:
-        navigation.navigate('Travels');
+        navigation.navigate('Profile');
         break;
       case 4:
         navigation.navigate('Messages');
@@ -92,7 +95,12 @@ function HomePage({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <ImageBackground
+                source={image}
+                blurRadius={0}
+                style={{ flex: 1}}
+                resizeMode="cover">
+    <SafeAreaView style={[styles.container, {backgroundColor:'rgba(255,255,255,.05)'}]}>
       <Modal visible={showLogout} transparent={true} animationType='fade'>
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.5)' }}>
           <View style={{ backgroundColor: '#eee', borderWidth: 2, paddingVertical: 15, paddingHorizontal: 30, borderRadius: 10, maxHeight: '20%' }}>
@@ -108,23 +116,25 @@ function HomePage({ navigation }) {
           </View>
         </View>
       </Modal>
-      <TouchableOpacity style={[styles.button, { backgroundColor: 'rgba(90, 210, 255, 0.9)' }]} onPress={() => handleButtonPress(1)}>
+      <TouchableOpacity style={[styles.button, { backgroundColor: 'rgba(90, 210, 255, .7)' }]} onPress={() => handleButtonPress(1)}>
         {
           weather !== null ? <CurrentCard current={weather.current} /> : <ActivityIndicator size={50} color='gray' />
         }
       </TouchableOpacity>
-      <TouchableOpacity style={[styles.button, { backgroundColor: 'rgba(255, 253, 208, 0.5)' }]} onPress={() => handleButtonPress(2)}>
-        {
-          jobs !== null ? <JobCard firstListing={jobs[0]} /> : <ActivityIndicator size={50} color='gray' />
-        }
+      <TouchableOpacity style={[styles.travelButton, {height: 50, width: 110, borderRadius: 28, marginHorizontal: '37%', marginTop: '10%'}]} onPress={() => handleButtonPress(2)}>
+        <Text style={{fontSize: 16, color: 'white'}}>Travel</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => handleButtonPress(3)}>
-        <Text>Travel</Text>
+      <TouchableOpacity style={[styles.travelButton, {height: 50, width: 110, borderRadius: 28, marginHorizontal: '37%', marginTop: '10%'}]} onPress={() => handleButtonPress(3)}>
+        <Text style={{fontSize: 16, color: 'white'}}>Profile</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => handleButtonPress(4)}>
+      <TouchableOpacity style={[styles.travelButton, {height: 50, width: 110, borderRadius: 28, marginHorizontal: '37%', marginTop: '10%'}]} onPress={() => setShowLogout(true)}>
+        <Text style={{fontSize: 16, color: 'white'}}>Logout</Text>
+      </TouchableOpacity>
+      {/* <TouchableOpacity style={styles.button} onPress={() => handleButtonPress(4)}>
         <Text>Messages</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </SafeAreaView>
+    </ImageBackground>
   );
 }
 
@@ -185,6 +195,7 @@ const Home = () => {
       <Stack.Screen name='HomePage' component={HomePage} />
       <Stack.Screen name='Weather' component={WeatherPage} />
       <Stack.Screen name='Travels' component={VeniceBeachCoffeeFinder} />
+      <Stack.Screen name='Profile' component={Profile} />
     </Stack.Navigator>
   )
 };
@@ -201,10 +212,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'lightblue',
-    borderWidth: 1,
+    // borderWidth: 1,
     borderColor: 'black',
-    width: '50%',
-    height: '50%'
+    width: '70%',
+    height: '50%',
+    marginLeft: '16%',
+    borderRadius: 20,
+  },
+  travelButton: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    // backgroundColor: 'rgba(254,234,279,1)',
+    backgroundColor: '#C73A52',
+    fontSize: 20,
   }
 });
 

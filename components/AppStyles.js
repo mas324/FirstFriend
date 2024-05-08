@@ -8,9 +8,10 @@ export const appStyles = StyleSheet.create({
   input: {
     height: 40,
     margin: 8,
-    borderWidth: 2,
+    borderWidth: .5,
     padding: 10,
-    borderColor: 'black'
+    borderColor: 'black',
+    backgroundColor: 'rgba( 255, 255, 255, .6)',
   },
   container: {
     flex: 1,
