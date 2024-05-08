@@ -3,14 +3,10 @@
     "name": "First Friend",
     "description": "Used to connect the students from all the lands together",
     "slug": "first-friend",
+    "icon": "./assets/images/ff_logo.png",
     "plugins": [
       "./plugins/manifest-plugin.js"
     ],
-    "extra": {
-      "eas": {
-        "projectId": "456fd9b6-4e14-46c8-af72-388827778d3a"
-      }
-    },
     "android": {
       "package": "com.g6.FirstFriend",
       "splash": {
@@ -19,6 +15,12 @@
     },
     "ios": {
       "bundleIdentifier": "com.g6.FirstFriend"
+    },
+    "owner": "smer",
+    "extra": {
+      "eas": {
+        "projectId": "456fd9b6-4e14-46c8-af72-388827778d3a"
+      }
     }
   }
 }
