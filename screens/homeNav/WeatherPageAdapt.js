@@ -45,14 +45,23 @@ function CurrentCard({ current }) {
 
 function DailyCard({ daily }) {
     //console.log(daily);
+    const picture = daily.rain <= 25 ? weatherImages.Sunny :
+        daily.rain <= 50 ? weatherImages["Partly cloudy"] :
+            weatherImages.Cloudy;
     const date = new Date(daily.time);
     return (
-        <View style={{ marginVertical: 10 }}>
-            <Text style={weatherStyles.text}>{date.getMonth() + 1}/{date.getDate() + 1}</Text>
-            <Text style={weatherStyles.text}>Min temperature: {daily.tempMin}°F</Text>
-            <Text style={weatherStyles.text}>Max temperature: {daily.tempMax}°F</Text>
-            <Text style={weatherStyles.text}>Rain: {daily.rain}%</Text>
-            <Text style={weatherStyles.text}>{daily.wind}mph {degrees(daily.windFrom)}</Text>
+        <View style={{ paddingVertical: 6, marginVertical: 6, flexDirection: 'row', backgroundColor: '#00ffff3f', borderRadius: 10 }}>
+            <View style={{ marginRight: 40, paddingLeft: 8 }}>
+                <Text style={[weatherStyles.text, { fontWeight: 'bold', fontSize: 22 }]}>{date.toLocaleString([], { month: 'long' })} {date.getDate() + 1}</Text>
+                <Text style={weatherStyles.text}>Min temperature: {daily.tempMin}°F</Text>
+                <Text style={weatherStyles.text}>Max temperature: {daily.tempMax}°F</Text>
+                <Text style={weatherStyles.text}>Rain: {daily.rain}%</Text>
+                <Text style={weatherStyles.text}>{daily.wind}mph {degrees(daily.windFrom)}</Text>
+            </View>
+            <Image
+                source={picture}
+                style={weatherStyles.image}
+            />
         </View>
     )
 }
@@ -109,7 +118,7 @@ export default function WeatherPage() {
     // }, []);
 
     return (
-        <SafeAreaView style={{ flex: 1, marginTop: '7.5%' }}>
+        <SafeAreaView style={{ flex: 1, marginTop: 20 }}>
             <Image
                 source={require('../../assets/images/bg.png')}
                 blurRadius={40}
