@@ -1,9 +1,10 @@
-import { View, ImageBackground, TextInput, StyleSheet, TouchableOpacity } from "react-native";
+import { View, ImageBackground, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { Text } from "../../components/TextFix";
 import { useContext, useEffect, useState } from "react";
 import AppContext from "../../utils/AppContext";
 import { updateProfile } from "../../utils/Firestore";
 import { Entypo } from '@expo/vector-icons';
+import { setItem } from "../../utils/LocalStore";
 
 const image = require('../../assets/images/profile_bg.png');
 
@@ -25,8 +26,9 @@ function Profile() {
         newUser.major = newMajor
         newUser.username = newUsername
         updateProfile(newUser).then(() => {
-            alert('User profile updated');
-            setUser(newUser)
+            Alert.alert('', 'Profile updated successfully', [{ text: 'OK' }]);
+            setUser(newUser);
+            setItem('@user', newUser);
         })
     }
 

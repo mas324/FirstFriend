@@ -43,15 +43,16 @@ function CurrentCard({ current }) {
     }
 }
 
-function DailyCard({ daily }) {
+function DailyCard({ daily, index }) {
     //console.log(daily);
+    const color = index % 2 === 0 ? '#00ffff3f' : '#00cfff3f';
     const picture = daily.rain <= 25 ? weatherImages.Sunny :
         daily.rain <= 50 ? weatherImages["Partly cloudy"] :
             weatherImages.Cloudy;
     const date = new Date(daily.time);
     return (
-        <View style={{ paddingVertical: 6, marginVertical: 6, flexDirection: 'row', backgroundColor: '#00ffff3f', borderRadius: 10 }}>
-            <View style={{ marginRight: 40, paddingLeft: 8 }}>
+        <View style={{ paddingVertical: 6, marginVertical: 6, flexDirection: 'row', backgroundColor: color, borderRadius: 10, justifyContent: 'center' }}>
+            <View style={{ paddingLeft: 8, flex: 1 }}>
                 <Text style={[weatherStyles.text, { fontWeight: 'bold', fontSize: 22 }]}>{date.toLocaleString([], { month: 'long' })} {date.getDate() + 1}</Text>
                 <Text style={weatherStyles.text}>Min temperature: {daily.tempMin}°F</Text>
                 <Text style={weatherStyles.text}>Max temperature: {daily.tempMax}°F</Text>
@@ -60,7 +61,7 @@ function DailyCard({ daily }) {
             </View>
             <Image
                 source={picture}
-                style={weatherStyles.image}
+                style={[weatherStyles.image, { marginRight: '10%' }]}
             />
         </View>
     )
@@ -118,7 +119,7 @@ export default function WeatherPage() {
     // }, []);
 
     return (
-        <SafeAreaView style={{ flex: 1, marginTop: 20 }}>
+        <SafeAreaView style={{ flex: 1, paddingTop: 8 }}>
             <Image
                 source={require('../../assets/images/bg.png')}
                 blurRadius={40}
@@ -140,7 +141,7 @@ export default function WeatherPage() {
                         <CurrentCard current={weather.current} />
                         <FlatList
                             data={weather.daily}
-                            renderItem={({ item, index }) => <DailyCard daily={item} />}
+                            renderItem={({ item, index }) => <DailyCard daily={item} index={index} />}
                         />
                     </>
                     : null

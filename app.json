@@ -10,7 +10,7 @@
     "android": {
       "package": "com.g6.FirstFriend",
       "splash": {
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#860038"
       }
     },
     "ios": {

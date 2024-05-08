@@ -113,7 +113,7 @@ const Messages = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    marginTop: 0,
     padding: 16,
     backgroundColor: '#860038'
   },

@@ -24,7 +24,7 @@ function DetailedListing({ route }) {
     const item = route.params as Job;
     //console.log(item);
     return (
-        <SafeAreaView style={{ marginTop: 24, marginBottom: 6, paddingHorizontal: 8, flex: 1, backgroundColor: '#FFFFE9' }}>
+        <SafeAreaView style={{ marginTop: 0, marginBottom: 6, paddingHorizontal: 8, flex: 1, backgroundColor: '#FFFFE9' }}>
             <ScrollView>
                 <Text style={[jobStyles.jobTitle, { textAlign: 'center', fontSize: 24 }]}>{item.position}</Text>
                 <Text style={[jobStyles.jobTitle, { fontSize: 20 }]}>{item.recruiter}</Text>
@@ -47,7 +47,7 @@ function JobsApplication({ route, navigation }) {
     const [error, setError] = useState('');
 
     return (
-        <SafeAreaView style={{ marginTop: 24, flex: 1, backgroundColor: '#860038' }}>
+        <SafeAreaView style={{ marginTop: 0, flex: 1, backgroundColor: '#860038' }}>
             <View style={{ paddingTop: 25, backgroundColor: '#860038' }}>
                 <TextInput
                     placeholder='Position'
@@ -174,7 +174,7 @@ function JobMain({ navigation }) {
     }
 
     return (
-        <SafeAreaView style={{ marginTop: 24, flex: 1, justifyContent: 'flex-start', paddingBottom: 20, backgroundColor: '#860038' }}>
+        <SafeAreaView style={{ marginTop: 0, flex: 1, justifyContent: 'flex-start', paddingBottom: 20, backgroundColor: '#860038' }}>
             {loading ?
                 <View style={{ position: 'absolute', width: '100%', height: '100%', justifyContent: 'center', alignItems: 'center', alignContent: 'center' }}>
                     <ActivityIndicator size={80} color='blue' />
@@ -198,7 +198,7 @@ function JobMain({ navigation }) {
                 </Pressable>
 
             </View>
-            <View style={{ height: '100%', paddingHorizontal: 7 }}>
+            <View style={{ height: '100%', paddingHorizontal: 8, paddingBottom: 48 }}>
                 <FlatList
                     data={search.length > 0 ? search : data}
                     renderItem={({ item }) => <JobListing listing={item} />}
