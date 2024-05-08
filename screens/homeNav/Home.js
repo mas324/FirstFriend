@@ -1,24 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { ActivityIndicator, BackHandler, Image, Modal, StyleSheet, TouchableOpacity, View, ImageBackground } from 'react-native';
-import { Text } from '../components/TextFix';
-import AppContext from '../utils/AppContext';
-import { useAuth } from '../utils/Auth';
+import { Text } from '../../components/TextFix';
+import AppContext from '../../utils/AppContext';
+import { useAuth } from '../../utils/Auth';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WeatherPage from './WeatherPageAdapt';
-import VeniceBeachCoffeeFinder from './travelNav/MapApp';
+import VeniceBeachCoffeeFinder from '../travelNav/MapApp';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { getItem, setItem } from '../utils/LocalStore';
-import weatherCall from '../utils/WeatherApi/meteoAPI';
-import { weatherImages } from '../utils/WeatherApi';
-import { degrees } from '../utils/Helper';
+import { getItem, setItem } from '../../utils/LocalStore';
+import weatherCall from '../../utils/WeatherApi/meteoAPI';
+import { weatherImages } from '../../utils/WeatherApi';
+import { degrees } from '../../utils/Helper';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
-import { getJob } from '../utils/Firestore';
-import Profile from './homeNav/Profile';
+import { getJob } from '../../utils/Firestore';
+import Profile from './Profile';
 
 
 const Stack = createNativeStackNavigator();
 
-const image = require('../assets/images/pathway.jpeg');
+const image = require('../../assets/images/pathway.jpeg');
 
 function HomePage({ navigation }) {
   const { setUser, weather, setWeather, jobs, setJobs } = useContext(AppContext);
@@ -55,7 +55,7 @@ function HomePage({ navigation }) {
         console.log('Home: job load okay');
         setJobs(jobData);
       }
-    })
+    });
   }, []);
 
   useFocusEffect(React.useCallback(() => {
@@ -96,44 +96,42 @@ function HomePage({ navigation }) {
 
   return (
     <ImageBackground
-                source={image}
-                blurRadius={0}
-                style={{ flex: 1}}
-                resizeMode="cover">
-    <SafeAreaView style={[styles.container, {backgroundColor:'rgba(255,255,255,.05)'}]}>
-      <Modal visible={showLogout} transparent={true} animationType='fade'>
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.5)' }}>
-          <View style={{ backgroundColor: '#eee', borderWidth: 2, paddingVertical: 15, paddingHorizontal: 30, borderRadius: 10, maxHeight: '20%' }}>
-            <Text style={{ flex: 3, fontSize: 32, fontWeight: 'bold' }}>Logout?</Text>
-            <View style={{ flex: 2, flexDirection: 'row', alignContent: 'space-between', justifyContent: 'center', alignItems: 'center' }}>
-              <TouchableOpacity style={{ flex: 1, borderWidth: 1, borderColor: 'black', backgroundColor: '#f0f0f0' }} onPress={() => handleButtonPress(5)}>
-                <Text style={{ fontSize: 20, alignSelf: 'center' }}>Yes</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={{ flex: 1, borderWidth: 1, borderColor: 'black', backgroundColor: '#09d0ffff' }} onPress={() => setShowLogout(false)}>
-                <Text style={{ fontSize: 20, fontWeight: 'bold', alignSelf: 'center' }}>No</Text>
-              </TouchableOpacity>
+      source={image}
+      blurRadius={2}
+      style={{ flex: 1 }}
+      resizeMode="cover"
+    >
+      <SafeAreaView style={[styles.container, { backgroundColor: 'rgba(255,255,255,.05)' }]}>
+        <Modal visible={showLogout} transparent={true} animationType='fade'>
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.5)' }}>
+            <View style={{ backgroundColor: '#eee', borderWidth: 2, paddingVertical: 15, paddingHorizontal: 30, borderRadius: 10, maxHeight: '20%' }}>
+              <Text style={{ flex: 3, fontSize: 32, fontWeight: 'bold' }}>Logout?</Text>
+              <View style={{ flex: 2, flexDirection: 'row', alignContent: 'space-between', justifyContent: 'center', alignItems: 'center' }}>
+                <TouchableOpacity style={{ flex: 1, borderWidth: 1, borderColor: 'black', backgroundColor: '#f0f0f0' }} onPress={() => handleButtonPress(5)}>
+                  <Text style={{ fontSize: 20, alignSelf: 'center' }}>Yes</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={{ flex: 1, borderWidth: 1, borderColor: 'black', backgroundColor: '#09d0ffff' }} onPress={() => setShowLogout(false)}>
+                  <Text style={{ fontSize: 20, fontWeight: 'bold', alignSelf: 'center' }}>No</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      </Modal>
-      <TouchableOpacity style={[styles.button, { backgroundColor: 'rgba(90, 210, 255, .7)' }]} onPress={() => handleButtonPress(1)}>
-        {
-          weather !== null ? <CurrentCard current={weather.current} /> : <ActivityIndicator size={50} color='gray' />
-        }
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.travelButton, {height: 50, width: 110, borderRadius: 28, marginHorizontal: '37%', marginTop: '10%'}]} onPress={() => handleButtonPress(2)}>
-        <Text style={{fontSize: 16, color: 'white'}}>Travel</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.travelButton, {height: 50, width: 110, borderRadius: 28, marginHorizontal: '37%', marginTop: '10%'}]} onPress={() => handleButtonPress(3)}>
-        <Text style={{fontSize: 16, color: 'white'}}>Profile</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={[styles.travelButton, {height: 50, width: 110, borderRadius: 28, marginHorizontal: '37%', marginTop: '10%'}]} onPress={() => setShowLogout(true)}>
-        <Text style={{fontSize: 16, color: 'white'}}>Logout</Text>
-      </TouchableOpacity>
-      {/* <TouchableOpacity style={styles.button} onPress={() => handleButtonPress(4)}>
-        <Text>Messages</Text>
-      </TouchableOpacity> */}
-    </SafeAreaView>
+        </Modal>
+        <TouchableOpacity style={[styles.button, { backgroundColor: 'rgba(90, 210, 255, .7)' }]} onPress={() => handleButtonPress(1)}>
+          {
+            weather !== null ? <CurrentCard current={weather.current} /> : <ActivityIndicator size={50} color='gray' />
+          }
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.travelButton, { height: 50, width: 110, borderRadius: 28, marginHorizontal: '37%', marginTop: '10%' }]} onPress={() => handleButtonPress(2)}>
+          <Text style={{ fontSize: 16, color: 'white' }}>Travel</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.travelButton, { height: 50, width: 110, borderRadius: 28, marginHorizontal: '37%', marginTop: '10%' }]} onPress={() => handleButtonPress(3)}>
+          <Text style={{ fontSize: 16, color: 'white' }}>Profile</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.travelButton, { height: 50, width: 110, borderRadius: 28, marginHorizontal: '37%', marginTop: '10%' }]} onPress={() => setShowLogout(true)}>
+          <Text style={{ fontSize: 16, color: 'white' }}>Logout</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
     </ImageBackground>
   );
 }
@@ -177,17 +175,17 @@ function CurrentCard({ current }) {
   }
 }
 
-function JobCard({ firstListing }) {
+// function JobCard({ firstListing }) {
 
-  return (
-    <View>
-      <Text style={{ fontSize: 30, alignSelf: 'center', marginBottom: 10 }}>Jobs</Text>
-      <Text style={{ fontSize: 18, fontWeight: 'bold', alignSelf: 'center', marginHorizontal: 10, marginBottom: 5, textAlign: 'center' }}>{firstListing.position}</Text>
-      <Text style={{ fontSize: 12, marginHorizontal: 10, marginTop: 10 }}>({firstListing.recruiter})</Text>
-      <Text style={{ fontSize: 11, marginHorizontal: 10, marginTop: 5 }} numberOfLines={10}>Description:{firstListing.description}</Text>
-    </View>
-  )
-}
+//   return (
+//     <View>
+//       <Text style={{ fontSize: 30, alignSelf: 'center', marginBottom: 10 }}>Jobs</Text>
+//       <Text style={{ fontSize: 18, fontWeight: 'bold', alignSelf: 'center', marginHorizontal: 10, marginBottom: 5, textAlign: 'center' }}>{firstListing.position}</Text>
+//       <Text style={{ fontSize: 12, marginHorizontal: 10, marginTop: 10 }}>({firstListing.recruiter})</Text>
+//       <Text style={{ fontSize: 11, marginHorizontal: 10, marginTop: 5 }} numberOfLines={10}>Description:{firstListing.description}</Text>
+//     </View>
+//   )
+// }
 
 const Home = () => {
   return (

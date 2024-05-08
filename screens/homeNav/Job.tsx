@@ -1,14 +1,14 @@
 // import * as React from 'react';
 import React, { useContext, useState } from 'react';
 import { View, FlatList, TextInput, Pressable, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import { Text } from '../components/TextFix';
-import { jobStyles } from '../components/JobStyles';
+import { Text } from '../../components/TextFix';
+import { jobStyles } from '../../components/JobStyles';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import AppContext from '../utils/AppContext';
-import { getJob, postJob } from '../utils/Firestore';
-import { Job } from '../components/Types';
+import AppContext from '../../utils/AppContext';
+import { getJob, postJob } from '../../utils/Firestore';
+import { Job } from '../../components/Types';
 import { useFocusEffect, useRoute } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();

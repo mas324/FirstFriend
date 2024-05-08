@@ -1,4 +1,4 @@
-import { React, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Text } from '../../components/TextFix';
@@ -6,12 +6,20 @@ import { appStyles } from '../../components/AppStyles';
 import { findUser, initializeMessages } from '../../utils/Firestore';
 import AppContext from '../../utils/AppContext';
 
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList { }
+  }
+}
+
 const SendMessageScreen = () => {
   const navigation = useNavigation();
   const [userID, setUserID] = useState("");
   const { user } = useContext(AppContext);
 
   const handleSubmit = () => {
+    const group = userID.split('\'');
+
     try {
       if (user.id === Number.parseInt(userID)) {
         console.log('Cant send to yourself');
@@ -50,15 +58,14 @@ const SendMessageScreen = () => {
   return (
     <View style={styles.container}>
       <View style={styles.heading}>
-        <Text style={styles.headingText}>Add New Friend</Text>
+        <Text style={styles.headingText}>Add New Friend. Add comma for group message</Text>
         <TextInput
           placeholder="Insert userID"
           placeholderTextColor="#e6bb23"
-          fontWeight="bold"
           value={userID}
           onChangeText={(text) => setUserID(text)}
           keyboardType='number-pad'
-          style={styles.input}
+          style={[styles.input, { fontWeight: 'bold' }]}
         />
         <TouchableOpacity
           style={[appStyles.button, {

@@ -1,13 +1,13 @@
 import { useContext, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Text } from "../components/TextFix";
-import { appStyles } from "../components/AppStyles";
-import { setItem } from "../utils/LocalStore";
-import weatherCall from "../utils/WeatherApi/meteoAPI";
-import { weatherImages } from "../utils/WeatherApi";
-import { degrees } from "../utils/Helper";
-import AppContext from "../utils/AppContext";
+import { Text } from "../../components/TextFix";
+import { appStyles } from "../../components/AppStyles";
+import { setItem } from "../../utils/LocalStore";
+import weatherCall from "../../utils/WeatherApi/meteoAPI";
+import { weatherImages } from "../../utils/WeatherApi";
+import { degrees } from "../../utils/Helper";
+import AppContext from "../../utils/AppContext";
 
 function CurrentCard({ current }) {
     //console.log("Weather: current", current);
@@ -111,7 +111,7 @@ export default function WeatherPage() {
     return (
         <SafeAreaView style={{ flex: 1, marginTop: '7.5%' }}>
             <Image
-                source={require('../assets/images/bg.png')}
+                source={require('../../assets/images/bg.png')}
                 blurRadius={40}
                 style={{ width: '100%', height: '200%', position: 'absolute' }}
             />

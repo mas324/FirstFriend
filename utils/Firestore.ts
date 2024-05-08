@@ -163,7 +163,14 @@ export async function getJob() {
 
 export async function initializeMessages(users: User[]) {
     try {
-        const userIDs = users[0].id + '_' + users[1].id;
+        let userIDs: string;
+        for (let i = 0; i < users.length; i++) {
+            if (i === users.length - 1) {
+                userIDs += users[i].id.toString();
+            } else {
+                userIDs += users[i].id.toString() + '_';
+            }
+        }
         const checkDoc = await getDoc(doc(db, 'messages', userIDs));
         if (checkDoc.exists()) {
             return false;
@@ -180,6 +187,7 @@ export async function sendMessage(messageDetail: Message, postID: string) {
     try {
         const userCol = collection(db, 'messages', postID + '/history');
         await addDoc(userCol, messageDetail);
+        
         return true;
     } catch (error) {
         console.error(error);
@@ -260,5 +268,15 @@ export async function findUser(id: number) {
     } catch (error) {
         console.error('Firestore: user not found', error);
         return null;
+    }
+}
+
+export async function updateProfile(user: User) {
+    try {
+        const userDoc = doc(db, 'users', auth.currentUser.uid);
+        await setDoc(userDoc, user);
+        console.log('Firestore: updated user');
+    } catch (err) {
+        console.error('Firestore: error user data', err);
     }
 }

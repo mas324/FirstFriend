@@ -14,7 +14,6 @@ import { getMessage } from '../../utils/Firestore';
 const Stack = createNativeStackNavigator();
 
 const MessagePage = ({ navigation }) => {
-  const [contacts, setContacts] = useState(Array<MessageStore>());
   const { user, message, setMessage } = useContext(AppContext);
   const route = useRoute();
 
@@ -23,10 +22,10 @@ const MessagePage = ({ navigation }) => {
   // the history is an array of messages
 
   useFocusEffect(useCallback(() => {
-    handleUpdates();
+    // handleUpdates();
     const timerID = setInterval(() => {
       handleUpdates();
-    }, 2000);
+    }, 10000000);
     navigation.addListener('blur', () => {
       console.log('Messages: unfocus');
       clearInterval(timerID);
@@ -37,7 +36,7 @@ const MessagePage = ({ navigation }) => {
     console.log('Messages: contact get');
     getMessage(user.id).then((contactArray) => {
       if (contactArray !== undefined && contactArray !== null) {
-        setContacts(contactArray);
+        setMessage(contactArray);
       }
     })
   }
@@ -75,7 +74,7 @@ const MessagePage = ({ navigation }) => {
         <Text style={styles.headingText}>First Friend</Text>
       </View>
       <FlatList
-        data={contacts}
+        data={message}
         renderItem={({ item, index }) => <Item store={item} index={index} />}
       />
       <TouchableOpacity onPress={() => { navigation.navigate('SendMessageScreen'); deleteItem('@messages') }} style={styles.fab}>
@@ -134,6 +133,7 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 25,
     marginRight: 10,
+    objectFit: 'contain',
   },
   messageContent: {
     flex: 1,
