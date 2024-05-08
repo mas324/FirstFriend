@@ -145,7 +145,7 @@ function HomePage({ navigation }) {
 }
 
 function CurrentCard({ current }) {
-  console.log("Weather: current", current);
+  //console.log("Weather: current", current);
   const cardStyle = StyleSheet.create({
     text: {
       color: 'black',
