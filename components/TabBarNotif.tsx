@@ -5,7 +5,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import { Text } from "./TextFix";
 
 function TabNotif({ resource }: { resource: Array<any> }) {
-    const { message } = useContext(AppContext);
+    const { user, message } = useContext(AppContext);
     const [unread, setUnread] = useState(0);
     const [newMess, setNewMess] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -21,7 +21,10 @@ function TabNotif({ resource }: { resource: Array<any> }) {
             message.forEach(contact => {
                 if (contact.history.length > 0) {
                     contact.history.forEach(chat => {
-                        count += chat.read ? 0 : 1;
+                        if (chat.userIDSender === user.id) {
+                            return;
+                        }
+                            count += chat.read ? 0 : 1;
                     });
                 }
             });
